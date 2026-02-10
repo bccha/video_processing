@@ -1,0 +1,32 @@
+# Quartus generated files
+db/
+incremental_db/
+output_files/
+greybox_tmp/
+hc_output/
+*.rpt
+*.summary
+*.qws
+*.done
+*.jdi
+*.pin
+*.sof
+*.rbf
+*.elf
+*.bak
+*.txt
+*.log
+
+# Qsys generated files
+*/synthesis/
+*/simulation/
+*/submodules/
+*.sopcinfo
+*.html
+*.xml
+*.csv
+
+# Software generated files
+software/*/
+obj/
+bin/
