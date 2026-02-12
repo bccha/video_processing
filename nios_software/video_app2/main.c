@@ -1,6 +1,11 @@
+#include "altera_avalon_jtag_uart_regs.h"
+#include "altera_avalon_timer_regs.h"
+#include "hdmi_config.h"
 #include "io.h"
+#include "nios2.h" // For NIOS2_WRITE_STATUS
 #include "sys/alt_alarm.h"
 #include "sys/alt_cache.h"
+#include "sys/alt_irq.h" // For alt_irq_enable_all
 #include "system.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -32,11 +37,56 @@
 // OCM Static Buffer
 static unsigned int ocm_src_buffer[OCM_TEST_WORDS] __attribute__((aligned(32)));
 
+// ----------------------------------------------------------------------------
+// [Helper] Light-weight input functions for Small C Library
+// ----------------------------------------------------------------------------
+
+// Blocking version: Waits until a character is received
+char get_char_polled() {
+  unsigned int data;
+  while (1) {
+    data = IORD_ALTERA_AVALON_JTAG_UART_DATA(JTAG_UART_BASE);
+    if (data & ALTERA_AVALON_JTAG_UART_DATA_RVALID_MSK) {
+      return (char)(data & ALTERA_AVALON_JTAG_UART_DATA_DATA_MSK);
+    }
+  }
+}
+
+// Non-blocking (Async) version: Returns char if available, else returns 0
+char get_char_async() {
+  unsigned int data = IORD_ALTERA_AVALON_JTAG_UART_DATA(JTAG_UART_BASE);
+  if (data & ALTERA_AVALON_JTAG_UART_DATA_RVALID_MSK) {
+    return (char)(data & ALTERA_AVALON_JTAG_UART_DATA_DATA_MSK);
+  }
+  return 0; // No data available
+}
+
+// ----------------------------------------------------------------------------
+// [Helper] High-resolution Timer (50MHz Snapshot + NTICKS)
+// ----------------------------------------------------------------------------
+// Returns current physical cycles (50MHz) since boot
+unsigned long long get_total_cycles() {
+  unsigned int t1, t2, snap;
+  do {
+    t1 = alt_nticks();
+    IOWR_ALTERA_AVALON_TIMER_SNAPL(TIMER_0_BASE, 0);
+    unsigned int low = IORD_ALTERA_AVALON_TIMER_SNAPL(TIMER_0_BASE);
+    unsigned int high = IORD_ALTERA_AVALON_TIMER_SNAPH(TIMER_0_BASE);
+    snap = (high << 16) | low;
+    t2 = alt_nticks();
+  } while (t1 != t2); // Ensure tick and snapshot are consistent
+
+  // Timer counts down from 49999 to 0
+  unsigned long long cycles = (unsigned long long)t1 * 50000;
+  cycles += (49999 - snap);
+  return cycles;
+}
+
 // ============================================================================
 // [Function 1] OCM to DDR DMA Test (Original burst_master_0)
 // ============================================================================
 void run_ocm_to_ddr_test(unsigned int csr_base) {
-  printf("\n--- Test 1: OCM to DDR DMA (burst_master_0) ---\n");
+  printf("\n--- [TEST 1] OCM to DDR DMA (burst_master_0) ---\n");
 
   unsigned int *src_ptr = ocm_src_buffer;
   unsigned int *dst_ptr =
@@ -50,27 +100,54 @@ void run_ocm_to_ddr_test(unsigned int csr_base) {
   }
   alt_dcache_flush_all();
 
-  printf("Starting HW DMA (4KB)... ");
-  alt_u32 start = alt_nticks();
+  printf("Starting SW Copy (4KB x 100)... ");
+  unsigned long long sw_t_start = get_total_cycles();
+  for (int j = 0; j < 100; j++) {
+    for (int i = 0; i < OCM_TEST_WORDS; i++) {
+      dst_ptr[i] = src_ptr[i];
+    }
+  }
+  unsigned long long sw_t_end = get_total_cycles();
+  unsigned int sw_delta = (unsigned int)(sw_t_end - sw_t_start);
+  if (sw_delta == 0)
+    sw_delta = 1;
+  // Use 10x scale for 0.1 MB/s precision
+  unsigned int sw_rate_x10 =
+      (unsigned int)((unsigned long long)OCM_TEST_WORDS * 4 * 100 *
+                     500000000ULL / sw_delta / 1048576ULL);
+  printf("Done (%u cycles, ~%u.%u MB/s)\n", sw_delta, sw_rate_x10 / 10,
+         sw_rate_x10 % 10);
 
-  // Crucial: Move OCM test destination to 512MB offset to avoid ARM space
+  alt_dcache_flush_all();
+
+  printf("Starting HW DMA (4KB x 100)... ");
+  unsigned long long hw_t_start = get_total_cycles();
+
   unsigned int ddr_phys_base = 0x20000000;
-  IOWR_32DIRECT(csr_base, REG_SRC_ADDR, src_phys);
-  IOWR_32DIRECT(csr_base, REG_DST_ADDR, ddr_phys_base); // DDR Physical 512MB
-  IOWR_32DIRECT(csr_base, REG_LEN, OCM_TEST_WORDS * 4);
-  IOWR_32DIRECT(csr_base, REG_RD_BURST, 32);
-  IOWR_32DIRECT(csr_base, REG_WR_BURST, 32);
-  IOWR_32DIRECT(csr_base, REG_CTRL, 1);
+  for (int j = 0; j < 100; j++) {
+    IOWR_32DIRECT(csr_base, REG_SRC_ADDR, src_phys);
+    IOWR_32DIRECT(csr_base, REG_DST_ADDR, ddr_phys_base);
+    IOWR_32DIRECT(csr_base, REG_LEN, OCM_TEST_WORDS * 4);
+    IOWR_32DIRECT(csr_base, REG_RD_BURST, 32);
+    IOWR_32DIRECT(csr_base, REG_WR_BURST, 32);
+    IOWR_32DIRECT(csr_base, REG_CTRL, 1);
 
-  while (!(IORD_32DIRECT(csr_base, REG_STATUS) & 1))
-    ;
-  IOWR_32DIRECT(csr_base, REG_STATUS, 1);
+    while (!(IORD_32DIRECT(csr_base, REG_STATUS) & 1))
+      ;
+    IOWR_32DIRECT(csr_base, REG_STATUS, 1);
+  }
 
-  alt_u32 end = alt_nticks();
-  printf("Done in %lu ticks.\n", (unsigned long)(end - start));
+  unsigned long long hw_t_end = get_total_cycles();
+  unsigned int hw_delta = (unsigned int)(hw_t_end - hw_t_start);
+  if (hw_delta == 0)
+    hw_delta = 1;
+  unsigned int hw_rate_x10 =
+      (unsigned int)((unsigned long long)OCM_TEST_WORDS * 4 * 100 *
+                     500000000ULL / hw_delta / 1048576ULL);
+  printf("Done (%u cycles, ~%u.%u MB/s)\n", hw_delta, hw_rate_x10 / 10,
+         hw_rate_x10 % 10);
+  printf("Speedup: %u x\n", sw_delta / hw_delta);
 
-  // Invalidate cache before reading back from DDR if not bypassing
-  // Though we use CACHE_BYPASS_MASK, full verification is better.
   alt_dcache_flush_all();
 
   // Verify
@@ -86,16 +163,16 @@ void run_ocm_to_ddr_test(unsigned int csr_base) {
     }
   }
   if (errors == 0)
-    printf("SUCCESS: OCM to DDR Verified! 🎉\n");
+    printf("SUCCESS: OCM to DDR Verified!\n");
   else
-    printf("FAILURE: %d errors in OCM test. ❌\n", errors);
+    printf("FAILURE: %d errors in OCM test.\n", errors);
 }
 
 // ============================================================================
 // [Function 2] DDR to DDR DMA Test (New burst_master_1 / burst_master_4)
 // ============================================================================
 void run_ddr_to_ddr_test(unsigned int csr_base) {
-  printf("\n--- Test 2: DDR to DDR DMA (burst_master_1 / 4-Stage Pipe) ---\n");
+  printf("\n--- [TEST 2] DDR to DDR DMA (Burst Master 4) ---\n");
   printf("Transfer Size: 1 MB\n");
 
   const unsigned int src_offset = 0x01000000;    // 16MB
@@ -116,33 +193,33 @@ void run_ddr_to_ddr_test(unsigned int csr_base) {
   alt_dcache_flush_all();
   printf("Done.\n");
 
-  // --- Step 2-A: Software Copy Performance (Including Pipeline Math) ---
   unsigned int test_coeff = 800; // Pipeline coefficient
-  printf("Starting SW Copy (1MB, Coeff=%d)... ", test_coeff);
-  alt_u32 sw_start = alt_nticks();
+  printf("Starting SW Copy (1MB)... ");
+  unsigned long long sw_t_start = get_total_cycles();
   for (int i = 0; i < DDR_TEST_WORDS; i++) {
-    // Pure Software Approach: Standard Division (No HW optimization)
     dst_sw_ptr[i] =
         (unsigned int)((unsigned long long)src_ptr[i] * test_coeff / 400);
   }
-  alt_u32 sw_end = alt_nticks();
-  float sw_time_s = (float)(sw_end - sw_start) / alt_ticks_per_second();
-  float sw_rate = (float)(DDR_TEST_WORDS * 4) / (1024.0 * 1024.0) / sw_time_s;
-  printf("Done.\n  -> SW Time: %.3f s, Rate: %.2f MB/s\n", sw_time_s, sw_rate);
+  unsigned long long sw_t_end = get_total_cycles();
+  unsigned int sw_delta = (unsigned int)(sw_t_end - sw_t_start);
+  if (sw_delta == 0)
+    sw_delta = 1;
+  unsigned int sw_rate_x10 =
+      (unsigned int)((unsigned long long)DDR_TEST_WORDS * 4 * 500000000ULL /
+                     sw_delta / 1048576ULL);
+  printf("Done (%u cycles, ~%u.%u MB/s)\n", sw_delta, sw_rate_x10 / 10,
+         sw_rate_x10 % 10);
 
   alt_dcache_flush_all();
 
-  // --- Step 2-B: Hardware DMA Performance ---
-  // Configure for Max Burst (256) and Coefficient
+  // Configure for Max Burst (256)
   IOWR_32DIRECT(csr_base, REG_RD_BURST, 256);
   IOWR_32DIRECT(csr_base, REG_WR_BURST, 256);
   IOWR_32DIRECT(csr_base, REG_COEFF, test_coeff);
 
-  printf("Starting HW DMA (1MB, Coeff=%d)... ", test_coeff);
-  alt_u32 hw_start = alt_nticks();
+  printf("Starting HW DMA (1MB)... ");
+  unsigned long long hw_t_start = get_total_cycles();
 
-  // Crucial: Use absolute physical address for DMA Master (DDR_BASE_PHYS +
-  // offset)
   unsigned int ddr_phys_base = 0x20000000; // 512MB
   IOWR_32DIRECT(csr_base, REG_SRC_ADDR, ddr_phys_base + src_offset);
   IOWR_32DIRECT(csr_base, REG_DST_ADDR, ddr_phys_base + dst_hw_offset);
@@ -153,65 +230,152 @@ void run_ddr_to_ddr_test(unsigned int csr_base) {
     ;
   IOWR_32DIRECT(csr_base, REG_STATUS, 1);
 
-  alt_u32 hw_end = alt_nticks();
-  float hw_time_s = (float)(hw_end - hw_start) / alt_ticks_per_second();
-  float hw_rate = (float)(DDR_TEST_WORDS * 4) / (1024.0 * 1024.0) / hw_time_s;
-  printf("Done.\n  -> HW Time: %.3f s, Rate: %.2f MB/s\n", hw_time_s, hw_rate);
-  printf("  -> Speedup: %.2fx\n", hw_rate / sw_rate);
+  unsigned long long hw_t_end = get_total_cycles();
+  unsigned int hw_delta = (unsigned int)(hw_t_end - hw_t_start);
+  if (hw_delta == 0)
+    hw_delta = 1;
+  unsigned int hw_rate_x10 =
+      (unsigned int)((unsigned long long)DDR_TEST_WORDS * 4 * 500000000ULL /
+                     hw_delta / 1048576ULL);
+  printf("Done (%u cycles, ~%u.%u MB/s)\n", hw_delta, hw_rate_x10 / 10,
+         hw_rate_x10 % 10);
+  printf("Speedup: %u x\n", sw_delta / hw_delta);
 
-  // --- Step 3: Verification (Direct SW vs HW comparison) ---
-  printf("Verifying Results (SW Output vs HW Output)...\n");
+  printf("Verifying HW Output...\n");
   int errors = 0;
-  for (int i = 0; i < 1024; i++) { // Verify first 1K words
+  for (int i = 0; i < 1024; i++) {
     unsigned int expected = dst_sw_ptr[i];
     unsigned int actual = dst_hw_ptr[i];
     int diff = (int)actual - (int)expected;
-
-    // Allow tolerance of +/- 1 due to fixed-point vs division rounding
-    if (diff > 1 || diff < -1) {
-      if (errors < 5) {
-        printf("  Error at idx %d: SW_Exp=%u, HW_Got=%u, Diff=%d\n", i,
-               expected, actual, diff);
-      }
+    if (diff > 1 || diff < -1)
       errors++;
+  }
+  if (errors == 0)
+    printf("SUCCESS: DDR to DDR Verified! (Coeff=%u)\n", test_coeff);
+  else
+    printf("FAILURE: %d errors in DDR test.\n", errors);
+}
+
+// ============================================================================
+// [Function 3] 720p Color Bar Pattern Generation
+// ============================================================================
+void generate_color_bar_pattern() {
+  printf("\nGenerating 720p Color Bar Pattern in DDR3... ");
+  unsigned int *fb = (unsigned int *)DDR3_WINDOW_BASE;
+  const int width = 1280;
+  const int height = 720;
+  const int bar_width = width / 8; // 160 pixels per bar
+
+  // Colors in XRGB8888 (32-bit)
+  const unsigned int colors[8] = {
+      0xFFFFFF, // White
+      0xFFFF00, // Yellow
+      0x00FFFF, // Cyan
+      0x00FF00, // Green
+      0xFF00FF, // Magenta
+      0xFF0000, // Red
+      0x0000FF, // Blue
+      0x000000  // Black
+  };
+
+  for (int y = 0; y < height; y++) {
+    for (int x = 0; x < width; x++) {
+      int color_idx = x / bar_width;
+      if (color_idx > 7)
+        color_idx = 7;
+      fb[y * width + x] = colors[color_idx];
     }
   }
 
-  if (errors == 0)
-    printf("SUCCESS: HW DMA results match SW reference! 🎉\n");
-  else
-    printf("FAILURE: %d mismatches found between SW and HW. ❌\n", errors);
+  alt_dcache_flush_all();
+  printf("Done! (Total %d pixels written)\n", width * height);
+}
+
+void print_menu() {
+  printf("\n========== DE10-Nano HDMI Pipeline Menu ==========\n");
+  printf(" [1] Perform OCM-to-DDR DMA Test (4KB)\n");
+  printf(" [2] Perform DDR-to-DDR Burst Master Test (1MB)\n");
+  printf(" [3] Initialize HDMI (ADV7513 via I2C)\n");
+  printf(" [4] Generate 720p Color Bar Pattern in DDR3\n");
+  printf(" [q] Quit\n");
+  printf("--------------------------------------------------\n");
+  printf("Select an option: ");
+}
+
+void run_interactive_menu() {
+  char choice;
+  while (1) {
+    print_menu();
+
+    // Clear stdin buffer and read one char
+    choice = 0;
+    while (choice < ' ') {
+      choice = get_char_polled();
+    }
+    printf("%c\n", choice);
+
+    switch (choice) {
+    case '1':
+      run_ocm_to_ddr_test(BURST_MASTER_0_BASE | CACHE_BYPASS_MASK);
+      break;
+    case '2':
+#ifdef BURST_MASTER_4_0_BASE
+      run_ddr_to_ddr_test(BURST_MASTER_4_0_BASE | CACHE_BYPASS_MASK);
+#else
+      printf("Error: BURST_MASTER_4_0 not found in system.h\n");
+#endif
+      break;
+    case '3':
+      hdmi_init();
+      break;
+    case '4':
+      generate_color_bar_pattern();
+      break;
+    case 'q':
+      printf("Exiting... Goodbye!\n");
+      return;
+    default:
+      printf("Invalid option! Please try again.\n");
+      break;
+    }
+  }
 }
 
 // ============================================================================
 // Main Entry
 // ============================================================================
 int main() {
-  printf("\nNios II Dual Master DMA Benchmark System\n");
+  printf("\nDE10-Nano Video/DMA Test Environment Initialized\n");
 
-  // --- Crucial Step: Initialize Address Span Extender Window ---
-  // The Span Extender maps Nios II's 128MB window to the HPS AXI Bridge.
-  // We point it to 0x20000000 (512MB) to avoid ARM/Linux kernel space.
+  // Force Start Timer & Enable Global Interrupts (PIE bit)
+  NIOS2_WRITE_STATUS(1);
+  IOWR_ALTERA_AVALON_TIMER_CONTROL(TIMER_0_BASE,
+                                   ALTERA_AVALON_TIMER_CONTROL_CONT_MSK |
+                                       ALTERA_AVALON_TIMER_CONTROL_START_MSK |
+                                       ALTERA_AVALON_TIMER_CONTROL_ITO_MSK);
+
+  // Debug: Check if timer is moving
+  printf("Checking Timer... ");
+  unsigned long long start_time = get_total_cycles();
+  for (volatile int i = 0; i < 10000; i++)
+    ; // Busy wait
+  unsigned long long end_time = get_total_cycles();
+  if (end_time > start_time) {
+    printf("Timer OK! (Delta=%u)\n", (unsigned int)(end_time - start_time));
+  } else {
+    printf("Timer STUCK! (Val=%u)\n", (unsigned int)start_time);
+  }
+
 #ifdef ADDRESS_SPAN_EXTENDER_0_CNTL_BASE
-  unsigned int ddr_phys_base = 0x20000000; // 512MB Offset
-  printf("Setting Span Extender window to 0x%08X... ", ddr_phys_base);
+  unsigned int ddr_phys_base = 0x20000000;
+  printf("Initializing Span Extender to 0x%08X... ", ddr_phys_base);
   IOWR_32DIRECT(ADDRESS_SPAN_EXTENDER_0_CNTL_BASE, 0, ddr_phys_base);
-  IOWR_32DIRECT(ADDRESS_SPAN_EXTENDER_0_CNTL_BASE, 4,
-                0x00000000); // High 32-bit
+  IOWR_32DIRECT(ADDRESS_SPAN_EXTENDER_0_CNTL_BASE, 4, 0);
   printf("Done.\n");
 #endif
 
-  // Run OCM test using Master 0
-  run_ocm_to_ddr_test(BURST_MASTER_0_BASE | CACHE_BYPASS_MASK);
+  // Start interactive session
+  run_interactive_menu();
 
-  // Run DDR test using burst_master_4 (if exists)
-#ifdef BURST_MASTER_4_0_BASE
-  run_ddr_to_ddr_test(BURST_MASTER_4_0_BASE | CACHE_BYPASS_MASK);
-#else
-  printf("\n[Warning] BURST_MASTER_4_0_BASE not found. Skipping DDR-to-DDR "
-         "test.\n");
-#endif
-
-  printf("\nAll DMA Tests Finished.\n");
   return 0;
 }

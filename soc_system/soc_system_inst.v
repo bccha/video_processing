@@ -72,6 +72,21 @@
 		.memory_mem_odt                        (<connected-to-memory_mem_odt>),                        //                               .mem_odt
 		.memory_mem_dm                         (<connected-to-memory_mem_dm>),                         //                               .mem_dm
 		.memory_oct_rzqin                      (<connected-to-memory_oct_rzqin>),                      //                               .oct_rzqin
-		.reset_reset_n                         (<connected-to-reset_reset_n>)                          //                          reset.reset_n
+		.reset_reset_n                         (<connected-to-reset_reset_n>),                         //                          reset.reset_n
+		.pll_outclk_clk                        (<connected-to-pll_outclk_clk>),                        //                     pll_outclk.clk
+		.video_dma_s_waitrequest               (<connected-to-video_dma_s_waitrequest>),               //                    video_dma_s.waitrequest
+		.video_dma_s_readdata                  (<connected-to-video_dma_s_readdata>),                  //                               .readdata
+		.video_dma_s_readdatavalid             (<connected-to-video_dma_s_readdatavalid>),             //                               .readdatavalid
+		.video_dma_s_burstcount                (<connected-to-video_dma_s_burstcount>),                //                               .burstcount
+		.video_dma_s_writedata                 (<connected-to-video_dma_s_writedata>),                 //                               .writedata
+		.video_dma_s_address                   (<connected-to-video_dma_s_address>),                   //                               .address
+		.video_dma_s_write                     (<connected-to-video_dma_s_write>),                     //                               .write
+		.video_dma_s_read                      (<connected-to-video_dma_s_read>),                      //                               .read
+		.video_dma_s_byteenable                (<connected-to-video_dma_s_byteenable>),                //                               .byteenable
+		.video_dma_s_debugaccess               (<connected-to-video_dma_s_debugaccess>),               //                               .debugaccess
+		.i2c_hdmi_sda_in                       (<connected-to-i2c_hdmi_sda_in>),                       //                       i2c_hdmi.sda_in
+		.i2c_hdmi_scl_in                       (<connected-to-i2c_hdmi_scl_in>),                       //                               .scl_in
+		.i2c_hdmi_sda_oe                       (<connected-to-i2c_hdmi_sda_oe>),                       //                               .sda_oe
+		.i2c_hdmi_scl_oe                       (<connected-to-i2c_hdmi_scl_oe>)                        //                               .scl_oe
 	);
 

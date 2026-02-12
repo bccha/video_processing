@@ -98,6 +98,23 @@ module DE10_NANO_SoC_GHRD(
   wire        hps_debug_reset;
   wire [27:0] stm_hw_events;
   wire 		  fpga_clk_50;
+  
+  // Video DMA Interface Wires
+  wire        dma_waitrequest;
+  wire [31:0] dma_readdata;
+  wire        dma_readdatavalid;
+  wire [7:0]  dma_burstcount;
+  wire [31:0] dma_writedata;
+  wire [31:0] dma_address;
+  wire        dma_write;
+  wire        dma_read;
+  wire [3:0]  dma_byteenable;
+
+  // HDMI I2C Wires
+  wire        hdmi_i2c_sda_in;
+  wire        hdmi_i2c_scl_in;
+  wire        hdmi_i2c_sda_oe;
+  wire        hdmi_i2c_scl_oe;
 // connection of internal logics
   assign LED[7:1] = fpga_led_internal;
   assign fpga_clk_50=FPGA_CLK1_50;
@@ -195,7 +212,30 @@ soc_system u0 (
      .hps_0_f2h_stm_hw_events_stm_hwevents  (stm_hw_events ),  //        hps_0_f2h_stm_hw_events.stm_hwevents
      .hps_0_f2h_warm_reset_req_reset_n      (~hps_warm_reset ),      //       hps_0_f2h_warm_reset_req.reset_n
 
+		// HDMI Video Pipeline
+	  .pll_outclk_clk                        (HDMI_TX_CLK),           //                     pll_outclk.clk
+	  .video_dma_s_waitrequest               (dma_waitrequest),       //                    video_dma_s.waitrequest
+	  .video_dma_s_readdata                  (dma_readdata),          //                               .readdata
+	  .video_dma_s_readdatavalid             (dma_readdatavalid),     //                               .readdatavalid
+	  .video_dma_s_burstcount                (dma_burstcount),        //                               .burstcount
+	  .video_dma_s_writedata                 (dma_writedata),         //                               .writedata
+	  .video_dma_s_address                   (dma_address),           //                               .address
+	  .video_dma_s_write                     (dma_write),             //                               .write
+	  .video_dma_s_read                      (dma_read),              //                               .read
+	  .video_dma_s_byteenable                (dma_byteenable),        //                               .byteenable
+
+		// HDMI I2C
+	  .i2c_hdmi_sda_in                       (hdmi_i2c_sda_in),       //                       i2c_hdmi.sda_in
+	  .i2c_hdmi_scl_in                       (hdmi_i2c_scl_in),       //                               .scl_in
+	  .i2c_hdmi_sda_oe                       (hdmi_i2c_sda_oe),       //                               .sda_oe
+	  .i2c_hdmi_scl_oe                       (hdmi_i2c_scl_oe)        //                               .scl_oe
  );
+
+// HDMI I2C Tri-state Buffer
+assign HDMI_I2C_SCL = hdmi_i2c_scl_oe ? 1'b0 : 1'bz;
+assign hdmi_i2c_scl_in = HDMI_I2C_SCL;
+assign HDMI_I2C_SDA = hdmi_i2c_sda_oe ? 1'b0 : 1'bz;
+assign hdmi_i2c_sda_in = HDMI_I2C_SDA;
 
 // Debounce logic to clean out glitches within 1ms
 debounce debounce_inst (

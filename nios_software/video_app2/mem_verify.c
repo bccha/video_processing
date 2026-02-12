@@ -6,7 +6,7 @@
  */
 #include "terasic_includes.h"
 #include "mem_verify.h"
-
+#if 0
 bool TMEM_Verify(alt_u32 BaseAddr, alt_u32 ByteLen, alt_u32 InitValue, bool bShowMessage){
     bool bPass = TRUE;
     typedef alt_u32 my_data;
@@ -101,4 +101,4 @@ bool TMEM_Verify(alt_u32 BaseAddr, alt_u32 ByteLen, alt_u32 InitValue, bool bSho
 
     return bPass;
 }
-
+#endif

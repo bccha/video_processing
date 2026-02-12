@@ -73,7 +73,22 @@
 			memory_mem_odt                        : out   std_logic;                                        -- mem_odt
 			memory_mem_dm                         : out   std_logic_vector(3 downto 0);                     -- mem_dm
 			memory_oct_rzqin                      : in    std_logic                     := 'X';             -- oct_rzqin
-			reset_reset_n                         : in    std_logic                     := 'X'              -- reset_n
+			reset_reset_n                         : in    std_logic                     := 'X';             -- reset_n
+			pll_outclk_clk                        : out   std_logic;                                        -- clk
+			video_dma_s_waitrequest               : out   std_logic;                                        -- waitrequest
+			video_dma_s_readdata                  : out   std_logic_vector(31 downto 0);                    -- readdata
+			video_dma_s_readdatavalid             : out   std_logic;                                        -- readdatavalid
+			video_dma_s_burstcount                : in    std_logic_vector(8 downto 0)  := (others => 'X'); -- burstcount
+			video_dma_s_writedata                 : in    std_logic_vector(31 downto 0) := (others => 'X'); -- writedata
+			video_dma_s_address                   : in    std_logic_vector(31 downto 0) := (others => 'X'); -- address
+			video_dma_s_write                     : in    std_logic                     := 'X';             -- write
+			video_dma_s_read                      : in    std_logic                     := 'X';             -- read
+			video_dma_s_byteenable                : in    std_logic_vector(3 downto 0)  := (others => 'X'); -- byteenable
+			video_dma_s_debugaccess               : in    std_logic                     := 'X';             -- debugaccess
+			i2c_hdmi_sda_in                       : in    std_logic                     := 'X';             -- sda_in
+			i2c_hdmi_scl_in                       : in    std_logic                     := 'X';             -- scl_in
+			i2c_hdmi_sda_oe                       : out   std_logic;                                        -- sda_oe
+			i2c_hdmi_scl_oe                       : out   std_logic                                         -- scl_oe
 		);
 	end component soc_system;
 
@@ -152,6 +167,21 @@
 			memory_mem_odt                        => CONNECTED_TO_memory_mem_odt,                        --                               .mem_odt
 			memory_mem_dm                         => CONNECTED_TO_memory_mem_dm,                         --                               .mem_dm
 			memory_oct_rzqin                      => CONNECTED_TO_memory_oct_rzqin,                      --                               .oct_rzqin
-			reset_reset_n                         => CONNECTED_TO_reset_reset_n                          --                          reset.reset_n
+			reset_reset_n                         => CONNECTED_TO_reset_reset_n,                         --                          reset.reset_n
+			pll_outclk_clk                        => CONNECTED_TO_pll_outclk_clk,                        --                     pll_outclk.clk
+			video_dma_s_waitrequest               => CONNECTED_TO_video_dma_s_waitrequest,               --                    video_dma_s.waitrequest
+			video_dma_s_readdata                  => CONNECTED_TO_video_dma_s_readdata,                  --                               .readdata
+			video_dma_s_readdatavalid             => CONNECTED_TO_video_dma_s_readdatavalid,             --                               .readdatavalid
+			video_dma_s_burstcount                => CONNECTED_TO_video_dma_s_burstcount,                --                               .burstcount
+			video_dma_s_writedata                 => CONNECTED_TO_video_dma_s_writedata,                 --                               .writedata
+			video_dma_s_address                   => CONNECTED_TO_video_dma_s_address,                   --                               .address
+			video_dma_s_write                     => CONNECTED_TO_video_dma_s_write,                     --                               .write
+			video_dma_s_read                      => CONNECTED_TO_video_dma_s_read,                      --                               .read
+			video_dma_s_byteenable                => CONNECTED_TO_video_dma_s_byteenable,                --                               .byteenable
+			video_dma_s_debugaccess               => CONNECTED_TO_video_dma_s_debugaccess,               --                               .debugaccess
+			i2c_hdmi_sda_in                       => CONNECTED_TO_i2c_hdmi_sda_in,                       --                       i2c_hdmi.sda_in
+			i2c_hdmi_scl_in                       => CONNECTED_TO_i2c_hdmi_scl_in,                       --                               .scl_in
+			i2c_hdmi_sda_oe                       => CONNECTED_TO_i2c_hdmi_sda_oe,                       --                               .sda_oe
+			i2c_hdmi_scl_oe                       => CONNECTED_TO_i2c_hdmi_scl_oe                        --                               .scl_oe
 		);
 

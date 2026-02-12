@@ -1,29 +1,34 @@
-# TODO: HDMI Color Bar Display Roadmap
+# TODO: Advanced Video Processing Roadmap
 
-This roadmap outlines the steps to display a color bar pattern on an HDMI monitor by fetching data from DDR3 memory using the verified DMA pipeline.
+This roadmap outlines the steps to build a high-performance video pipeline, from basic color bars to advanced real-time image processing.
 
-## 1. Platform Designer (Qsys) Integration
-- [ ] **Pixel Clock PLL**: Add `Altera PLL` to generate 74.25 MHz (720p).
-- [ ] **PLL Reconfig**: Add `Altera PLL Reconfig` to allow Nios II to tune the clock.
-- [ ] **I2C Master**: Add `OpenCores I2C` or `Parallel to I2C` for ADV7513 configuration.
-- [ ] **Video DMA**: Custom Avalon-MM Master connected directly to the F2H AXI Bridge.
-- [ ] **Video Pipeline**: 
-    - [ ] Add `Video FIFO` for clock domain crossing and buffering.
-    - [ ] **Custom Sync Generator**: Create Verilog module for HSync/VSync/DE.
-    - [ ] Implement RGB data output logic synchronized with timing signals.
+## Phase 1: Foundation (Nios II Pattern & DMA) [/]
+- [x] **DDR3 Pattern Generation**: Write Nios II code to fill DDR3 (0x2000_0000) with 720p color bar.
+- [ ] **Video DMA (MM2ST Integration)**: Connect/Verify the hardware DMA that sends DDR3 pixels to HDMI.
+- [ ] **Basic HDMI Output**: Verify the first stable image on a monitor.
 
-## 2. FPGA Top-level RTL (Verilog)
-- [ ] **Pin Mapping**: Connect Qsys HDMI signals to physical DE10-Nano pins:
-    - `HDMI_TX_D[23:0]`
-    - `HDMI_TX_HS` / `HDMI_TX_VS` / `HDMI_TX_DE`
-    - `HDMI_TX_CLK`
-- [ ] **I2C Pins**: Connect `HDMI_I2C_SDA` and `HDMI_I2C_SCL` (with pull-up logic if needed).
+## Phase 2: Hardware Extension (RTL Sync Gen & Menu)
+- [ ] **Custom Sync Gen**: Implement `hdmi_sync_gen.v` with H/V sync and DE.
+- [ ] **RTL Patterns**: Add built-in patterns (Grid, Moving Square) to the Sync Gen.
+- [ ] **Software Control**: Update Nios II menu to switch between DMA and RTL patterns.
 
-## 3. Nios II Control Software
-- [ ] **I2C Driver**: Implement initialization for ADV7513 (Set output format, Power on).
-- [ ] **PLL Driver**: Implement code to wait for PLL Lock and handle reconfiguration.
-- [ ] **DMA Launcher**: Initialize the DMA to fetch from the reserved DDR3 space (0x20000000).
+## Phase 3: Advanced Processing (Line Buffer & Filters)
+- [ ] **Line Buffer Design**: Implement dual-port RAM based line buffers for 3x3 windowing.
+- [ ] **Processing Core**: Implement `video_processing_core.v`.
+    - [ ] **Grayscale/Thresholding**: Basic pixel-wise processing.
+    - [ ] **Sobel Edge Detection**: High-speed spatial filtering using the line buffers.
 
-## 4. Verification (The Color Bar)
-- [ ] **Pattern Setup**: Write a software loop in Nios II to fill DDR3 with a 1280x720 RGB color bar pattern.
-- [ ] **Final Run**: Start the pipeline and verify output on a 720p monitor.
+## Phase 4: High-End Quality (Hybrid Dithering)
+- [ ] **Spatial Dithering**: Implement Bayer Matrix based dithering to reduce banding.
+- [ ] **Temporal Dithering (FRC)**: Implement frame-rate control for 10-bit color simulation.
+- [ ] **Final Integration**: Combine Sobel + Dithering for a professional video output.
+
+## Phase 5: Next-Gen Integration (AI & Linux System)
+- [ ] **Linux Frame Buffer (fbdev/DRM)**: Map the video pipeline as a standard Linux display device.
+- [ ] **AI Acceleration**: Implement a hardware-based Object Detection core (CNN/YOLO-tiny).
+- [ ] **System-on-Chip Harmony**: Stream Linux video to HDMI while performing real-time AI recognition.
+
+## Hardware/Qsys Requirements (Common)
+- [ ] **Clocking**: 74.25 MHz Pixel Clock PLL + Reconfig IP.
+- [ ] **I2C Control**: ADV7513 initialization via Nios II.
+- [ ] **Top-level Wiring**: HDMI_TX pins assignment in `DE10_NANO_SoC_GHRD.v`.

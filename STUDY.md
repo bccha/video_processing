@@ -428,3 +428,31 @@ How does the Linux driver make sure the Frame Reader doesn't read a half-drawn f
    - The Frame Reader waits until the current frame output is completely finished before actually switching the internal DMA address to the new location.
 
 Understanding this flow is exactly what we are doing manually now—but instead of a complex Linux driver, we are using the **Nios II and our Custom Sync Generator** to gain full control!
+
+## 21. Historical Context: 8086 Text Mode
+In the 8086/DOS era, displaying text was much simpler for the CPU because the hardware had a dedicated **Text Mode**.
+
+### Character Memory (0xB8000)
+- Instead of managing millions of pixels, the CPU only had to manage a grid (typically **80x25** characters).
+- The video memory started at physical address **`0xB8000`**.
+- Each character occupied **2 bytes**:
+    - **Byte 1**: ASCII code (e.g., 'A' = `0x41`).
+    - **Byte 2**: Attribute (Color/Blink).
+
+### How it worked without a Framebuffer
+1. **CPU**: Writes `0x41` (A) and `0x07` (White on Black) to `0xB8000`.
+2. **Video Controller**:
+   - Reads the ASCII code `0x41` from memory.
+   - Looks up the pixel pattern for 'A' in a **Font ROM** (Character Generator).
+   - The Font ROM output the 16x8 or 8x8 pixel grid for that character.
+3. **Output**: The hardware converted that ROM pattern into a VGA signal in real-time.
+
+### Comparison to Modern HDMI Project
+| Feature | 8086 Text Mode | Our Modern HDMI Pipeline |
+| :--- | :--- | :--- |
+| **Logic** | Character-based (Grid) | Pixel-based (Everything is a dot) |
+| **CPU Burden** | Very Low (2 bytes per char) | High (3 bytes per pixel) |
+| **Hardware** | Fixed Font ROM | Flexible Software/RTL Rendering |
+| **Flexibility** | Fixed font and size | Unlimited (Anti-aliasing, any font) |
+
+In modern systems like our DE10-Nano, **"Text Mode" no longer exists in hardware.** When you see text (like in our Linux UI), the ARM/Nios II has to manually "draw" each letter pixel-by-pixel into the DDR3 framebuffer using a font bitmap!

@@ -73,7 +73,22 @@ module soc_system (
 	memory_mem_odt,
 	memory_mem_dm,
 	memory_oct_rzqin,
-	reset_reset_n);	
+	reset_reset_n,
+	pll_outclk_clk,
+	video_dma_s_waitrequest,
+	video_dma_s_readdata,
+	video_dma_s_readdatavalid,
+	video_dma_s_burstcount,
+	video_dma_s_writedata,
+	video_dma_s_address,
+	video_dma_s_write,
+	video_dma_s_read,
+	video_dma_s_byteenable,
+	video_dma_s_debugaccess,
+	i2c_hdmi_sda_in,
+	i2c_hdmi_scl_in,
+	i2c_hdmi_sda_oe,
+	i2c_hdmi_scl_oe);	
 
 	input	[1:0]	button_pio_external_connection_export;
 	input		clk_clk;
@@ -149,4 +164,19 @@ module soc_system (
 	output	[3:0]	memory_mem_dm;
 	input		memory_oct_rzqin;
 	input		reset_reset_n;
+	output		pll_outclk_clk;
+	output		video_dma_s_waitrequest;
+	output	[31:0]	video_dma_s_readdata;
+	output		video_dma_s_readdatavalid;
+	input	[8:0]	video_dma_s_burstcount;
+	input	[31:0]	video_dma_s_writedata;
+	input	[31:0]	video_dma_s_address;
+	input		video_dma_s_write;
+	input		video_dma_s_read;
+	input	[3:0]	video_dma_s_byteenable;
+	input		video_dma_s_debugaccess;
+	input		i2c_hdmi_sda_in;
+	input		i2c_hdmi_scl_in;
+	output		i2c_hdmi_sda_oe;
+	output		i2c_hdmi_scl_oe;
 endmodule

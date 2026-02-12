@@ -2,8 +2,8 @@
 <sch:Settings xmlns:sch="http://www.altera.com/embeddedsw/bsp/schema">
         <BspType>hal</BspType>
         <BspVersion>default</BspVersion>
-        <BspGeneratedTimeStamp>Feb 11, 2026 8:44:31 PM</BspGeneratedTimeStamp>
-        <BspGeneratedUnixTimeStamp>1770860671628</BspGeneratedUnixTimeStamp>
+        <BspGeneratedTimeStamp>Feb 12, 2026 1:41:57 AM</BspGeneratedTimeStamp>
+        <BspGeneratedUnixTimeStamp>1770878517759</BspGeneratedUnixTimeStamp>
         <BspGeneratedLocation>C:\Workspace\quartus\video_processing\nios_software\nios_ddr3_test_bsp</BspGeneratedLocation>
         <BspSettingsFile>settings.bsp</BspSettingsFile>
         <SopcDesignFile>..\..\soc_system.sopcinfo</SopcDesignFile>
@@ -734,7 +734,7 @@
                 <SettingName>hal.enable_small_c_library</SettingName>
                 <Identifier>none</Identifier>
                 <Type>Boolean</Type>
-                <Value>0</Value>
+                <Value>1</Value>
                 <DefaultValue>0</DefaultValue>
                 <DestinationFile>public_mk_define</DestinationFile>
                 <Description>Causes the small newlib (C library) to be used. This reduces code and data footprint at the expense of reduced functionality. Several newlib features are removed such as floating-point support in printf(), stdin input routines, and buffered I/O. The small C library is not compatible with Micrium MicroC/OS-II. If true, adds -msmallc to ALT_LDFLAGS in public.mk.</Description>
@@ -794,7 +794,7 @@
                 <SettingName>hal.enable_reduced_device_drivers</SettingName>
                 <Identifier>ALT_USE_SMALL_DRIVERS</Identifier>
                 <Type>Boolean</Type>
-                <Value>0</Value>
+                <Value>1</Value>
                 <DefaultValue>0</DefaultValue>
                 <DestinationFile>public_mk_define</DestinationFile>
                 <Description>Certain drivers are compiled with reduced functionality to reduce code footprint. Not all drivers observe this setting. The altera_avalon_uart and altera_avalon_jtag_uart drivers switch from interrupt-driven to polled operation. CAUTION: Several device drivers are disabled entirely. These include the altera_avalon_cfi_flash, altera_avalon_epcs_flash_controller, and altera_avalon_lcd_16207 drivers. This can result in certain API (HAL flash access routines) to fail. You can define a symbol provided by each driver to prevent it from being removed. If true, adds -DALT_USE_SMALL_DRIVERS to ALT_CPPFLAGS in public.mk.</Description>
@@ -917,21 +917,39 @@
                 <attributes/>
         </MemoryMap>
         <MemoryMap>
-                <slaveDescriptor>burst_master_4_0</slaveDescriptor>
-                <addressRange>0x00020020 - 0x0002003F</addressRange>
-                <addressSpan>32</addressSpan>
+                <slaveDescriptor>pll_locked</slaveDescriptor>
+                <addressRange>0x00020010 - 0x0002001F</addressRange>
+                <addressSpan>16</addressSpan>
                 <attributes/>
         </MemoryMap>
         <MemoryMap>
                 <slaveDescriptor>timer_0</slaveDescriptor>
-                <addressRange>0x00020040 - 0x0002005F</addressRange>
+                <addressRange>0x00020020 - 0x0002003F</addressRange>
                 <addressSpan>32</addressSpan>
                 <attributes>timer</attributes>
         </MemoryMap>
         <MemoryMap>
+                <slaveDescriptor>i2c_hdmi</slaveDescriptor>
+                <addressRange>0x00020040 - 0x0002007F</addressRange>
+                <addressSpan>64</addressSpan>
+                <attributes/>
+        </MemoryMap>
+        <MemoryMap>
                 <slaveDescriptor>burst_master_0</slaveDescriptor>
-                <addressRange>0x00020060 - 0x0002007F</addressRange>
+                <addressRange>0x00020080 - 0x0002009F</addressRange>
                 <addressSpan>32</addressSpan>
+                <attributes/>
+        </MemoryMap>
+        <MemoryMap>
+                <slaveDescriptor>burst_master_4_0</slaveDescriptor>
+                <addressRange>0x000200A0 - 0x000200BF</addressRange>
+                <addressSpan>32</addressSpan>
+                <attributes/>
+        </MemoryMap>
+        <MemoryMap>
+                <slaveDescriptor>pll_reconfig</slaveDescriptor>
+                <addressRange>0x00020100 - 0x000201FF</addressRange>
+                <addressSpan>256</addressSpan>
                 <attributes/>
         </MemoryMap>
         <MemoryMap>

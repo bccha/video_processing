@@ -4,7 +4,7 @@
  * Machine generated for CPU 'nios2_gen2_0' in SOPC Builder design 'soc_system'
  * SOPC Builder design path: ../../soc_system.sopcinfo
  *
- * Generated: Tue Dec 13 10:53:04 CST 2016
+ * Generated: Thu Feb 12 01:26:38 EST 2026
  */
 
 /*
@@ -59,6 +59,7 @@
  */
 
 #include "altera_nios2_gen2_irq.h"
+#include "altera_avalon_i2c.h"
 #include "altera_avalon_jtag_uart.h"
 #include "altera_avalon_timer.h"
 
@@ -67,6 +68,7 @@
  */
 
 ALTERA_NIOS2_GEN2_IRQ_INSTANCE ( NIOS2_GEN2_0, nios2_gen2_0);
+ALTERA_AVALON_I2C_INSTANCE ( I2C_HDMI, i2c_hdmi);
 ALTERA_AVALON_JTAG_UART_INSTANCE ( JTAG_UART, jtag_uart);
 ALTERA_AVALON_TIMER_INSTANCE ( TIMER_0, timer_0);
 
@@ -92,5 +94,6 @@ void alt_irq_init ( const void* base )
 void alt_sys_init( void )
 {
     ALTERA_AVALON_TIMER_INIT ( TIMER_0, timer_0);
+    ALTERA_AVALON_I2C_INIT ( I2C_HDMI, i2c_hdmi);
     ALTERA_AVALON_JTAG_UART_INIT ( JTAG_UART, jtag_uart);
 }

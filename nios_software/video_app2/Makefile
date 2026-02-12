@@ -91,6 +91,7 @@ ELF := video_app2.elf
 # Paths to C, C++, and assembly source files.
 C_SRCS += main.c
 C_SRCS += mem_verify.c
+C_SRCS += hdmi_config.c
 CXX_SRCS :=
 ASM_SRCS :=
 
@@ -111,7 +112,7 @@ CREATE_LINKER_MAP := 1
 APP_CFLAGS_DEFINED_SYMBOLS :=
 APP_CFLAGS_UNDEFINED_SYMBOLS :=
 APP_CFLAGS_OPTIMIZATION := -O0
-APP_CFLAGS_DEBUG_LEVEL := -g
+APP_CFLAGS_DEBUG_LEVEL :=
 APP_CFLAGS_WARNINGS := -Wall
 APP_CFLAGS_USER_FLAGS :=
 
