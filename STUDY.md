@@ -414,4 +414,17 @@ In the Golden Hardware Reference Design (GHRD), you see a Linux desktop on the H
 ### Why does it feel slow?
 Sometimes the Linux UI feels a bit "laggy" on FPGA boards. This is because the ARM CPU has to do all the drawing (GUI rendering) in software and then the FPGA has to compete for DDR3 bandwidth to read those pixels.
 
+### The Sync: Handling the Swap
+How does the Linux driver make sure the Frame Reader doesn't read a half-drawn frame?
+
+1. **AXI-Lite Control**: The Frame Reader IP has a set of control registers accessible by the ARM CPU. One of these registers holds the **Start Address** of the current frame in DDR3.
+2. **Double/Triple Buffering**: Linux usually maintains at least two buffers.
+3. **V-Sync Interrupt**: This is the secret sauce.
+   - When the Frame Reader finishes reading the last pixel of a frame (during the Vertical Blanking Interval), it sends an **IRQ (Interrupt Request)** to the ARM CPU.
+   - The Linux driver receives this interrupt and knows, "Okay, the monitor just finished showing the old frame. It's safe to switch to the new one now!"
+4. **The Handshake**:
+   - ARM writes the *new* buffer's address to the Frame Reader's register.
+   - ARM tells the Frame Reader to "Update on next V-Sync."
+   - The Frame Reader waits until the current frame output is completely finished before actually switching the internal DMA address to the new location.
+
 Understanding this flow is exactly what we are doing manually now—but instead of a complex Linux driver, we are using the **Nios II and our Custom Sync Generator** to gain full control!
