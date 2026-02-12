@@ -16,10 +16,9 @@ graph LR
 
     subgraph "FPGA (Logic)"
         DDR --> AXI[F2H AXI Bridge]
-        AXI --> ASE[Address Span Extender]
-        ASE --> V_DMA[Video DMA Master]
+        AXI --> V_DMA[Video DMA Master]
         V_DMA --> FIFO[Video FIFO]
-        FIFO --> CVO[Clocked Video Output]
+        FIFO --> SGEN[Custom Sync Generator]
     end
 
     subgraph "System Control"
@@ -30,8 +29,8 @@ graph LR
         PLL_R -.-> P_CLK[Pixel Clock PLL]
     end
 
-    CVO --> HDMI_Chip
-    P_CLK --> CVO
+    SGEN --> HDMI_Chip
+    P_CLK --> SGEN
 ```
 
 ---
@@ -49,8 +48,8 @@ graph LR
 - **Pipeline Orchestration**: Triggers the Video DMA and monitors the overall system status.
 
 ### FPGA Fabric (High-Speed Data Path)
-- **Video DMA Master**: A custom Avalon-MM Master that fetches pixel data from DDR3 using burst transactions.
-- **Clocked Video Output (CVO)**: Converts the streaming pixel data into standard HDMI timing signals (HSync, VSync, Data Enable).
+- **Video DMA Master (MM2ST)**: A custom DMA module that fetches pixel data from DDR3 via an **Avalon-MM Master** and outputs it as a high-speed **Avalon-ST (Streaming)** source.
+- **Custom Sync Generator**: A Verilog module that converts streaming pixel data into standard HDMI timing signals (HSync, VSync, Data Enable) based on the target resolution.
 - **Latency Optimization**: Bypasses traditional bottlenecks by using the F2H AXI Slave Bridge, ensuring a stable throughput of over 100MB/s.
 
 ---
@@ -59,7 +58,7 @@ graph LR
 
 1. **ARM-based Data Loading**: We chose ARM-Linux for data loading over JTAG (HostFS) because it provides significantly higher transfer speeds required for video.
 2. **Software-Defined Control (Nios II)**: Implementing I2C and PLL reconfiguration in software provides the flexibility to support multiple display resolutions and timing adjustments without rebuilding the hardware.
-3. **Avalon-MM to AXI Hierarchy**: We use Avalon-MM masters for the DMA logic while utilizing the Address Span Extender to bridge into the HPS AXI infrastructure for stability and performance.
+3. **Direct AXI Connectivity**: The Video DMA connects directly to the F2H AXI Slave Bridge. This removes the need for the Address Span Extender in the high-speed data path, reducing latency and simplifying the address mapping to a direct physical view of the HPS DDR3.
 
 ---
 
