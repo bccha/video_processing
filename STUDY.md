@@ -397,3 +397,21 @@ By applying this "Convex" shape in our LUT, we effectively "pre-brighten" the da
 | **Response** | **Concave ($\cup$)** | $x^{2.2}$ | Physical display characteristic |
 
 This is why a simple linear counter $0 \to 255$ results in a gradient that looks like it has too much "black" area on a raw monitor without this correction! 📊✨
+
+## 20. Case Study: How does the GHRD Linux UI work?
+In the Golden Hardware Reference Design (GHRD), you see a Linux desktop on the HDMI monitor. This data path is a perfect example of what we've learned.
+
+### The Mechanism: Linux Framebuffer
+1. **Memory Allocation**: During boot, the Linux kernel reserves a specific region of DDR3 (e.g., 32MB) to be used as `fb0` (Framebuffer 0).
+2. **The Driver**: A dedicated Linux driver (`altvipfb` or similar) communicates with the FPGA.
+3. **The IP in Qsys**: In the FPGA fabric, there is an IP called the **Intel VIP Frame Reader** (or a custom Frame Reader).
+4. **The Link**:
+   - **ARM Side**: The X-Server or GUI draws pixels into the Reserved DDR3 region.
+   - **FPGA Side**: The Frame Reader IP is configured (via AXI-Lite) with the start address of that DDR3 region.
+   - **Streaming**: The Frame Reader IP acts as a DMA Master, fetching pixels from DDR3 and converting them into an **Avalon-ST video stream**.
+5. **Output**: This stream goes through a **Clocked Video Output (CVO)** IP, which generates the HSync/VSync, and finally to the ADV7513.
+
+### Why does it feel slow?
+Sometimes the Linux UI feels a bit "laggy" on FPGA boards. This is because the ARM CPU has to do all the drawing (GUI rendering) in software and then the FPGA has to compete for DDR3 bandwidth to read those pixels.
+
+Understanding this flow is exactly what we are doing manually now—but instead of a complex Linux driver, we are using the **Nios II and our Custom Sync Generator** to gain full control!
