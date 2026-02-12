@@ -77,12 +77,12 @@ Step 3: Verifying HW DMA Integrity...
 
 ## 6. Phase 2: DDR-to-DDR Pipeline DMA & Memory Protection
 
-단순 데이터 전송을 넘어, 4단계 연산 파이프라인이 포함된 `burst_master_4`를 사용하여 픽셀 연산을 동시 수행하는 성능을 측정하였습니다. 해당 테스트는 소스 데이터에 계수(Coefficient)를 곱한 뒤 400으로 나누는 연산(`Pixel_Out = (Pixel_In * Coeff) / 400`)을 포함하며, 이는 비디오 필터 및 색상 변환 알고리즘의 기초가 됩니다. 또한, HPS(ARM/Linux) 시스템 영역 보호를 위한 주소 관리 기법을 적용하였습니다.
+Beyond simple data transfers, we measured pixel-processing performance using `burst_master_4` which includes a 4-stage arithmetic pipeline. This test performs a multiplication by a coefficient followed by a division by 400 (`Pixel_Out = (Pixel_In * Coeff) / 400`), which serves as the foundation for video filters and color space conversion algorithms. We also implemented memory protection strategies to avoid HPS (ARM/Linux) system space.
 
 ### 🛑 Challenge 4: HPS Memory Conflict (0x0 Address)
-- **문제**: 물리 주소 0x0 지점은 ARM의 Vector Table 및 Kernel 영역으로, DMA가 이 대역을 침범할 경우 시스템 크래시가 발생합니다.
-- **해결**: 모든 DMA 테스트 주소를 **512MB (0x20000000)** 이후의 안전 영역으로 상향 조정하였습니다.
-- **구현**: `Address Span Extender`의 윈도우 베이스를 초기화 시 `0x20000000`으로 설정하여 Nios II와 하드웨어 간의 주소 정렬을 유지하였습니다.
+- **Problem**: Physical address 0x0 is reserved for the ARM Vector Table and Kernel. Writing to this region via DMA triggers immediate system crashes.
+- **Solution**: Shifted all DMA test addresses to the safe region starting at **512MB (0x20000000)**.
+- **Implementation**: Initialized the `Address Span Extender` window base to `0x20000000` during startup to ensure alignment between Nios II and the hardware DMA.
 
 ### 📊 DDR-to-DDR Benchmark (1 MB)
 | Method | Transfer Size | Time | Throughput | Speedup |
@@ -100,5 +100,5 @@ Setting Span Extender window to 0x20000000... Done.
 [SUCCESS] HW DMA results match SW reference! 🎉
 ```
 
-## 7. 결론 (Conclusion)
-AXI Bridge와 Burst Master DMA의 조합은 DE10-Nano 플랫폼에서 DDR3 자원을 활용하기 위한 가장 안정적이고 강력한 방법임을 확인하였습니다. 특히 125MB/s의 확정 대역폭은 실시간 720p HD 비디오 스트리밍 처리에 충분한 수치이며, 고속 연산 파이프라인과의 통합이 성공적으로 검증되었습니다.
+## 7. Conclusion
+The combination of the **AXI Bridge** and **Burst Master DMA** is the most stable and high-performance method for utilizing DDR3 resources on the DE10-Nano. The verified throughput of 125 MB/s is sufficient for real-time 720p HD video streaming, and the successful integration with an arithmetic pipeline proves its readiness for advanced image processing tasks.

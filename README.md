@@ -37,6 +37,7 @@ graph LR
 | **Hardware DMA (Burst)** | **136.53 MB/s** | **~30.0x faster** |
 
 ## 📖 Documentation
-- [BURST_DMA.md](./BURST_DMA.md): Detailed debugging history, trial & error, and technical implementation details.
-- [soc_system.qsys](./soc_system.qsys): Platform Designer configuration.
+- [DESIGN.md](./DESIGN.md): Comprehensive system architecture and DDR-to-HDMI pipeline specification.
+- [BURST_DMA.md](./BURST_DMA.md): Detailed debugging history, performance benchmarks, and memory protection strategies.
+- [soc_system.qsys](./soc_system.qsys): Platform Designer (Qsys) hardware configuration.
 - [nios_software/](./nios_software/): Nios II benchmark and verification source code.
