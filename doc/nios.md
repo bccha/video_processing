@@ -33,8 +33,43 @@ Accessible via option `[6]`, this menu manages hardware Look-Up Table (LUT) sett
 - **[4] Load Inverse Gamma 2.2**: Specialized LUT for linear panels to prevent "washed-out" blacks.
 - **[b] Back**: Returns to the Main Menu.
 
-## 📝 Menu Sample
-*(User-provided sample will be placed here)*
+## 📝 Menu Sample (Actual Execution Log)
+
+```text
+DE10-Nano Video/DMA Test Environment Initialized
+Checking Timer... Timer OK! (Delta=161197)
+Initializing Span Extender to 0x20000000... Done.
+
+========== DE10-Nano HDMI Pipeline Menu ==========
+ [1] Perform OCM-to-DDR DMA Test (4KB)
+ [2] Perform DDR-to-DDR Burst Master Test (1MB)
+ [3] Initialize HDMI (ADV7513 via I2C)
+ [4] Generate 720p Color Bar Pattern in DDR3
+ [5] Change RTL Test Pattern (Red, Green, Blue, etc.)
+ [6] Gamma Correction Settings (Table, Toggle, Standard)
+ [C] Load Custom Character Bitmap
+ [r] Reset RTL Pattern Generator
+ [q] Quit
+--------------------------------------------------
+Select an option: 1
+
+--- [TEST 1] OCM to DDR DMA (burst_master_0) ---
+Starting SW Copy (4KB x 100)... Done (4179649 cycles, ~4.6 MB/s)
+Starting HW DMA (4KB x 100)... Done (167027 cycles, ~116.9 MB/s)
+Speedup: 25 x
+SUCCESS: OCM to DDR Verified!
+
+Select an option: 6
+
+--- Gamma Correction Settings ---
+ [1] Toggle Enable (Current: OFF)
+ [2] Load Gamma 2.2 (Standard)
+ [3] Load sRGB Gamma (Standard)
+ [4] Load Inverse Gamma 2.2 (for Linear Panel)
+ [b] Back to Main Menu
+Enter choice: 1
+Gamma Correction Enabled
+```
 
 ---
 > [!TIP]
