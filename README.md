@@ -30,13 +30,14 @@ graph LR
     AXI --> DDR
 ```
 
-## 📊 Performance Summary
-| Method | Throughput | Improvement |
-| :--- | :--- | :--- |
-| Software Copy (CPU) | 4.55 MB/s | Baseline |
-| **Hardware DMA (Burst)** | **136.53 MB/s** | **~30x faster** |
-| Software (w/ Arithmetic) | 0.21 MB/s | Ref (Complex) |
-| **Hardware DMA (BM4/Pipe)** | **125.00 MB/s** | **~585x faster** |
+## Performance Summary
+
+| Data Path | Method | Throughput | Verification |
+| :--- | :--- | :--- | :--- |
+| **OCM to DDR3** | Software Copy (CPU) | 4.55 MB/s | Baseline |
+| | **Hardware DMA (Burst)** | **136.53 MB/s** | **~30x Speedup** |
+| **DDR3 to DDR3** | Software (w/ Arithmetic) | 0.21 MB/s | Reference |
+| | **Hardware DMA (BM4/Pipe)** | **125.00 MB/s** | **~585x Speedup** |
 
 ## 📖 Documentation
 - [DESIGN.md](./DESIGN.md): Comprehensive system architecture and DDR-to-HDMI pipeline specification.
