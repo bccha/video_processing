@@ -332,4 +332,68 @@ You can use **FFmpeg**, the Swiss Army knife of video, to convert any movie into
 ffmpeg -i movie.mp4 -f rawvideo -pix_fmt rgb24 output_720p.raw
 ```
 
-The resulting `.raw` file is just a massive stream of bytes. Our ARM processor just needs to read 2.76 MB chunks and copy them to DDR3 to play the video! 
+The resulting `.raw` file is just a massive stream of bytes. Our ARM processor just needs to read 2.76 MB chunks and copy them to DDR3 to play the video!
+
+## 18. Hardware Optimization: YUV422 to RGB888 CSC
+Incorporating a **Color Space Converter (CSC)** into the pipeline allows you to store video in YUV422 format (16 bits per pixel) instead of RGB888 (24 bits per pixel), saving **33% of DDR3 bandwidth**.
+
+### YUV422 Data Structure
+- **Pixel 1**: $Y_0$ and share $U_0, V_0$.
+- **Pixel 2**: $Y_1$ and share the same $U_0, V_0$.
+- Data is typically ordered as: `Y0, U0, Y1, V0, Y2, U1, Y3, V1...`
+
+### The Conversion Formula (Fixed Point)
+Since FPGAs aren't great at floating-point math, we use integer approximations (multiplication and bit-shifting):
+- $R = [1.164(Y - 16) + 1.596(V - 128)]$
+- $G = [1.164(Y - 16) - 0.813(V - 128) - 0.391(U - 128)]$
+- $B = [1.164(Y - 16) + 2.018(U - 128)]$
+
+### Pipeline Integration
+1. **MM2ST Decoder**: Reads 16-bit YUV422 chunks from DDR3.
+2. **CSC Module**: Contains multipliers and adders to calculate RGB values in real-time.
+3. **FIFO**: Stores the resulting 24-bit RGB pixels.
+4. **Sync Generator**: Pulls RGB pixels from the FIFO as needed.
+
+By adding this one module, we can handle higher resolutions or save bandwidth for other ARM/HPS tasks!
+
+## 19. Visual Quality: Gamma Correction ($\gamma$)
+**Gamma Correction** is the process of compensating for the non-linear relationship between the pixel value and the actual brightness perceived by the human eye.
+
+### Why do we need it?
+- **Human Perception**: Our eyes are more sensitive to variations in dark tones than in bright ones.
+- **Display Response**: Old CRTs and modern LCDs don't have a linear response ($Intensity \propto Voltage^\gamma$).
+- Without Gamma Correction ($\gamma = 2.2$), images tend to look "washed out" or have incorrect contrast in the mid-tones.
+
+### FPGA Implementation: Look-Up Table (LUT)
+Calculating $V_{out} = V_{in}^{1/\gamma}$ in real-time using mathematical formulas is extremely hardware-heavy. Instead, we use a **LUT**.
+
+1. **Pre-calculation**: On a PC, you calculate the correct 8-bit output for every possible 8-bit input (0-255) based on the gamma curve.
+2. **Memory Map**: Store these 256 values in a small Dual-Port RAM or ROM inside the FPGA.
+3. **The Pipeline**:
+   - `Input Pixel (8-bit)` ➡️ `Address of LUT`
+   - `Data at Address` ➡️ `Gamma-Corrected Pixel (8-bit)`
+4. **Integration**: This can be placed right before the HDMI transmitter to fine-tune the final output quality.
+
+### Integration: Encoding vs. Correction
+You've made a very sharp point: Most monitors already have a "Gamma Response." Because of this, we usually distinguish between two terms:
+
+1. **Gamma Encoding (Source Side)**: This is what the FPGA or the PC does. Since monitors have a non-linear response, we **encode** the data (usually with $\gamma=1/2.2$) so that when the monitor applies its natural "Gamma Correction" (usually $\gamma=2.2$), the final result is a **linear** 1-to-1 brightness.
+2. **Pre-encoded Content**: Most MP4, BMP, and JPEG files are **already gamma-encoded** by the camera or the software that created them. In this case, the FPGA should **not** apply any further gamma correction—it should just pass the bits through!
+3. **When to use the LUT?**: You only need a Gamma LUT in the FPGA if:
+   - Your FPGA is generating **Linear Math** (e.g., a simple gradient counter $0 \to 255$). Without encoding, the gradient will look "bunched up" in the dark areas on the monitor.
+   - You are doing **Alpha Blending** or **Linear Light Video Processing** inside the FPGA fabric.
+
+### The Shape of the Curve: Convex Upwards ($\cap$)
+Your intuition is 100% correct! To match the monitor's response, the encoding curve must be **convex upwards** (위로 볼록).
+
+- **Monitor Response (Physical)**: $I = V^{2.2}$. This curve is **concave upwards** ($\cup$). It stays dark for a long time and then shoots up suddenly. If we send linear data, the middle grey values will look way too dark.
+- **FPGA Encoding (Mathematical)**: $V = I^{1/2.2} \approx I^{0.45}$. This curve is **convex upwards** ($\cap$). It shoots up quickly in the dark areas and then flattens out.
+
+By applying this "Convex" shape in our LUT, we effectively "pre-brighten" the dark areas. When the monitor's "Concave" response pulls them back down, they land exactly where they should be for our eyes.
+
+| Curve Type | Shape | Math | Role |
+| :--- | :---: | :---: | :--- |
+| **Encoding** | **Convex ($\cap$)** | $x^{0.45}$ | Pre-brighten darks (Source side) |
+| **Response** | **Concave ($\cup$)** | $x^{2.2}$ | Physical display characteristic |
+
+This is why a simple linear counter $0 \to 255$ results in a gradient that looks like it has too much "black" area on a raw monitor without this correction! 📊✨
