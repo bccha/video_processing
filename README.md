@@ -47,7 +47,7 @@ graph LR
 
 ## 📖 Documentation
 - [DESIGN.md](doc/DESIGN.md): Comprehensive system architecture and DDR-to-HDMI pipeline specification.
-- [NIOS.md](doc/nios.md): Detailed Interactive Menu tree structure and control logic.
+- [NIOS.md](doc/NIOS.md): Detailed Interactive Menu tree structure and control logic.
 - [BURST_DMA.md](doc/BURST_DMA.md): Detailed debugging history, performance benchmarks, and memory protection strategies.
 - [STUDY.md](doc/STUDY.md): Technical study notes on HDMI timing, ADV7513, and video processing.
 - [RESULT.md](doc/RESULT.md): Official performance benchmark results and hardware status logs.
