@@ -77,7 +77,7 @@ Step 3: Verifying HW DMA Integrity...
 
 ## 6. Phase 2: DDR-to-DDR Pipeline DMA & Memory Protection
 
-단순 전송을 넘어, 연산 파이프라인이 포함된 `burst_master_4`를 통해 DDR-to-DDR 성능을 측정하였습니다. 또한, HPS(ARM/Linux)의 시스템 영역 보호를 위한 주소 관리 기법을 적용하였습니다.
+단순 데이터 전송을 넘어, 4단계 연산 파이프라인이 포함된 `burst_master_4`를 사용하여 픽셀 연산을 동시 수행하는 성능을 측정하였습니다. 해당 테스트는 소스 데이터에 계수(Coefficient)를 곱한 뒤 400으로 나누는 연산(`Pixel_Out = (Pixel_In * Coeff) / 400`)을 포함하며, 이는 비디오 필터 및 색상 변환 알고리즘의 기초가 됩니다. 또한, HPS(ARM/Linux) 시스템 영역 보호를 위한 주소 관리 기법을 적용하였습니다.
 
 ### 🛑 Challenge 4: HPS Memory Conflict (0x0 Address)
 - **문제**: 물리 주소 0x0 지점은 ARM의 Vector Table 및 Kernel 영역으로, DMA가 이 대역을 침범할 경우 시스템 크래시가 발생합니다.
