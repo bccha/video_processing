@@ -92,6 +92,9 @@ ELF := video_app2.elf
 C_SRCS += main.c
 C_SRCS += mem_verify.c
 C_SRCS += hdmi_config.c
+C_SRCS += burst_master_test.c
+C_SRCS += common.c
+C_SRCS += hdmi_control.c
 CXX_SRCS :=
 ASM_SRCS :=
 

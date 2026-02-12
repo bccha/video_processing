@@ -13,7 +13,7 @@ module hdmi_sync_gen (
     output reg         hdmi_vs,
 
     // Avalon-MM Slave Interface for Control
-    input  wire [1:0]  avs_address,
+    input  wire [2:0]  avs_address,
     input  wire        avs_read,
     input  wire        avs_write,
     input  wire [31:0] avs_writedata,
@@ -26,6 +26,12 @@ module hdmi_sync_gen (
     reg [31:0] reg_gamma_ctrl; // Addr 1: Bit 0 = Gamma Enable
     reg [31:0] reg_lut_addr;   // Addr 2: LUT Address (0-255)
     reg [31:0] reg_lut_data;   // Addr 3: LUT Data (8-bit)
+    reg [31:0] reg_bitmap_addr; // Addr 4: Bitmap Update Addr (0-15)
+    reg [31:0] reg_bitmap_data; // Addr 5: Bitmap Update Data (16-bit)
+
+    // Character Bitmap Memory (16x16)
+    // Each entry is one row (16 bits)
+    reg [15:0] char_bitmap [0:15];
 
     // LUT Memory (256x8)
     reg [7:0] lut_mem [0:255];
@@ -36,10 +42,12 @@ module hdmi_sync_gen (
 
     always @(*) begin
         case (avs_address)
-            2'd0:    read_data_mux = reg_mode;
-            2'd1:    read_data_mux = reg_gamma_ctrl;
-            2'd2:    read_data_mux = reg_lut_addr;
-            2'd3:    read_data_mux = reg_lut_data;
+            3'd0:    read_data_mux = reg_mode;
+            3'd1:    read_data_mux = reg_gamma_ctrl;
+            3'd2:    read_data_mux = reg_lut_addr;
+            3'd3:    read_data_mux = reg_lut_data;
+            3'd4:    read_data_mux = reg_bitmap_addr;
+            3'd5:    read_data_mux = reg_bitmap_data;
             default: read_data_mux = 32'd0;
         endcase
     end
@@ -51,17 +59,28 @@ module hdmi_sync_gen (
             reg_lut_addr <= 32'd0;
             reg_lut_data <= 32'd0;
             avs_readdatavalid <= 1'b0;
+            // Initialize bitmap to 0
+            char_bitmap[0] <= 16'd0; char_bitmap[1] <= 16'd0; char_bitmap[2] <= 16'd0; char_bitmap[3] <= 16'd0;
+            char_bitmap[4] <= 16'd0; char_bitmap[5] <= 16'd0; char_bitmap[6] <= 16'd0; char_bitmap[7] <= 16'd0;
+            char_bitmap[8] <= 16'd0; char_bitmap[9] <= 16'd0; char_bitmap[10] <= 16'd0; char_bitmap[11] <= 16'd0;
+            char_bitmap[12] <= 16'd0; char_bitmap[13] <= 16'd0; char_bitmap[14] <= 16'd0; char_bitmap[15] <= 16'd0;
         end else begin
             // Write Logic
             if (avs_write) begin
                 case (avs_address)
-                    2'd0: reg_mode <= avs_writedata;
-                    2'd1: reg_gamma_ctrl <= avs_writedata;
-                    2'd2: reg_lut_addr <= avs_writedata;
-                    2'd3: begin
+                    3'd0: reg_mode <= avs_writedata;
+                    3'd1: reg_gamma_ctrl <= avs_writedata;
+                    3'd2: reg_lut_addr <= avs_writedata;
+                    3'd3: begin
                         reg_lut_data <= avs_writedata;
                         lut_mem[reg_lut_addr[7:0]] <= avs_writedata[7:0];
                     end
+                    3'd4: reg_bitmap_addr <= avs_writedata;
+                    3'd5: begin
+                        reg_bitmap_data <= avs_writedata;
+                        char_bitmap[reg_bitmap_addr[3:0]] <= avs_writedata[15:0];
+                    end
+                    default: ;
                 endcase
             end
             
@@ -108,11 +127,21 @@ module hdmi_sync_gen (
         end
     end
 
-    // Sync & DE Generation
-    always @(posedge clk) begin
-        hdmi_hs <= (h_cnt >= (H_VISIBLE + H_FRONT) && h_cnt < (H_VISIBLE + H_FRONT + H_SYNC));
-        hdmi_vs <= (v_cnt >= (V_VISIBLE + V_FRONT) && v_cnt < (V_VISIBLE + V_FRONT + V_SYNC));
-        hdmi_de <= (h_cnt < H_VISIBLE && v_cnt < V_VISIBLE);
+    // Sync & DE Generation (Internal Wires for Alignment)
+    wire visible = (h_cnt < H_VISIBLE && v_cnt < V_VISIBLE);
+    wire hs_wire = (h_cnt >= (H_VISIBLE + H_FRONT) && h_cnt < (H_VISIBLE + H_FRONT + H_SYNC));
+    wire vs_wire = (v_cnt >= (V_VISIBLE + V_FRONT) && v_cnt < (V_VISIBLE + V_FRONT + V_SYNC));
+
+    always @(posedge clk or negedge reset_n) begin
+        if (!reset_n) begin
+            hdmi_hs <= 1'b0;
+            hdmi_vs <= 1'b0;
+            hdmi_de <= 1'b0;
+        end else begin
+            hdmi_hs <= hs_wire;
+            hdmi_vs <= vs_wire;
+            hdmi_de <= visible;
+        end
     end
 
     // Pixel Data Generation Based on Mode
@@ -135,6 +164,13 @@ module hdmi_sync_gen (
                          (h_cnt < 1120) ? 3'd6 : 3'd7;
     wire [7:0] gray8_val = {bar_idx, 5'd0}; // Each step is 32
 
+    // Character Tile Logic (16x16 Scaling 4x -> 64x64 Tile)
+    wire [3:0] char_row_idx = v_cnt[5:2]; // 0-15
+    wire [3:0] char_col_idx = h_cnt[5:2]; // 0-15
+    wire [15:0] current_row_bits = char_bitmap[char_row_idx];
+    wire char_pixel = current_row_bits[15 - char_col_idx]; // Leftmost bit is col 0
+    wire [23:0] char_color = char_pixel ? 24'hFF00FF : 24'h000000; // Magenta on Black
+
     always @(*) begin
         case (reg_mode[2:0])
             3'd0: pre_gamma_d = 24'hFF0000; // Red
@@ -144,18 +180,23 @@ module hdmi_sync_gen (
             3'd4: pre_gamma_d = grid_line ? 24'hFFFFFF : 24'h000000; // Grid
             3'd5: pre_gamma_d = 24'hFFFFFF; // Solid White
             3'd6: pre_gamma_d = {gray8_val, gray8_val, gray8_val}; // 8-level Gray Scale
+            3'd7: pre_gamma_d = char_color; // Character Tile 4x
             default: pre_gamma_d = 24'hFFFFFF; // White
         endcase
     end
 
-    always @(posedge clk) begin
-        if (hdmi_de) begin
-            if (reg_gamma_ctrl[0])
-                hdmi_d <= {gamma_r, gamma_g, gamma_b};
-            else
-                hdmi_d <= pre_gamma_d;
+    always @(posedge clk or negedge reset_n) begin
+        if (!reset_n) begin
+            hdmi_d <= 24'h000000;
         end else begin
-            hdmi_d <= 24'h000000; // Blank
+            if (visible) begin // Use 'visible' wire to align with hdmi_de register update
+                if (reg_gamma_ctrl[0])
+                    hdmi_d <= {gamma_r, gamma_g, gamma_b};
+                else
+                    hdmi_d <= pre_gamma_d;
+            end else begin
+                hdmi_d <= 24'h000000; // Blank
+            end
         end
     end
 

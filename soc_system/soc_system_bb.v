@@ -56,6 +56,10 @@ module soc_system (
 	hps_0_hps_io_hps_io_gpio_inst_GPIO53,
 	hps_0_hps_io_hps_io_gpio_inst_GPIO54,
 	hps_0_hps_io_hps_io_gpio_inst_GPIO61,
+	i2c_hdmi_sda_in,
+	i2c_hdmi_scl_in,
+	i2c_hdmi_sda_oe,
+	i2c_hdmi_scl_oe,
 	led_pio_external_connection_export,
 	memory_mem_a,
 	memory_mem_ba,
@@ -73,8 +77,8 @@ module soc_system (
 	memory_mem_odt,
 	memory_mem_dm,
 	memory_oct_rzqin,
-	reset_reset_n,
 	pll_outclk_clk,
+	reset_reset_n,
 	video_dma_s_waitrequest,
 	video_dma_s_readdata,
 	video_dma_s_readdatavalid,
@@ -85,10 +89,16 @@ module soc_system (
 	video_dma_s_read,
 	video_dma_s_byteenable,
 	video_dma_s_debugaccess,
-	i2c_hdmi_sda_in,
-	i2c_hdmi_scl_in,
-	i2c_hdmi_sda_oe,
-	i2c_hdmi_scl_oe);	
+	hdmi_sync_master_waitrequest,
+	hdmi_sync_master_readdata,
+	hdmi_sync_master_readdatavalid,
+	hdmi_sync_master_burstcount,
+	hdmi_sync_master_writedata,
+	hdmi_sync_master_address,
+	hdmi_sync_master_write,
+	hdmi_sync_master_read,
+	hdmi_sync_master_byteenable,
+	hdmi_sync_master_debugaccess);	
 
 	input	[1:0]	button_pio_external_connection_export;
 	input		clk_clk;
@@ -146,6 +156,10 @@ module soc_system (
 	inout		hps_0_hps_io_hps_io_gpio_inst_GPIO53;
 	inout		hps_0_hps_io_hps_io_gpio_inst_GPIO54;
 	inout		hps_0_hps_io_hps_io_gpio_inst_GPIO61;
+	input		i2c_hdmi_sda_in;
+	input		i2c_hdmi_scl_in;
+	output		i2c_hdmi_sda_oe;
+	output		i2c_hdmi_scl_oe;
 	output	[6:0]	led_pio_external_connection_export;
 	output	[14:0]	memory_mem_a;
 	output	[2:0]	memory_mem_ba;
@@ -163,8 +177,8 @@ module soc_system (
 	output		memory_mem_odt;
 	output	[3:0]	memory_mem_dm;
 	input		memory_oct_rzqin;
-	input		reset_reset_n;
 	output		pll_outclk_clk;
+	input		reset_reset_n;
 	output		video_dma_s_waitrequest;
 	output	[31:0]	video_dma_s_readdata;
 	output		video_dma_s_readdatavalid;
@@ -175,8 +189,14 @@ module soc_system (
 	input		video_dma_s_read;
 	input	[3:0]	video_dma_s_byteenable;
 	input		video_dma_s_debugaccess;
-	input		i2c_hdmi_sda_in;
-	input		i2c_hdmi_scl_in;
-	output		i2c_hdmi_sda_oe;
-	output		i2c_hdmi_scl_oe;
+	input		hdmi_sync_master_waitrequest;
+	input	[31:0]	hdmi_sync_master_readdata;
+	input		hdmi_sync_master_readdatavalid;
+	output	[0:0]	hdmi_sync_master_burstcount;
+	output	[31:0]	hdmi_sync_master_writedata;
+	output	[2:0]	hdmi_sync_master_address;
+	output		hdmi_sync_master_write;
+	output		hdmi_sync_master_read;
+	output	[3:0]	hdmi_sync_master_byteenable;
+	output		hdmi_sync_master_debugaccess;
 endmodule

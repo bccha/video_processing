@@ -110,6 +110,14 @@ module DE10_NANO_SoC_GHRD(
   wire        dma_read;
   wire [3:0]  dma_byteenable;
 
+  // HDMI Sync Gen Control Interface (Exported from Qsys)
+  wire [2:0]  hsg_s_address;
+  wire        hsg_s_read;
+  wire        hsg_s_write;
+  wire [31:0] hsg_s_writedata;
+  wire [31:0] hsg_s_readdata;
+  wire        hsg_s_readdatavalid;
+
   // HDMI I2C Wires
   wire        hdmi_i2c_sda_in;
   wire        hdmi_i2c_scl_in;
@@ -228,8 +236,38 @@ soc_system u0 (
 	  .i2c_hdmi_sda_in                       (hdmi_i2c_sda_in),       //                       i2c_hdmi.sda_in
 	  .i2c_hdmi_scl_in                       (hdmi_i2c_scl_in),       //                               .scl_in
 	  .i2c_hdmi_sda_oe                       (hdmi_i2c_sda_oe),       //                               .sda_oe
-	  .i2c_hdmi_scl_oe                       (hdmi_i2c_scl_oe)        //                               .scl_oe
+	  .i2c_hdmi_scl_oe                       (hdmi_i2c_scl_oe),       //                               .scl_oe
+
+		// HDMI Sync Gen Control (Master Exported)
+	  .hdmi_sync_master_waitrequest          (1'b0),                  //                     Waitrequest: Always ready
+	  .hdmi_sync_master_readdata             (hsg_s_readdata),        //                               .readdata
+	  .hdmi_sync_master_readdatavalid        (hsg_s_readdatavalid),   //                               .readdatavalid
+	  .hdmi_sync_master_burstcount           (),                      //                               .burstcount (Not used)
+	  .hdmi_sync_master_writedata            (hsg_s_writedata),       //                               .writedata
+	  .hdmi_sync_master_address              (hsg_s_address),         //                               .address
+	  .hdmi_sync_master_write                (hsg_s_write),           //                               .write
+	  .hdmi_sync_master_read                 (hsg_s_read),            //                               .read
+	  .hdmi_sync_master_byteenable           (),                      //                               .byteenable (Not used)
+	  .hdmi_sync_master_debugaccess          ()                       //                               .debugaccess (Not used)
  );
+
+// HDMI Sync & Pattern Generator (Solid Red)
+hdmi_sync_gen u_hdmi_sync (
+    .clk               (HDMI_TX_CLK),           // 74.25 MHz from Qsys PLL
+    .reset_n           (hps_fpga_reset_n),      // Reset from HPS
+    .hdmi_d            (HDMI_TX_D),             // 24-bit Data
+    .hdmi_de           (HDMI_TX_DE),            // Display Enable
+    .hdmi_hs           (HDMI_TX_HS),            // H-Sync
+    .hdmi_vs           (HDMI_TX_VS),            // V-Sync
+    
+    // Control Interface
+    .avs_address       (hsg_s_address),    // 3-bit local address
+    .avs_read          (hsg_s_read),            // Read Request
+    .avs_write         (hsg_s_write),           // Write Request
+    .avs_writedata     (hsg_s_writedata),       // Write Data
+    .avs_readdata      (hsg_s_readdata),        // Read Data
+    .avs_readdatavalid (hsg_s_readdatavalid)    // Read Data Valid
+);
 
 // HDMI I2C Tri-state Buffer
 assign HDMI_I2C_SCL = hdmi_i2c_scl_oe ? 1'b0 : 1'bz;

@@ -2,8 +2,8 @@
 <sch:Settings xmlns:sch="http://www.altera.com/embeddedsw/bsp/schema">
         <BspType>hal</BspType>
         <BspVersion>default</BspVersion>
-        <BspGeneratedTimeStamp>Feb 12, 2026 1:41:57 AM</BspGeneratedTimeStamp>
-        <BspGeneratedUnixTimeStamp>1770878517759</BspGeneratedUnixTimeStamp>
+        <BspGeneratedTimeStamp>Feb 12, 2026 2:08:12 PM</BspGeneratedTimeStamp>
+        <BspGeneratedUnixTimeStamp>1770923292090</BspGeneratedUnixTimeStamp>
         <BspGeneratedLocation>C:\Workspace\quartus\video_processing\nios_software\nios_ddr3_test_bsp</BspGeneratedLocation>
         <BspSettingsFile>settings.bsp</BspSettingsFile>
         <SopcDesignFile>..\..\soc_system.sopcinfo</SopcDesignFile>
@@ -923,10 +923,10 @@
                 <attributes/>
         </MemoryMap>
         <MemoryMap>
-                <slaveDescriptor>timer_0</slaveDescriptor>
+                <slaveDescriptor>hdmi_sync_mm</slaveDescriptor>
                 <addressRange>0x00020020 - 0x0002003F</addressRange>
                 <addressSpan>32</addressSpan>
-                <attributes>timer</attributes>
+                <attributes/>
         </MemoryMap>
         <MemoryMap>
                 <slaveDescriptor>i2c_hdmi</slaveDescriptor>
@@ -935,14 +935,20 @@
                 <attributes/>
         </MemoryMap>
         <MemoryMap>
-                <slaveDescriptor>burst_master_0</slaveDescriptor>
+                <slaveDescriptor>timer_0</slaveDescriptor>
                 <addressRange>0x00020080 - 0x0002009F</addressRange>
+                <addressSpan>32</addressSpan>
+                <attributes>timer</attributes>
+        </MemoryMap>
+        <MemoryMap>
+                <slaveDescriptor>burst_master_0</slaveDescriptor>
+                <addressRange>0x000200A0 - 0x000200BF</addressRange>
                 <addressSpan>32</addressSpan>
                 <attributes/>
         </MemoryMap>
         <MemoryMap>
                 <slaveDescriptor>burst_master_4_0</slaveDescriptor>
-                <addressRange>0x000200A0 - 0x000200BF</addressRange>
+                <addressRange>0x000200C0 - 0x000200DF</addressRange>
                 <addressSpan>32</addressSpan>
                 <attributes/>
         </MemoryMap>

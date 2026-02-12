@@ -12,8 +12,8 @@ void print_menu() {
   printf(" [3] Initialize HDMI (ADV7513 via I2C)\n");
   printf(" [4] Generate 720p Color Bar Pattern in DDR3\n");
   printf(" [5] Change RTL Test Pattern (Red, Green, Blue, etc.)\n");
-  printf(" [6] Toggle Gamma 2.2 Correction On/Off\n");
-  printf(" [L] Load Gamma 2.2 Look-Up Table\n");
+  printf(" [6] Gamma Correction Settings (Table, Toggle, Standard)\n");
+  printf(" [C] Load Custom Character Bitmap\n");
   printf(" [r] Reset RTL Pattern Generator\n");
   printf(" [q] Quit\n");
   printf("--------------------------------------------------\n");
@@ -52,12 +52,11 @@ void run_interactive_menu() {
       change_rtl_pattern();
       break;
     case '6':
-      gamma_en = !gamma_en;
-      set_gamma_enable(gamma_en);
+      run_gamma_submenu();
       break;
-    case 'L':
-    case 'l':
-      load_gamma_table(2.2f);
+    case 'C':
+    case 'c':
+      load_char_bitmap();
       break;
     case 'r':
       IOWR_32DIRECT(HDMI_SYNC_GEN_BASE | CACHE_BYPASS_MASK, REG_PATTERN_MODE,

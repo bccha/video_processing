@@ -4,7 +4,7 @@
  * Machine generated for CPU 'nios2_gen2_0' in SOPC Builder design 'soc_system'
  * SOPC Builder design path: ../../soc_system.sopcinfo
  *
- * Generated: Thu Feb 12 01:26:38 EST 2026
+ * Generated: Thu Feb 12 14:08:14 EST 2026
  */
 
 /*
@@ -144,6 +144,7 @@
 #define __ALTERA_ADDRESS_SPAN_EXTENDER
 #define __ALTERA_AVALON_I2C
 #define __ALTERA_AVALON_JTAG_UART
+#define __ALTERA_AVALON_MM_BRIDGE
 #define __ALTERA_AVALON_ONCHIP_MEMORY2
 #define __ALTERA_AVALON_PIO
 #define __ALTERA_AVALON_TIMER
@@ -243,7 +244,7 @@
  */
 
 #define ALT_MODULE_CLASS_burst_master_0 burst_master
-#define BURST_MASTER_0_BASE 0x20080
+#define BURST_MASTER_0_BASE 0x200a0
 #define BURST_MASTER_0_IRQ -1
 #define BURST_MASTER_0_IRQ_INTERRUPT_CONTROLLER_ID -1
 #define BURST_MASTER_0_NAME "/dev/burst_master_0"
@@ -257,7 +258,7 @@
  */
 
 #define ALT_MODULE_CLASS_burst_master_4_0 burst_master_4
-#define BURST_MASTER_4_0_BASE 0x200a0
+#define BURST_MASTER_4_0_BASE 0x200c0
 #define BURST_MASTER_4_0_IRQ -1
 #define BURST_MASTER_4_0_IRQ_INTERRUPT_CONTROLLER_ID -1
 #define BURST_MASTER_4_0_NAME "/dev/burst_master_4_0"
@@ -274,6 +275,20 @@
 #define ALT_MAX_FD 32
 #define ALT_SYS_CLK TIMER_0
 #define ALT_TIMESTAMP_CLK none
+
+
+/*
+ * hdmi_sync_mm configuration
+ *
+ */
+
+#define ALT_MODULE_CLASS_hdmi_sync_mm altera_avalon_mm_bridge
+#define HDMI_SYNC_MM_BASE 0x20020
+#define HDMI_SYNC_MM_IRQ -1
+#define HDMI_SYNC_MM_IRQ_INTERRUPT_CONTROLLER_ID -1
+#define HDMI_SYNC_MM_NAME "/dev/hdmi_sync_mm"
+#define HDMI_SYNC_MM_SPAN 32
+#define HDMI_SYNC_MM_TYPE "altera_avalon_mm_bridge"
 
 
 /*
@@ -388,7 +403,7 @@
 
 #define ALT_MODULE_CLASS_timer_0 altera_avalon_timer
 #define TIMER_0_ALWAYS_RUN 0
-#define TIMER_0_BASE 0x20020
+#define TIMER_0_BASE 0x20080
 #define TIMER_0_COUNTER_SIZE 32
 #define TIMER_0_FIXED_PERIOD 0
 #define TIMER_0_FREQ 50000000
