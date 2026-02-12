@@ -1,0 +1,1037 @@
+Archive member included to satisfy reference by file (symbol)
+
+c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_load.o)
+                              c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp//obj/HAL/src/crt0.o (alt_load)
+c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_main.o)
+                              c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp//obj/HAL/src/crt0.o (alt_main)
+c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_sys_init.o)
+                              c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_main.o) (alt_irq_init)
+c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(altera_avalon_jtag_uart_fd.o)
+                              c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_sys_init.o) (altera_avalon_jtag_uart_read_fd)
+c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(altera_avalon_jtag_uart_init.o)
+                              c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_sys_init.o) (altera_avalon_jtag_uart_init)
+c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(altera_avalon_jtag_uart_ioctl.o)
+                              c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(altera_avalon_jtag_uart_fd.o) (altera_avalon_jtag_uart_ioctl)
+c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(altera_avalon_jtag_uart_read.o)
+                              c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(altera_avalon_jtag_uart_fd.o) (altera_avalon_jtag_uart_read)
+c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(altera_avalon_jtag_uart_write.o)
+                              c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(altera_avalon_jtag_uart_fd.o) (altera_avalon_jtag_uart_write)
+c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(altera_avalon_timer_sc.o)
+                              c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_sys_init.o) (alt_avalon_timer_sc_init)
+c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_alarm_start.o)
+                              c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(altera_avalon_jtag_uart_init.o) (alt_alarm_start)
+c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_close.o)
+                              c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_main.o) (close)
+c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_dcache_flush_all.o)
+                              c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_load.o) (alt_dcache_flush_all)
+c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_dev.o)
+                              c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_sys_init.o) (alt_dev_list)
+c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_dev_llist_insert.o)
+                              c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_sys_init.o) (alt_dev_llist_insert)
+c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_do_ctors.o)
+                              c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_main.o) (_do_ctors)
+c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_do_dtors.o)
+                              c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_main.o) (_do_dtors)
+c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_errno.o)
+                              c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_close.o) (alt_errno)
+c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_icache_flush_all.o)
+                              c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_load.o) (alt_icache_flush_all)
+c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_iic.o)
+                              c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(altera_avalon_jtag_uart_init.o) (alt_ic_isr_register)
+c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_iic_isr_register.o)
+                              c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_iic.o) (alt_iic_isr_register)
+c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_io_redirect.o)
+                              c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_main.o) (alt_io_redirect)
+c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_irq_entry.o)
+                              c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_iic_isr_register.o) (alt_irq_entry)
+c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_irq_handler.o)
+                              c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_iic_isr_register.o) (alt_irq)
+c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_irq_vars.o)
+                              c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_iic.o) (alt_irq_active)
+c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_open.o)
+                              c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_io_redirect.o) (open)
+c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_release_fd.o)
+                              c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_close.o) (alt_release_fd)
+c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_tick.o)
+                              c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(altera_avalon_jtag_uart_init.o) (_alt_tick_rate)
+c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(altera_nios2_gen2_irq.o)
+                              c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_sys_init.o) (altera_nios2_gen2_irq_init)
+c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_exception_entry.o)
+                              c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_irq_entry.o) (alt_exception)
+c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_find_dev.o)
+                              c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_open.o) (alt_find_dev)
+c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_find_file.o)
+                              c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_open.o) (alt_find_file)
+c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_get_fd.o)
+                              c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_open.o) (alt_get_fd)
+c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_icache_flush.o)
+                              c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_icache_flush_all.o) (alt_icache_flush)
+c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_instruction_exception_entry.o)
+                              c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_exception_entry.o) (alt_instruction_exception_entry)
+d:/intelfpga_lite/20.1/nios2eds/bin/gnu/h-x86_64-mingw32/bin/../lib/gcc/nios2-elf/10.1.1/../../../../../H-x86_64-mingw32/nios2-elf/lib\libc.a(lib_a-atexit.o)
+                              c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_main.o) (atexit)
+d:/intelfpga_lite/20.1/nios2eds/bin/gnu/h-x86_64-mingw32/bin/../lib/gcc/nios2-elf/10.1.1/../../../../../H-x86_64-mingw32/nios2-elf/lib\libc.a(lib_a-exit.o)
+                              c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_main.o) (exit)
+d:/intelfpga_lite/20.1/nios2eds/bin/gnu/h-x86_64-mingw32/bin/../lib/gcc/nios2-elf/10.1.1/../../../../../H-x86_64-mingw32/nios2-elf/lib\libc.a(lib_a-impure.o)
+                              d:/intelfpga_lite/20.1/nios2eds/bin/gnu/h-x86_64-mingw32/bin/../lib/gcc/nios2-elf/10.1.1/../../../../../H-x86_64-mingw32/nios2-elf/lib\libc.a(lib_a-exit.o) (_global_impure_ptr)
+d:/intelfpga_lite/20.1/nios2eds/bin/gnu/h-x86_64-mingw32/bin/../lib/gcc/nios2-elf/10.1.1/../../../../../H-x86_64-mingw32/nios2-elf/lib\libc.a(lib_a-int_errno.o)
+                              c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_close.o) (errno)
+d:/intelfpga_lite/20.1/nios2eds/bin/gnu/h-x86_64-mingw32/bin/../lib/gcc/nios2-elf/10.1.1/../../../../../H-x86_64-mingw32/nios2-elf/lib\libc.a(lib_a-memcmp.o)
+                              c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_find_dev.o) (memcmp)
+d:/intelfpga_lite/20.1/nios2eds/bin/gnu/h-x86_64-mingw32/bin/../lib/gcc/nios2-elf/10.1.1/../../../../../H-x86_64-mingw32/nios2-elf/lib\libc.a(lib_a-memcpy.o)
+                              c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(altera_avalon_jtag_uart_read.o) (memcpy)
+d:/intelfpga_lite/20.1/nios2eds/bin/gnu/h-x86_64-mingw32/bin/../lib/gcc/nios2-elf/10.1.1/../../../../../H-x86_64-mingw32/nios2-elf/lib\libc.a(lib_a-strlen.o)
+                              c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_find_dev.o) (strlen)
+d:/intelfpga_lite/20.1/nios2eds/bin/gnu/h-x86_64-mingw32/bin/../lib/gcc/nios2-elf/10.1.1/../../../../../H-x86_64-mingw32/nios2-elf/lib\libc.a(lib_a-__atexit.o)
+                              d:/intelfpga_lite/20.1/nios2eds/bin/gnu/h-x86_64-mingw32/bin/../lib/gcc/nios2-elf/10.1.1/../../../../../H-x86_64-mingw32/nios2-elf/lib\libc.a(lib_a-atexit.o) (__register_exitproc)
+d:/intelfpga_lite/20.1/nios2eds/bin/gnu/h-x86_64-mingw32/bin/../lib/gcc/nios2-elf/10.1.1/../../../../../H-x86_64-mingw32/nios2-elf/lib\libc.a(lib_a-__call_atexit.o)
+                              d:/intelfpga_lite/20.1/nios2eds/bin/gnu/h-x86_64-mingw32/bin/../lib/gcc/nios2-elf/10.1.1/../../../../../H-x86_64-mingw32/nios2-elf/lib\libc.a(lib_a-exit.o) (__call_exitprocs)
+c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_exit.o)
+                              d:/intelfpga_lite/20.1/nios2eds/bin/gnu/h-x86_64-mingw32/bin/../lib/gcc/nios2-elf/10.1.1/../../../../../H-x86_64-mingw32/nios2-elf/lib\libc.a(lib_a-exit.o) (_exit)
+
+Memory Configuration
+
+Name             Origin             Length             Attributes
+reset            0x0000000000000000 0x0000000000000020
+onchip_memory2_0 0x0000000000000020 0x0000000000018680
+*default*        0x0000000000000000 0xffffffffffffffff
+
+Linker script and memory map
+
+LOAD c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp//obj/HAL/src/crt0.o
+LOAD d:/intelfpga_lite/20.1/nios2eds/bin/gnu/h-x86_64-mingw32/bin/../lib/gcc/nios2-elf/10.1.1/../../../../../H-x86_64-mingw32/nios2-elf/lib\libstdc++.a
+LOAD d:/intelfpga_lite/20.1/nios2eds/bin/gnu/h-x86_64-mingw32/bin/../lib/gcc/nios2-elf/10.1.1/../../../../../H-x86_64-mingw32/nios2-elf/lib\libm.a
+LOAD d:/intelfpga_lite/20.1/nios2eds/bin/gnu/h-x86_64-mingw32/bin/../lib/gcc/nios2-elf/10.1.1\libgcc.a
+START GROUP
+LOAD d:/intelfpga_lite/20.1/nios2eds/bin/gnu/h-x86_64-mingw32/bin/../lib/gcc/nios2-elf/10.1.1/../../../../../H-x86_64-mingw32/nios2-elf/lib\libc.a
+LOAD d:/intelfpga_lite/20.1/nios2eds/bin/gnu/h-x86_64-mingw32/bin/../lib/gcc/nios2-elf/10.1.1\libgcc.a
+LOAD c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a
+LOAD d:/intelfpga_lite/20.1/nios2eds/bin/gnu/h-x86_64-mingw32/bin/../lib/gcc/nios2-elf/10.1.1/../../../../../H-x86_64-mingw32/nios2-elf/lib\libm.a
+END GROUP
+LOAD d:/intelfpga_lite/20.1/nios2eds/bin/gnu/h-x86_64-mingw32/bin/../lib/gcc/nios2-elf/10.1.1\libgcc.a
+                0x0000000000000000                __alt_mem_onchip_memory2_0 = 0x0
+
+.entry          0x0000000000000000       0x20
+ *(.entry)
+ .entry         0x0000000000000000       0x20 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp//obj/HAL/src/crt0.o
+                0x0000000000000000                __reset
+
+.exceptions     0x0000000000000020      0x218
+                0x0000000000000020                PROVIDE (__ram_exceptions_start = ABSOLUTE (.))
+                0x0000000000000020                . = ALIGN (0x20)
+ *(.irq)
+ *(.exceptions.entry.label)
+ .exceptions.entry.label
+                0x0000000000000020        0x0 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_irq_entry.o)
+                0x0000000000000020                alt_irq_entry
+ .exceptions.entry.label
+                0x0000000000000020        0x0 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_exception_entry.o)
+                0x0000000000000020                alt_exception
+ *(.exceptions.entry.user)
+ *(.exceptions.entry.ecc_fatal)
+ *(.exceptions.entry)
+ .exceptions.entry
+                0x0000000000000020       0x54 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_exception_entry.o)
+ *(.exceptions.irqtest.user)
+ *(.exceptions.irqtest)
+ .exceptions.irqtest
+                0x0000000000000074       0x10 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_irq_entry.o)
+ *(.exceptions.irqhandler.user)
+ *(.exceptions.irqhandler)
+ .exceptions.irqhandler
+                0x0000000000000084        0x4 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_irq_entry.o)
+ *(.exceptions.irqreturn.user)
+ *(.exceptions.irqreturn)
+ .exceptions.irqreturn
+                0x0000000000000088        0x4 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_irq_entry.o)
+ *(.exceptions.notirq.label)
+ .exceptions.notirq.label
+                0x000000000000008c        0x0 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_irq_entry.o)
+ *(.exceptions.notirq.user)
+ *(.exceptions.notirq)
+ .exceptions.notirq
+                0x000000000000008c        0x8 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_exception_entry.o)
+ *(.exceptions.soft.user)
+ *(.exceptions.soft)
+ *(.exceptions.unknown.user)
+ *(.exceptions.unknown)
+ .exceptions.unknown
+                0x0000000000000094       0x14 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_exception_entry.o)
+ *(.exceptions.exit.label)
+ .exceptions.exit.label
+                0x00000000000000a8        0x0 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_irq_entry.o)
+ .exceptions.exit.label
+                0x00000000000000a8        0x0 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_exception_entry.o)
+ *(.exceptions.exit.user)
+ *(.exceptions.exit)
+ .exceptions.exit
+                0x00000000000000a8       0x54 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_exception_entry.o)
+ *(.exceptions)
+ .exceptions    0x00000000000000fc       0xc8 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_irq_handler.o)
+                0x00000000000000fc                alt_irq_handler
+ .exceptions    0x00000000000001c4       0x74 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_instruction_exception_entry.o)
+                0x00000000000001c4                alt_instruction_exception_entry
+                0x0000000000000238                PROVIDE (__ram_exceptions_end = ABSOLUTE (.))
+                0x0000000000000020                PROVIDE (__flash_exceptions_start = LOADADDR (.exceptions))
+
+.text           0x0000000000000238     0x22d8
+                [!provide]                        PROVIDE (stext = ABSOLUTE (.))
+ *(.interp)
+ *(.hash)
+ *(.dynsym)
+ *(.dynstr)
+ *(.gnu.version)
+ *(.gnu.version_d)
+ *(.gnu.version_r)
+ *(.rel.init)
+ *(.rela.init)
+ *(.rel.text .rel.text.* .rel.gnu.linkonce.t.*)
+ *(.rela.text .rela.text.* .rela.gnu.linkonce.t.*)
+ *(.rel.fini)
+ *(.rela.fini)
+ *(.rel.rodata .rel.rodata.* .rel.gnu.linkonce.r.*)
+ *(.rela.rodata .rela.rodata.* .rela.gnu.linkonce.r.*)
+ *(.rel.data .rel.data.* .rel.gnu.linkonce.d.*)
+ *(.rela.data .rela.data.* .rela.gnu.linkonce.d.*)
+ *(.rel.tdata .rel.tdata.* .rel.gnu.linkonce.td.*)
+ *(.rela.tdata .rela.tdata.* .rela.gnu.linkonce.td.*)
+ *(.rel.tbss .rel.tbss.* .rel.gnu.linkonce.tb.*)
+ *(.rela.tbss .rela.tbss.* .rela.gnu.linkonce.tb.*)
+ *(.rel.ctors)
+ *(.rela.ctors)
+ *(.rel.dtors)
+ *(.rela.dtors)
+ *(.rel.got)
+ *(.rela.got)
+ *(.rel.sdata .rel.sdata.* .rel.gnu.linkonce.s.*)
+ *(.rela.sdata .rela.sdata.* .rela.gnu.linkonce.s.*)
+ *(.rel.sbss .rel.sbss.* .rel.gnu.linkonce.sb.*)
+ *(.rela.sbss .rela.sbss.* .rela.gnu.linkonce.sb.*)
+ *(.rel.sdata2 .rel.sdata2.* .rel.gnu.linkonce.s2.*)
+ *(.rela.sdata2 .rela.sdata2.* .rela.gnu.linkonce.s2.*)
+ *(.rel.sbss2 .rel.sbss2.* .rel.gnu.linkonce.sb2.*)
+ *(.rela.sbss2 .rela.sbss2.* .rela.gnu.linkonce.sb2.*)
+ *(.rel.bss .rel.bss.* .rel.gnu.linkonce.b.*)
+ *(.rela.bss .rela.bss.* .rela.gnu.linkonce.b.*)
+ *(.rel.plt)
+ *(.rela.plt)
+ *(.rel.dyn)
+ *(.init)
+ *(.plt)
+ *(.text .stub .text.* .gnu.linkonce.t.*)
+ .text          0x0000000000000238       0x4c c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp//obj/HAL/src/crt0.o
+                0x0000000000000238                _start
+ .text          0x0000000000000284       0xec c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_load.o)
+                0x00000000000002ec                alt_load
+ .text          0x0000000000000370       0x7c c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_main.o)
+                0x0000000000000370                alt_main
+ .text          0x00000000000003ec       0xd4 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_sys_init.o)
+                0x0000000000000424                alt_irq_init
+                0x0000000000000460                alt_sys_init
+ .text          0x00000000000004c0      0x164 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(altera_avalon_jtag_uart_fd.o)
+                0x00000000000004c0                altera_avalon_jtag_uart_read_fd
+                0x0000000000000520                altera_avalon_jtag_uart_write_fd
+                0x0000000000000580                altera_avalon_jtag_uart_close_fd
+                0x00000000000005d0                altera_avalon_jtag_uart_ioctl_fd
+ .text          0x0000000000000624      0x3dc c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(altera_avalon_jtag_uart_init.o)
+                0x0000000000000624                altera_avalon_jtag_uart_init
+                0x0000000000000998                altera_avalon_jtag_uart_close
+ .text          0x0000000000000a00       0xf4 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(altera_avalon_jtag_uart_ioctl.o)
+                0x0000000000000a00                altera_avalon_jtag_uart_ioctl
+ .text          0x0000000000000af4      0x220 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(altera_avalon_jtag_uart_read.o)
+                0x0000000000000af4                altera_avalon_jtag_uart_read
+ .text          0x0000000000000d14      0x228 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(altera_avalon_jtag_uart_write.o)
+                0x0000000000000d14                altera_avalon_jtag_uart_write
+ .text          0x0000000000000f3c      0x108 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(altera_avalon_timer_sc.o)
+                0x0000000000000fb8                alt_avalon_timer_sc_init
+ .text          0x0000000000001044      0x140 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_alarm_start.o)
+                0x0000000000001044                alt_alarm_start
+ .text          0x0000000000001184      0x118 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_close.o)
+                0x00000000000011cc                close
+ .text          0x000000000000129c       0x4c c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_dcache_flush_all.o)
+                0x000000000000129c                alt_dcache_flush_all
+ .text          0x00000000000012e8       0x2c c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_dev.o)
+ .text          0x0000000000001314       0xf0 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_dev_llist_insert.o)
+                0x000000000000135c                alt_dev_llist_insert
+ .text          0x0000000000001404       0x64 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_do_ctors.o)
+                0x0000000000001404                _do_ctors
+ .text          0x0000000000001468       0x64 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_do_dtors.o)
+                0x0000000000001468                _do_dtors
+ .text          0x00000000000014cc        0x0 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_errno.o)
+ .text          0x00000000000014cc       0x34 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_icache_flush_all.o)
+                0x00000000000014cc                alt_icache_flush_all
+ .text          0x0000000000001500      0x1c8 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_iic.o)
+                0x0000000000001500                alt_ic_isr_register
+                0x0000000000001550                alt_ic_irq_enable
+                0x00000000000015e4                alt_ic_irq_disable
+                0x000000000000167c                alt_ic_irq_enabled
+ .text          0x00000000000016c8       0xe8 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_iic_isr_register.o)
+                0x00000000000016c8                alt_iic_isr_register
+ .text          0x00000000000017b0      0x12c c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_io_redirect.o)
+                0x0000000000001860                alt_io_redirect
+ .text          0x00000000000018dc        0x0 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_irq_entry.o)
+ .text          0x00000000000018dc        0x0 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_irq_handler.o)
+ .text          0x00000000000018dc        0x0 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_irq_vars.o)
+ .text          0x00000000000018dc      0x25c c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_open.o)
+                0x00000000000019e0                open
+ .text          0x0000000000001b38       0x58 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_release_fd.o)
+                0x0000000000001b38                alt_release_fd
+ .text          0x0000000000001b90      0x1ac c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_tick.o)
+                0x0000000000001b90                alt_alarm_stop
+                0x0000000000001c34                alt_tick
+ .text          0x0000000000001d3c       0x24 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(altera_nios2_gen2_irq.o)
+                0x0000000000001d3c                altera_nios2_gen2_irq_init
+ .text          0x0000000000001d60        0x0 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_exception_entry.o)
+ .text          0x0000000000001d60       0x90 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_find_dev.o)
+                0x0000000000001d60                alt_find_dev
+ .text          0x0000000000001df0      0x110 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_find_file.o)
+                0x0000000000001df0                alt_find_file
+ .text          0x0000000000001f00       0xa8 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_get_fd.o)
+                0x0000000000001f00                alt_get_fd
+ .text          0x0000000000001fa8       0x90 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_icache_flush.o)
+                0x0000000000001fa8                alt_icache_flush
+ .text          0x0000000000002038       0x98 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_instruction_exception_entry.o)
+                0x0000000000002038                alt_exception_cause_generated_bad_addr
+ .text          0x00000000000020d0        0x0 d:/intelfpga_lite/20.1/nios2eds/bin/gnu/h-x86_64-mingw32/bin/../lib/gcc/nios2-elf/10.1.1/../../../../../H-x86_64-mingw32/nios2-elf/lib\libc.a(lib_a-atexit.o)
+ .text.atexit   0x00000000000020d0       0x14 d:/intelfpga_lite/20.1/nios2eds/bin/gnu/h-x86_64-mingw32/bin/../lib/gcc/nios2-elf/10.1.1/../../../../../H-x86_64-mingw32/nios2-elf/lib\libc.a(lib_a-atexit.o)
+                0x00000000000020d0                atexit
+ .text          0x00000000000020e4        0x0 d:/intelfpga_lite/20.1/nios2eds/bin/gnu/h-x86_64-mingw32/bin/../lib/gcc/nios2-elf/10.1.1/../../../../../H-x86_64-mingw32/nios2-elf/lib\libc.a(lib_a-exit.o)
+ .text.exit     0x00000000000020e4       0x34 d:/intelfpga_lite/20.1/nios2eds/bin/gnu/h-x86_64-mingw32/bin/../lib/gcc/nios2-elf/10.1.1/../../../../../H-x86_64-mingw32/nios2-elf/lib\libc.a(lib_a-exit.o)
+                0x00000000000020e4                exit
+ .text          0x0000000000002118        0x0 d:/intelfpga_lite/20.1/nios2eds/bin/gnu/h-x86_64-mingw32/bin/../lib/gcc/nios2-elf/10.1.1/../../../../../H-x86_64-mingw32/nios2-elf/lib\libc.a(lib_a-impure.o)
+ .text          0x0000000000002118        0x0 d:/intelfpga_lite/20.1/nios2eds/bin/gnu/h-x86_64-mingw32/bin/../lib/gcc/nios2-elf/10.1.1/../../../../../H-x86_64-mingw32/nios2-elf/lib\libc.a(lib_a-int_errno.o)
+ .text          0x0000000000002118        0x0 d:/intelfpga_lite/20.1/nios2eds/bin/gnu/h-x86_64-mingw32/bin/../lib/gcc/nios2-elf/10.1.1/../../../../../H-x86_64-mingw32/nios2-elf/lib\libc.a(lib_a-memcmp.o)
+ .text.memcmp   0x0000000000002118       0x78 d:/intelfpga_lite/20.1/nios2eds/bin/gnu/h-x86_64-mingw32/bin/../lib/gcc/nios2-elf/10.1.1/../../../../../H-x86_64-mingw32/nios2-elf/lib\libc.a(lib_a-memcmp.o)
+                0x0000000000002118                memcmp
+ .text          0x0000000000002190        0x0 d:/intelfpga_lite/20.1/nios2eds/bin/gnu/h-x86_64-mingw32/bin/../lib/gcc/nios2-elf/10.1.1/../../../../../H-x86_64-mingw32/nios2-elf/lib\libc.a(lib_a-memcpy.o)
+ .text.memcpy   0x0000000000002190      0x100 d:/intelfpga_lite/20.1/nios2eds/bin/gnu/h-x86_64-mingw32/bin/../lib/gcc/nios2-elf/10.1.1/../../../../../H-x86_64-mingw32/nios2-elf/lib\libc.a(lib_a-memcpy.o)
+                0x0000000000002190                memcpy
+ .text          0x0000000000002290        0x0 d:/intelfpga_lite/20.1/nios2eds/bin/gnu/h-x86_64-mingw32/bin/../lib/gcc/nios2-elf/10.1.1/../../../../../H-x86_64-mingw32/nios2-elf/lib\libc.a(lib_a-strlen.o)
+ .text.strlen   0x0000000000002290       0x98 d:/intelfpga_lite/20.1/nios2eds/bin/gnu/h-x86_64-mingw32/bin/../lib/gcc/nios2-elf/10.1.1/../../../../../H-x86_64-mingw32/nios2-elf/lib\libc.a(lib_a-strlen.o)
+                0x0000000000002290                strlen
+ .text          0x0000000000002328        0x0 d:/intelfpga_lite/20.1/nios2eds/bin/gnu/h-x86_64-mingw32/bin/../lib/gcc/nios2-elf/10.1.1/../../../../../H-x86_64-mingw32/nios2-elf/lib\libc.a(lib_a-__atexit.o)
+ .text.__register_exitproc
+                0x0000000000002328       0x90 d:/intelfpga_lite/20.1/nios2eds/bin/gnu/h-x86_64-mingw32/bin/../lib/gcc/nios2-elf/10.1.1/../../../../../H-x86_64-mingw32/nios2-elf/lib\libc.a(lib_a-__atexit.o)
+                0x0000000000002328                __register_exitproc
+ .text          0x00000000000023b8        0x0 d:/intelfpga_lite/20.1/nios2eds/bin/gnu/h-x86_64-mingw32/bin/../lib/gcc/nios2-elf/10.1.1/../../../../../H-x86_64-mingw32/nios2-elf/lib\libc.a(lib_a-__call_atexit.o)
+ .text.__call_exitprocs
+                0x00000000000023b8      0x120 d:/intelfpga_lite/20.1/nios2eds/bin/gnu/h-x86_64-mingw32/bin/../lib/gcc/nios2-elf/10.1.1/../../../../../H-x86_64-mingw32/nios2-elf/lib\libc.a(lib_a-__call_atexit.o)
+                0x00000000000023b8                __call_exitprocs
+ .text          0x00000000000024d8       0x38 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_exit.o)
+                0x00000000000024d8                _exit
+ *(.gnu.warning.*)
+ *(.fini)
+                [!provide]                        PROVIDE (__etext = ABSOLUTE (.))
+                [!provide]                        PROVIDE (_etext = ABSOLUTE (.))
+                [!provide]                        PROVIDE (etext = ABSOLUTE (.))
+ *(.eh_frame_hdr)
+                0x0000000000002510                . = ALIGN (0x4)
+                [!provide]                        PROVIDE (__preinit_array_start = ABSOLUTE (.))
+ *(.preinit_array)
+                [!provide]                        PROVIDE (__preinit_array_end = ABSOLUTE (.))
+                [!provide]                        PROVIDE (__init_array_start = ABSOLUTE (.))
+ *(.init_array)
+                [!provide]                        PROVIDE (__init_array_end = ABSOLUTE (.))
+                [!provide]                        PROVIDE (__fini_array_start = ABSOLUTE (.))
+ *(.fini_array)
+                [!provide]                        PROVIDE (__fini_array_end = ABSOLUTE (.))
+ *(.eh_frame)
+ *(.gcc_except_table .gcc_except_table.*)
+ *(.dynamic)
+                0x0000000000002510                PROVIDE (__CTOR_LIST__ = ABSOLUTE (.))
+ *(.ctors)
+ *(SORT_BY_NAME(.ctors.*))
+                0x0000000000002510                PROVIDE (__CTOR_END__ = ABSOLUTE (.))
+                0x0000000000002510                PROVIDE (__DTOR_LIST__ = ABSOLUTE (.))
+ *(.dtors)
+ *(SORT_BY_NAME(.dtors.*))
+                0x0000000000002510                PROVIDE (__DTOR_END__ = ABSOLUTE (.))
+ *(.jcr)
+                0x0000000000002510                . = ALIGN (0x4)
+
+.rodata         0x0000000000002510       0x2c
+                0x0000000000002510                PROVIDE (__ram_rodata_start = ABSOLUTE (.))
+                0x0000000000002510                . = ALIGN (0x4)
+ *(.rodata .rodata.* .gnu.linkonce.r.*)
+ .rodata        0x0000000000002510        0xf c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_main.o)
+ *fill*         0x000000000000251f        0x1 
+ .rodata        0x0000000000002520        0xf c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_sys_init.o)
+ *fill*         0x000000000000252f        0x1 
+ .rodata        0x0000000000002530        0xa c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_dev.o)
+ *(.rodata1)
+                0x000000000000253c                . = ALIGN (0x4)
+ *fill*         0x000000000000253a        0x2 
+                0x000000000000253c                PROVIDE (__ram_rodata_end = ABSOLUTE (.))
+                0x0000000000002510                PROVIDE (__flash_rodata_start = LOADADDR (.rodata))
+
+.rwdata         0x000000000000253c     0x1658 load address 0x0000000000003b94
+                0x000000000000253c                PROVIDE (__ram_rwdata_start = ABSOLUTE (.))
+                0x000000000000253c                . = ALIGN (0x4)
+ *(.got.plt)
+ *(.got)
+ *(.data1)
+ *(.data .data.* .gnu.linkonce.d.*)
+ .data          0x000000000000253c        0x0 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp//obj/HAL/src/crt0.o
+ .data          0x000000000000253c        0x0 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_load.o)
+ .data          0x000000000000253c        0x0 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_main.o)
+ .data          0x000000000000253c     0x1060 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_sys_init.o)
+ .data          0x000000000000359c        0x0 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(altera_avalon_jtag_uart_fd.o)
+ .data          0x000000000000359c        0x0 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(altera_avalon_jtag_uart_init.o)
+ .data          0x000000000000359c        0x0 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(altera_avalon_jtag_uart_ioctl.o)
+ .data          0x000000000000359c        0x0 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(altera_avalon_jtag_uart_read.o)
+ .data          0x000000000000359c        0x0 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(altera_avalon_jtag_uart_write.o)
+ .data          0x000000000000359c        0x0 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(altera_avalon_timer_sc.o)
+ .data          0x000000000000359c        0x0 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_alarm_start.o)
+ .data          0x000000000000359c        0x0 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_close.o)
+ .data          0x000000000000359c        0x0 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_dcache_flush_all.o)
+ .data          0x000000000000359c      0x1a8 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_dev.o)
+                0x000000000000359c                alt_dev_null
+                0x00000000000035c4                alt_fd_list
+ .data          0x0000000000003744        0x0 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_dev_llist_insert.o)
+ .data          0x0000000000003744        0x0 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_do_ctors.o)
+ .data          0x0000000000003744        0x0 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_do_dtors.o)
+ .data          0x0000000000003744        0x0 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_errno.o)
+ .data          0x0000000000003744        0x0 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_icache_flush_all.o)
+ .data          0x0000000000003744        0x0 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_iic.o)
+ .data          0x0000000000003744        0x0 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_iic_isr_register.o)
+ .data          0x0000000000003744        0x0 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_io_redirect.o)
+ .data          0x0000000000003744        0x0 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_irq_entry.o)
+ .data          0x0000000000003744        0x0 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_irq_handler.o)
+ .data          0x0000000000003744        0x0 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_irq_vars.o)
+ .data          0x0000000000003744        0x0 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_open.o)
+ .data          0x0000000000003744        0x0 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_release_fd.o)
+ .data          0x0000000000003744        0x0 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_tick.o)
+ .data          0x0000000000003744        0x0 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(altera_nios2_gen2_irq.o)
+ .data          0x0000000000003744        0x0 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_exception_entry.o)
+ .data          0x0000000000003744        0x0 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_find_dev.o)
+ .data          0x0000000000003744        0x0 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_find_file.o)
+ .data          0x0000000000003744        0x0 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_get_fd.o)
+ .data          0x0000000000003744        0x0 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_icache_flush.o)
+ .data          0x0000000000003744        0x0 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_instruction_exception_entry.o)
+ .data          0x0000000000003744        0x0 d:/intelfpga_lite/20.1/nios2eds/bin/gnu/h-x86_64-mingw32/bin/../lib/gcc/nios2-elf/10.1.1/../../../../../H-x86_64-mingw32/nios2-elf/lib\libc.a(lib_a-atexit.o)
+ .data          0x0000000000003744        0x0 d:/intelfpga_lite/20.1/nios2eds/bin/gnu/h-x86_64-mingw32/bin/../lib/gcc/nios2-elf/10.1.1/../../../../../H-x86_64-mingw32/nios2-elf/lib\libc.a(lib_a-exit.o)
+ .data          0x0000000000003744        0x0 d:/intelfpga_lite/20.1/nios2eds/bin/gnu/h-x86_64-mingw32/bin/../lib/gcc/nios2-elf/10.1.1/../../../../../H-x86_64-mingw32/nios2-elf/lib\libc.a(lib_a-impure.o)
+ .data.impure_data
+                0x0000000000003744      0x424 d:/intelfpga_lite/20.1/nios2eds/bin/gnu/h-x86_64-mingw32/bin/../lib/gcc/nios2-elf/10.1.1/../../../../../H-x86_64-mingw32/nios2-elf/lib\libc.a(lib_a-impure.o)
+ .data          0x0000000000003b68        0x0 d:/intelfpga_lite/20.1/nios2eds/bin/gnu/h-x86_64-mingw32/bin/../lib/gcc/nios2-elf/10.1.1/../../../../../H-x86_64-mingw32/nios2-elf/lib\libc.a(lib_a-int_errno.o)
+ .data          0x0000000000003b68        0x0 d:/intelfpga_lite/20.1/nios2eds/bin/gnu/h-x86_64-mingw32/bin/../lib/gcc/nios2-elf/10.1.1/../../../../../H-x86_64-mingw32/nios2-elf/lib\libc.a(lib_a-memcmp.o)
+ .data          0x0000000000003b68        0x0 d:/intelfpga_lite/20.1/nios2eds/bin/gnu/h-x86_64-mingw32/bin/../lib/gcc/nios2-elf/10.1.1/../../../../../H-x86_64-mingw32/nios2-elf/lib\libc.a(lib_a-memcpy.o)
+ .data          0x0000000000003b68        0x0 d:/intelfpga_lite/20.1/nios2eds/bin/gnu/h-x86_64-mingw32/bin/../lib/gcc/nios2-elf/10.1.1/../../../../../H-x86_64-mingw32/nios2-elf/lib\libc.a(lib_a-strlen.o)
+ .data          0x0000000000003b68        0x0 d:/intelfpga_lite/20.1/nios2eds/bin/gnu/h-x86_64-mingw32/bin/../lib/gcc/nios2-elf/10.1.1/../../../../../H-x86_64-mingw32/nios2-elf/lib\libc.a(lib_a-__atexit.o)
+ .data          0x0000000000003b68        0x0 d:/intelfpga_lite/20.1/nios2eds/bin/gnu/h-x86_64-mingw32/bin/../lib/gcc/nios2-elf/10.1.1/../../../../../H-x86_64-mingw32/nios2-elf/lib\libc.a(lib_a-__call_atexit.o)
+ .data          0x0000000000003b68        0x0 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_exit.o)
+                0x000000000000bb68                _gp = ABSOLUTE ((. + 0x8000))
+                [!provide]                        PROVIDE (gp = _gp)
+ *(.rwdata .rwdata.*)
+ *(.sdata .sdata.* .gnu.linkonce.s.*)
+ .sdata         0x0000000000003b68       0x14 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_dev.o)
+                0x0000000000003b68                alt_fs_list
+                0x0000000000003b70                alt_dev_list
+                0x0000000000003b78                alt_max_fd
+ .sdata         0x0000000000003b7c        0x4 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_errno.o)
+                0x0000000000003b7c                alt_errno
+ .sdata         0x0000000000003b80        0x4 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_irq_vars.o)
+                0x0000000000003b80                alt_priority_mask
+ .sdata         0x0000000000003b84        0x8 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_tick.o)
+                0x0000000000003b84                alt_alarm_list
+ .sdata._global_impure_ptr
+                0x0000000000003b8c        0x4 d:/intelfpga_lite/20.1/nios2eds/bin/gnu/h-x86_64-mingw32/bin/../lib/gcc/nios2-elf/10.1.1/../../../../../H-x86_64-mingw32/nios2-elf/lib\libc.a(lib_a-impure.o)
+                0x0000000000003b8c                _global_impure_ptr
+ .sdata._impure_ptr
+                0x0000000000003b90        0x4 d:/intelfpga_lite/20.1/nios2eds/bin/gnu/h-x86_64-mingw32/bin/../lib/gcc/nios2-elf/10.1.1/../../../../../H-x86_64-mingw32/nios2-elf/lib\libc.a(lib_a-impure.o)
+                0x0000000000003b90                _impure_ptr
+ *(.sdata2 .sdata2.* .gnu.linkonce.s2.*)
+                0x0000000000003b94                . = ALIGN (0x4)
+                0x0000000000003b94                _edata = ABSOLUTE (.)
+                [!provide]                        PROVIDE (edata = ABSOLUTE (.))
+                0x0000000000003b94                PROVIDE (__ram_rwdata_end = ABSOLUTE (.))
+                0x0000000000003b94                PROVIDE (__flash_rwdata_start = LOADADDR (.rwdata))
+
+.bss            0x00000000000051ec      0x120
+                0x00000000000051ec                __bss_start = ABSOLUTE (.)
+                [!provide]                        PROVIDE (__sbss_start = ABSOLUTE (.))
+                [!provide]                        PROVIDE (___sbss_start = ABSOLUTE (.))
+ *(.dynsbss)
+ *(.sbss .sbss.* .gnu.linkonce.sb.*)
+ .sbss          0x00000000000051ec        0xc c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_main.o)
+                0x00000000000051ec                alt_argc
+                0x00000000000051f0                alt_argv
+                0x00000000000051f4                alt_envp
+ .sbss          0x00000000000051f8        0x4 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_irq_vars.o)
+                0x00000000000051f8                alt_irq_active
+ .sbss          0x00000000000051fc        0x8 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_tick.o)
+                0x00000000000051fc                _alt_tick_rate
+                0x0000000000005200                _alt_nticks
+ .sbss          0x0000000000005204        0x4 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_instruction_exception_entry.o)
+                0x0000000000005204                alt_instruction_exception_handler
+ .sbss.errno    0x0000000000005208        0x4 d:/intelfpga_lite/20.1/nios2eds/bin/gnu/h-x86_64-mingw32/bin/../lib/gcc/nios2-elf/10.1.1/../../../../../H-x86_64-mingw32/nios2-elf/lib\libc.a(lib_a-int_errno.o)
+                0x0000000000005208                errno
+ *(.sbss2 .sbss2.* .gnu.linkonce.sb2.*)
+ *(.scommon)
+                [!provide]                        PROVIDE (__sbss_end = ABSOLUTE (.))
+                [!provide]                        PROVIDE (___sbss_end = ABSOLUTE (.))
+ *(.dynbss)
+ *(.bss .bss.* .gnu.linkonce.b.*)
+ .bss           0x000000000000520c        0x0 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp//obj/HAL/src/crt0.o
+ .bss           0x000000000000520c        0x0 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_load.o)
+ .bss           0x000000000000520c        0x0 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_main.o)
+ .bss           0x000000000000520c        0x0 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_sys_init.o)
+ .bss           0x000000000000520c        0x0 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(altera_avalon_jtag_uart_fd.o)
+ .bss           0x000000000000520c        0x0 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(altera_avalon_jtag_uart_init.o)
+ .bss           0x000000000000520c        0x0 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(altera_avalon_jtag_uart_ioctl.o)
+ .bss           0x000000000000520c        0x0 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(altera_avalon_jtag_uart_read.o)
+ .bss           0x000000000000520c        0x0 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(altera_avalon_jtag_uart_write.o)
+ .bss           0x000000000000520c        0x0 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(altera_avalon_timer_sc.o)
+ .bss           0x000000000000520c        0x0 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_alarm_start.o)
+ .bss           0x000000000000520c        0x0 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_close.o)
+ .bss           0x000000000000520c        0x0 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_dcache_flush_all.o)
+ .bss           0x000000000000520c        0x0 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_dev.o)
+ .bss           0x000000000000520c        0x0 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_dev_llist_insert.o)
+ .bss           0x000000000000520c        0x0 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_do_ctors.o)
+ .bss           0x000000000000520c        0x0 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_do_dtors.o)
+ .bss           0x000000000000520c        0x0 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_errno.o)
+ .bss           0x000000000000520c        0x0 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_icache_flush_all.o)
+ .bss           0x000000000000520c        0x0 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_iic.o)
+ .bss           0x000000000000520c        0x0 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_iic_isr_register.o)
+ .bss           0x000000000000520c        0x0 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_io_redirect.o)
+ .bss           0x000000000000520c        0x0 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_irq_entry.o)
+ .bss           0x000000000000520c      0x100 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_irq_handler.o)
+                0x000000000000520c                alt_irq
+ .bss           0x000000000000530c        0x0 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_irq_vars.o)
+ .bss           0x000000000000530c        0x0 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_open.o)
+ .bss           0x000000000000530c        0x0 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_release_fd.o)
+ .bss           0x000000000000530c        0x0 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_tick.o)
+ .bss           0x000000000000530c        0x0 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(altera_nios2_gen2_irq.o)
+ .bss           0x000000000000530c        0x0 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_exception_entry.o)
+ .bss           0x000000000000530c        0x0 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_find_dev.o)
+ .bss           0x000000000000530c        0x0 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_find_file.o)
+ .bss           0x000000000000530c        0x0 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_get_fd.o)
+ .bss           0x000000000000530c        0x0 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_icache_flush.o)
+ .bss           0x000000000000530c        0x0 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_instruction_exception_entry.o)
+ .bss           0x000000000000530c        0x0 d:/intelfpga_lite/20.1/nios2eds/bin/gnu/h-x86_64-mingw32/bin/../lib/gcc/nios2-elf/10.1.1/../../../../../H-x86_64-mingw32/nios2-elf/lib\libc.a(lib_a-atexit.o)
+ .bss           0x000000000000530c        0x0 d:/intelfpga_lite/20.1/nios2eds/bin/gnu/h-x86_64-mingw32/bin/../lib/gcc/nios2-elf/10.1.1/../../../../../H-x86_64-mingw32/nios2-elf/lib\libc.a(lib_a-exit.o)
+ .bss           0x000000000000530c        0x0 d:/intelfpga_lite/20.1/nios2eds/bin/gnu/h-x86_64-mingw32/bin/../lib/gcc/nios2-elf/10.1.1/../../../../../H-x86_64-mingw32/nios2-elf/lib\libc.a(lib_a-impure.o)
+ .bss           0x000000000000530c        0x0 d:/intelfpga_lite/20.1/nios2eds/bin/gnu/h-x86_64-mingw32/bin/../lib/gcc/nios2-elf/10.1.1/../../../../../H-x86_64-mingw32/nios2-elf/lib\libc.a(lib_a-int_errno.o)
+ .bss           0x000000000000530c        0x0 d:/intelfpga_lite/20.1/nios2eds/bin/gnu/h-x86_64-mingw32/bin/../lib/gcc/nios2-elf/10.1.1/../../../../../H-x86_64-mingw32/nios2-elf/lib\libc.a(lib_a-memcmp.o)
+ .bss           0x000000000000530c        0x0 d:/intelfpga_lite/20.1/nios2eds/bin/gnu/h-x86_64-mingw32/bin/../lib/gcc/nios2-elf/10.1.1/../../../../../H-x86_64-mingw32/nios2-elf/lib\libc.a(lib_a-memcpy.o)
+ .bss           0x000000000000530c        0x0 d:/intelfpga_lite/20.1/nios2eds/bin/gnu/h-x86_64-mingw32/bin/../lib/gcc/nios2-elf/10.1.1/../../../../../H-x86_64-mingw32/nios2-elf/lib\libc.a(lib_a-strlen.o)
+ .bss           0x000000000000530c        0x0 d:/intelfpga_lite/20.1/nios2eds/bin/gnu/h-x86_64-mingw32/bin/../lib/gcc/nios2-elf/10.1.1/../../../../../H-x86_64-mingw32/nios2-elf/lib\libc.a(lib_a-__atexit.o)
+ .bss           0x000000000000530c        0x0 d:/intelfpga_lite/20.1/nios2eds/bin/gnu/h-x86_64-mingw32/bin/../lib/gcc/nios2-elf/10.1.1/../../../../../H-x86_64-mingw32/nios2-elf/lib\libc.a(lib_a-__call_atexit.o)
+ .bss           0x000000000000530c        0x0 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_exit.o)
+ *(COMMON)
+                0x000000000000530c                . = ALIGN (0x4)
+                0x000000000000530c                __bss_end = ABSOLUTE (.)
+
+.onchip_memory2_0
+                0x000000000000530c        0x0
+                [!provide]                        PROVIDE (_alt_partition_onchip_memory2_0_start = ABSOLUTE (.))
+ *(.onchip_memory2_0 .onchip_memory2_0. onchip_memory2_0.*)
+                0x000000000000530c                . = ALIGN (0x4)
+                [!provide]                        PROVIDE (_alt_partition_onchip_memory2_0_end = ABSOLUTE (.))
+                0x000000000000530c                _end = ABSOLUTE (.)
+                0x000000000000530c                end = ABSOLUTE (.)
+                0x000000000000530c                __alt_stack_base = ABSOLUTE (.)
+                [!provide]                        PROVIDE (_alt_partition_onchip_memory2_0_load_addr = LOADADDR (.onchip_memory2_0))
+
+.stab
+ *(.stab)
+
+.stabstr
+ *(.stabstr)
+
+.stab.excl
+ *(.stab.excl)
+
+.stab.exclstr
+ *(.stab.exclstr)
+
+.stab.index
+ *(.stab.index)
+
+.stab.indexstr
+ *(.stab.indexstr)
+
+.comment        0x0000000000000000       0x2d
+ *(.comment)
+ .comment       0x0000000000000000       0x2d c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_load.o)
+                                         0x2e (size before relaxing)
+ .comment       0x000000000000002d       0x2e c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_main.o)
+ .comment       0x000000000000002d       0x2e c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_sys_init.o)
+ .comment       0x000000000000002d       0x2e c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(altera_avalon_jtag_uart_fd.o)
+ .comment       0x000000000000002d       0x2e c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(altera_avalon_jtag_uart_init.o)
+ .comment       0x000000000000002d       0x2e c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(altera_avalon_jtag_uart_ioctl.o)
+ .comment       0x000000000000002d       0x2e c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(altera_avalon_jtag_uart_read.o)
+ .comment       0x000000000000002d       0x2e c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(altera_avalon_jtag_uart_write.o)
+ .comment       0x000000000000002d       0x2e c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(altera_avalon_timer_sc.o)
+ .comment       0x000000000000002d       0x2e c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_alarm_start.o)
+ .comment       0x000000000000002d       0x2e c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_close.o)
+ .comment       0x000000000000002d       0x2e c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_dcache_flush_all.o)
+ .comment       0x000000000000002d       0x2e c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_dev.o)
+ .comment       0x000000000000002d       0x2e c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_dev_llist_insert.o)
+ .comment       0x000000000000002d       0x2e c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_do_ctors.o)
+ .comment       0x000000000000002d       0x2e c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_do_dtors.o)
+ .comment       0x000000000000002d       0x2e c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_errno.o)
+ .comment       0x000000000000002d       0x2e c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_icache_flush_all.o)
+ .comment       0x000000000000002d       0x2e c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_iic.o)
+ .comment       0x000000000000002d       0x2e c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_iic_isr_register.o)
+ .comment       0x000000000000002d       0x2e c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_io_redirect.o)
+ .comment       0x000000000000002d       0x2e c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_irq_handler.o)
+ .comment       0x000000000000002d       0x2e c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_irq_vars.o)
+ .comment       0x000000000000002d       0x2e c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_open.o)
+ .comment       0x000000000000002d       0x2e c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_release_fd.o)
+ .comment       0x000000000000002d       0x2e c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_tick.o)
+ .comment       0x000000000000002d       0x2e c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(altera_nios2_gen2_irq.o)
+ .comment       0x000000000000002d       0x2e c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_find_dev.o)
+ .comment       0x000000000000002d       0x2e c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_find_file.o)
+ .comment       0x000000000000002d       0x2e c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_get_fd.o)
+ .comment       0x000000000000002d       0x2e c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_icache_flush.o)
+ .comment       0x000000000000002d       0x2e c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_instruction_exception_entry.o)
+ .comment       0x000000000000002d       0x2e d:/intelfpga_lite/20.1/nios2eds/bin/gnu/h-x86_64-mingw32/bin/../lib/gcc/nios2-elf/10.1.1/../../../../../H-x86_64-mingw32/nios2-elf/lib\libc.a(lib_a-atexit.o)
+ .comment       0x000000000000002d       0x2e d:/intelfpga_lite/20.1/nios2eds/bin/gnu/h-x86_64-mingw32/bin/../lib/gcc/nios2-elf/10.1.1/../../../../../H-x86_64-mingw32/nios2-elf/lib\libc.a(lib_a-exit.o)
+ .comment       0x000000000000002d       0x2e d:/intelfpga_lite/20.1/nios2eds/bin/gnu/h-x86_64-mingw32/bin/../lib/gcc/nios2-elf/10.1.1/../../../../../H-x86_64-mingw32/nios2-elf/lib\libc.a(lib_a-impure.o)
+ .comment       0x000000000000002d       0x2e d:/intelfpga_lite/20.1/nios2eds/bin/gnu/h-x86_64-mingw32/bin/../lib/gcc/nios2-elf/10.1.1/../../../../../H-x86_64-mingw32/nios2-elf/lib\libc.a(lib_a-int_errno.o)
+ .comment       0x000000000000002d       0x2e d:/intelfpga_lite/20.1/nios2eds/bin/gnu/h-x86_64-mingw32/bin/../lib/gcc/nios2-elf/10.1.1/../../../../../H-x86_64-mingw32/nios2-elf/lib\libc.a(lib_a-memcmp.o)
+ .comment       0x000000000000002d       0x2e d:/intelfpga_lite/20.1/nios2eds/bin/gnu/h-x86_64-mingw32/bin/../lib/gcc/nios2-elf/10.1.1/../../../../../H-x86_64-mingw32/nios2-elf/lib\libc.a(lib_a-memcpy.o)
+ .comment       0x000000000000002d       0x2e d:/intelfpga_lite/20.1/nios2eds/bin/gnu/h-x86_64-mingw32/bin/../lib/gcc/nios2-elf/10.1.1/../../../../../H-x86_64-mingw32/nios2-elf/lib\libc.a(lib_a-strlen.o)
+ .comment       0x000000000000002d       0x2e d:/intelfpga_lite/20.1/nios2eds/bin/gnu/h-x86_64-mingw32/bin/../lib/gcc/nios2-elf/10.1.1/../../../../../H-x86_64-mingw32/nios2-elf/lib\libc.a(lib_a-__atexit.o)
+ .comment       0x000000000000002d       0x2e d:/intelfpga_lite/20.1/nios2eds/bin/gnu/h-x86_64-mingw32/bin/../lib/gcc/nios2-elf/10.1.1/../../../../../H-x86_64-mingw32/nios2-elf/lib\libc.a(lib_a-__call_atexit.o)
+ .comment       0x000000000000002d       0x2e c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_exit.o)
+
+.debug
+ *(.debug)
+
+.line
+ *(.line)
+
+.debug_srcinfo
+ *(.debug_srcinfo)
+
+.debug_sfnames
+ *(.debug_sfnames)
+
+.debug_aranges  0x0000000000000000      0x5b8
+ *(.debug_aranges)
+ .debug_aranges
+                0x0000000000000000       0x28 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp//obj/HAL/src/crt0.o
+ .debug_aranges
+                0x0000000000000028       0x20 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_load.o)
+ .debug_aranges
+                0x0000000000000048       0x20 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_main.o)
+ .debug_aranges
+                0x0000000000000068       0x20 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_sys_init.o)
+ .debug_aranges
+                0x0000000000000088       0x20 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(altera_avalon_jtag_uart_fd.o)
+ .debug_aranges
+                0x00000000000000a8       0x20 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(altera_avalon_jtag_uart_init.o)
+ .debug_aranges
+                0x00000000000000c8       0x20 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(altera_avalon_jtag_uart_ioctl.o)
+ .debug_aranges
+                0x00000000000000e8       0x20 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(altera_avalon_jtag_uart_read.o)
+ .debug_aranges
+                0x0000000000000108       0x20 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(altera_avalon_jtag_uart_write.o)
+ .debug_aranges
+                0x0000000000000128       0x20 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(altera_avalon_timer_sc.o)
+ .debug_aranges
+                0x0000000000000148       0x20 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_alarm_start.o)
+ .debug_aranges
+                0x0000000000000168       0x20 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_close.o)
+ .debug_aranges
+                0x0000000000000188       0x20 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_dcache_flush_all.o)
+ .debug_aranges
+                0x00000000000001a8       0x20 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_dev.o)
+ .debug_aranges
+                0x00000000000001c8       0x20 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_dev_llist_insert.o)
+ .debug_aranges
+                0x00000000000001e8       0x20 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_do_ctors.o)
+ .debug_aranges
+                0x0000000000000208       0x20 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_do_dtors.o)
+ .debug_aranges
+                0x0000000000000228       0x18 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_errno.o)
+ .debug_aranges
+                0x0000000000000240       0x20 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_icache_flush_all.o)
+ .debug_aranges
+                0x0000000000000260       0x20 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_iic.o)
+ .debug_aranges
+                0x0000000000000280       0x20 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_iic_isr_register.o)
+ .debug_aranges
+                0x00000000000002a0       0x20 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_io_redirect.o)
+ .debug_aranges
+                0x00000000000002c0       0x30 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_irq_entry.o)
+ .debug_aranges
+                0x00000000000002f0       0x20 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_irq_handler.o)
+ .debug_aranges
+                0x0000000000000310       0x18 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_irq_vars.o)
+ .debug_aranges
+                0x0000000000000328       0x20 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_open.o)
+ .debug_aranges
+                0x0000000000000348       0x20 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_release_fd.o)
+ .debug_aranges
+                0x0000000000000368       0x20 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_tick.o)
+ .debug_aranges
+                0x0000000000000388       0x20 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(altera_nios2_gen2_irq.o)
+ .debug_aranges
+                0x00000000000003a8       0x38 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_exception_entry.o)
+ .debug_aranges
+                0x00000000000003e0       0x20 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_find_dev.o)
+ .debug_aranges
+                0x0000000000000400       0x20 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_find_file.o)
+ .debug_aranges
+                0x0000000000000420       0x20 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_get_fd.o)
+ .debug_aranges
+                0x0000000000000440       0x20 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_icache_flush.o)
+ .debug_aranges
+                0x0000000000000460       0x28 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_instruction_exception_entry.o)
+ .debug_aranges
+                0x0000000000000488       0x20 d:/intelfpga_lite/20.1/nios2eds/bin/gnu/h-x86_64-mingw32/bin/../lib/gcc/nios2-elf/10.1.1/../../../../../H-x86_64-mingw32/nios2-elf/lib\libc.a(lib_a-atexit.o)
+ .debug_aranges
+                0x00000000000004a8       0x20 d:/intelfpga_lite/20.1/nios2eds/bin/gnu/h-x86_64-mingw32/bin/../lib/gcc/nios2-elf/10.1.1/../../../../../H-x86_64-mingw32/nios2-elf/lib\libc.a(lib_a-exit.o)
+ .debug_aranges
+                0x00000000000004c8       0x18 d:/intelfpga_lite/20.1/nios2eds/bin/gnu/h-x86_64-mingw32/bin/../lib/gcc/nios2-elf/10.1.1/../../../../../H-x86_64-mingw32/nios2-elf/lib\libc.a(lib_a-impure.o)
+ .debug_aranges
+                0x00000000000004e0       0x18 d:/intelfpga_lite/20.1/nios2eds/bin/gnu/h-x86_64-mingw32/bin/../lib/gcc/nios2-elf/10.1.1/../../../../../H-x86_64-mingw32/nios2-elf/lib\libc.a(lib_a-int_errno.o)
+ .debug_aranges
+                0x00000000000004f8       0x20 d:/intelfpga_lite/20.1/nios2eds/bin/gnu/h-x86_64-mingw32/bin/../lib/gcc/nios2-elf/10.1.1/../../../../../H-x86_64-mingw32/nios2-elf/lib\libc.a(lib_a-memcmp.o)
+ .debug_aranges
+                0x0000000000000518       0x20 d:/intelfpga_lite/20.1/nios2eds/bin/gnu/h-x86_64-mingw32/bin/../lib/gcc/nios2-elf/10.1.1/../../../../../H-x86_64-mingw32/nios2-elf/lib\libc.a(lib_a-memcpy.o)
+ .debug_aranges
+                0x0000000000000538       0x20 d:/intelfpga_lite/20.1/nios2eds/bin/gnu/h-x86_64-mingw32/bin/../lib/gcc/nios2-elf/10.1.1/../../../../../H-x86_64-mingw32/nios2-elf/lib\libc.a(lib_a-strlen.o)
+ .debug_aranges
+                0x0000000000000558       0x20 d:/intelfpga_lite/20.1/nios2eds/bin/gnu/h-x86_64-mingw32/bin/../lib/gcc/nios2-elf/10.1.1/../../../../../H-x86_64-mingw32/nios2-elf/lib\libc.a(lib_a-__atexit.o)
+ .debug_aranges
+                0x0000000000000578       0x20 d:/intelfpga_lite/20.1/nios2eds/bin/gnu/h-x86_64-mingw32/bin/../lib/gcc/nios2-elf/10.1.1/../../../../../H-x86_64-mingw32/nios2-elf/lib\libc.a(lib_a-__call_atexit.o)
+ .debug_aranges
+                0x0000000000000598       0x20 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_exit.o)
+
+.debug_pubnames
+ *(.debug_pubnames)
+
+.debug_info     0x0000000000000000     0x7978
+ *(.debug_info .gnu.linkonce.wi.*)
+ .debug_info    0x0000000000000000       0x22 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp//obj/HAL/src/crt0.o
+ .debug_info    0x0000000000000022      0x14d c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_load.o)
+ .debug_info    0x000000000000016f       0xef c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_main.o)
+ .debug_info    0x000000000000025e      0x4d1 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_sys_init.o)
+ .debug_info    0x000000000000072f      0x53d c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(altera_avalon_jtag_uart_fd.o)
+ .debug_info    0x0000000000000c6c      0x3d0 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(altera_avalon_jtag_uart_init.o)
+ .debug_info    0x000000000000103c      0x273 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(altera_avalon_jtag_uart_ioctl.o)
+ .debug_info    0x00000000000012af      0x336 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(altera_avalon_jtag_uart_read.o)
+ .debug_info    0x00000000000015e5      0x331 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(altera_avalon_jtag_uart_write.o)
+ .debug_info    0x0000000000001916      0x1d5 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(altera_avalon_timer_sc.o)
+ .debug_info    0x0000000000001aeb      0x2dd c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_alarm_start.o)
+ .debug_info    0x0000000000001dc8      0x32c c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_close.o)
+ .debug_info    0x00000000000020f4       0xa0 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_dcache_flush_all.o)
+ .debug_info    0x0000000000002194      0x57d c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_dev.o)
+ .debug_info    0x0000000000002711      0x1b0 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_dev_llist_insert.o)
+ .debug_info    0x00000000000028c1       0x88 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_do_ctors.o)
+ .debug_info    0x0000000000002949       0x88 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_do_dtors.o)
+ .debug_info    0x00000000000029d1       0x9d c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_errno.o)
+ .debug_info    0x0000000000002a6e       0x8c c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_icache_flush_all.o)
+ .debug_info    0x0000000000002afa      0x32c c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_iic.o)
+ .debug_info    0x0000000000002e26      0x1f0 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_iic_isr_register.o)
+ .debug_info    0x0000000000003016      0x546 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_io_redirect.o)
+ .debug_info    0x000000000000355c       0x22 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_irq_entry.o)
+ .debug_info    0x000000000000357e      0x175 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_irq_handler.o)
+ .debug_info    0x00000000000036f3       0x8b c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_irq_vars.o)
+ .debug_info    0x000000000000377e      0x3dd c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_open.o)
+ .debug_info    0x0000000000003b5b      0x2b9 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_release_fd.o)
+ .debug_info    0x0000000000003e14      0x2bd c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_tick.o)
+ .debug_info    0x00000000000040d1       0x8c c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(altera_nios2_gen2_irq.o)
+ .debug_info    0x000000000000415d       0x22 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_exception_entry.o)
+ .debug_info    0x000000000000417f      0x2ee c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_find_dev.o)
+ .debug_info    0x000000000000446d      0x2eb c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_find_file.o)
+ .debug_info    0x0000000000004758      0x31c c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_get_fd.o)
+ .debug_info    0x0000000000004a74       0xdb c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_icache_flush.o)
+ .debug_info    0x0000000000004b4f      0x1f1 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_instruction_exception_entry.o)
+ .debug_info    0x0000000000004d40      0x100 d:/intelfpga_lite/20.1/nios2eds/bin/gnu/h-x86_64-mingw32/bin/../lib/gcc/nios2-elf/10.1.1/../../../../../H-x86_64-mingw32/nios2-elf/lib\libc.a(lib_a-atexit.o)
+ .debug_info    0x0000000000004e40      0x970 d:/intelfpga_lite/20.1/nios2eds/bin/gnu/h-x86_64-mingw32/bin/../lib/gcc/nios2-elf/10.1.1/../../../../../H-x86_64-mingw32/nios2-elf/lib\libc.a(lib_a-exit.o)
+ .debug_info    0x00000000000057b0      0x931 d:/intelfpga_lite/20.1/nios2eds/bin/gnu/h-x86_64-mingw32/bin/../lib/gcc/nios2-elf/10.1.1/../../../../../H-x86_64-mingw32/nios2-elf/lib\libc.a(lib_a-impure.o)
+ .debug_info    0x00000000000060e1       0x84 d:/intelfpga_lite/20.1/nios2eds/bin/gnu/h-x86_64-mingw32/bin/../lib/gcc/nios2-elf/10.1.1/../../../../../H-x86_64-mingw32/nios2-elf/lib\libc.a(lib_a-int_errno.o)
+ .debug_info    0x0000000000006165      0x138 d:/intelfpga_lite/20.1/nios2eds/bin/gnu/h-x86_64-mingw32/bin/../lib/gcc/nios2-elf/10.1.1/../../../../../H-x86_64-mingw32/nios2-elf/lib\libc.a(lib_a-memcmp.o)
+ .debug_info    0x000000000000629d      0x162 d:/intelfpga_lite/20.1/nios2eds/bin/gnu/h-x86_64-mingw32/bin/../lib/gcc/nios2-elf/10.1.1/../../../../../H-x86_64-mingw32/nios2-elf/lib\libc.a(lib_a-memcpy.o)
+ .debug_info    0x00000000000063ff       0xee d:/intelfpga_lite/20.1/nios2eds/bin/gnu/h-x86_64-mingw32/bin/../lib/gcc/nios2-elf/10.1.1/../../../../../H-x86_64-mingw32/nios2-elf/lib\libc.a(lib_a-strlen.o)
+ .debug_info    0x00000000000064ed      0x9b1 d:/intelfpga_lite/20.1/nios2eds/bin/gnu/h-x86_64-mingw32/bin/../lib/gcc/nios2-elf/10.1.1/../../../../../H-x86_64-mingw32/nios2-elf/lib\libc.a(lib_a-__atexit.o)
+ .debug_info    0x0000000000006e9e      0x9f9 d:/intelfpga_lite/20.1/nios2eds/bin/gnu/h-x86_64-mingw32/bin/../lib/gcc/nios2-elf/10.1.1/../../../../../H-x86_64-mingw32/nios2-elf/lib\libc.a(lib_a-__call_atexit.o)
+ .debug_info    0x0000000000007897       0xe1 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_exit.o)
+
+.debug_abbrev   0x0000000000000000     0x2cf6
+ *(.debug_abbrev)
+ .debug_abbrev  0x0000000000000000       0x12 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp//obj/HAL/src/crt0.o
+ .debug_abbrev  0x0000000000000012       0xab c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_load.o)
+ .debug_abbrev  0x00000000000000bd       0x86 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_main.o)
+ .debug_abbrev  0x0000000000000143      0x1a7 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_sys_init.o)
+ .debug_abbrev  0x00000000000002ea      0x146 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(altera_avalon_jtag_uart_fd.o)
+ .debug_abbrev  0x0000000000000430      0x1be c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(altera_avalon_jtag_uart_init.o)
+ .debug_abbrev  0x00000000000005ee      0x112 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(altera_avalon_jtag_uart_ioctl.o)
+ .debug_abbrev  0x0000000000000700      0x1b0 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(altera_avalon_jtag_uart_read.o)
+ .debug_abbrev  0x00000000000008b0      0x1ae c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(altera_avalon_jtag_uart_write.o)
+ .debug_abbrev  0x0000000000000a5e      0x14b c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(altera_avalon_timer_sc.o)
+ .debug_abbrev  0x0000000000000ba9      0x188 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_alarm_start.o)
+ .debug_abbrev  0x0000000000000d31      0x133 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_close.o)
+ .debug_abbrev  0x0000000000000e64       0x5e c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_dcache_flush_all.o)
+ .debug_abbrev  0x0000000000000ec2      0x117 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_dev.o)
+ .debug_abbrev  0x0000000000000fd9      0x12a c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_dev_llist_insert.o)
+ .debug_abbrev  0x0000000000001103       0x81 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_do_ctors.o)
+ .debug_abbrev  0x0000000000001184       0x81 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_do_dtors.o)
+ .debug_abbrev  0x0000000000001205       0x5a c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_errno.o)
+ .debug_abbrev  0x000000000000125f       0x44 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_icache_flush_all.o)
+ .debug_abbrev  0x00000000000012a3      0x189 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_iic.o)
+ .debug_abbrev  0x000000000000142c      0x17c c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_iic_isr_register.o)
+ .debug_abbrev  0x00000000000015a8      0x126 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_io_redirect.o)
+ .debug_abbrev  0x00000000000016ce       0x12 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_irq_entry.o)
+ .debug_abbrev  0x00000000000016e0      0x12d c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_irq_handler.o)
+ .debug_abbrev  0x000000000000180d       0x44 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_irq_vars.o)
+ .debug_abbrev  0x0000000000001851      0x160 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_open.o)
+ .debug_abbrev  0x00000000000019b1       0xea c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_release_fd.o)
+ .debug_abbrev  0x0000000000001a9b      0x17a c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_tick.o)
+ .debug_abbrev  0x0000000000001c15       0x44 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(altera_nios2_gen2_irq.o)
+ .debug_abbrev  0x0000000000001c59       0x12 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_exception_entry.o)
+ .debug_abbrev  0x0000000000001c6b       0xed c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_find_dev.o)
+ .debug_abbrev  0x0000000000001d58      0x100 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_find_file.o)
+ .debug_abbrev  0x0000000000001e58      0x121 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_get_fd.o)
+ .debug_abbrev  0x0000000000001f79       0x96 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_icache_flush.o)
+ .debug_abbrev  0x000000000000200f       0xea c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_instruction_exception_entry.o)
+ .debug_abbrev  0x00000000000020f9       0xb7 d:/intelfpga_lite/20.1/nios2eds/bin/gnu/h-x86_64-mingw32/bin/../lib/gcc/nios2-elf/10.1.1/../../../../../H-x86_64-mingw32/nios2-elf/lib\libc.a(lib_a-atexit.o)
+ .debug_abbrev  0x00000000000021b0      0x21d d:/intelfpga_lite/20.1/nios2eds/bin/gnu/h-x86_64-mingw32/bin/../lib/gcc/nios2-elf/10.1.1/../../../../../H-x86_64-mingw32/nios2-elf/lib\libc.a(lib_a-exit.o)
+ .debug_abbrev  0x00000000000023cd      0x1c9 d:/intelfpga_lite/20.1/nios2eds/bin/gnu/h-x86_64-mingw32/bin/../lib/gcc/nios2-elf/10.1.1/../../../../../H-x86_64-mingw32/nios2-elf/lib\libc.a(lib_a-impure.o)
+ .debug_abbrev  0x0000000000002596       0x39 d:/intelfpga_lite/20.1/nios2eds/bin/gnu/h-x86_64-mingw32/bin/../lib/gcc/nios2-elf/10.1.1/../../../../../H-x86_64-mingw32/nios2-elf/lib\libc.a(lib_a-int_errno.o)
+ .debug_abbrev  0x00000000000025cf       0x8d d:/intelfpga_lite/20.1/nios2eds/bin/gnu/h-x86_64-mingw32/bin/../lib/gcc/nios2-elf/10.1.1/../../../../../H-x86_64-mingw32/nios2-elf/lib\libc.a(lib_a-memcmp.o)
+ .debug_abbrev  0x000000000000265c       0xb6 d:/intelfpga_lite/20.1/nios2eds/bin/gnu/h-x86_64-mingw32/bin/../lib/gcc/nios2-elf/10.1.1/../../../../../H-x86_64-mingw32/nios2-elf/lib\libc.a(lib_a-memcpy.o)
+ .debug_abbrev  0x0000000000002712       0x8f d:/intelfpga_lite/20.1/nios2eds/bin/gnu/h-x86_64-mingw32/bin/../lib/gcc/nios2-elf/10.1.1/../../../../../H-x86_64-mingw32/nios2-elf/lib\libc.a(lib_a-strlen.o)
+ .debug_abbrev  0x00000000000027a1      0x250 d:/intelfpga_lite/20.1/nios2eds/bin/gnu/h-x86_64-mingw32/bin/../lib/gcc/nios2-elf/10.1.1/../../../../../H-x86_64-mingw32/nios2-elf/lib\libc.a(lib_a-__atexit.o)
+ .debug_abbrev  0x00000000000029f1      0x259 d:/intelfpga_lite/20.1/nios2eds/bin/gnu/h-x86_64-mingw32/bin/../lib/gcc/nios2-elf/10.1.1/../../../../../H-x86_64-mingw32/nios2-elf/lib\libc.a(lib_a-__call_atexit.o)
+ .debug_abbrev  0x0000000000002c4a       0xac c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_exit.o)
+
+.debug_line     0x0000000000000000     0x3268
+ *(.debug_line)
+ .debug_line    0x0000000000000000       0x72 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp//obj/HAL/src/crt0.o
+ .debug_line    0x0000000000000072       0xa6 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_load.o)
+ .debug_line    0x0000000000000118       0x85 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_main.o)
+ .debug_line    0x000000000000019d      0x147 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_sys_init.o)
+ .debug_line    0x00000000000002e4      0x149 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(altera_avalon_jtag_uart_fd.o)
+ .debug_line    0x000000000000042d      0x25b c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(altera_avalon_jtag_uart_init.o)
+ .debug_line    0x0000000000000688      0x154 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(altera_avalon_jtag_uart_ioctl.o)
+ .debug_line    0x00000000000007dc      0x1d1 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(altera_avalon_jtag_uart_read.o)
+ .debug_line    0x00000000000009ad      0x1d6 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(altera_avalon_jtag_uart_write.o)
+ .debug_line    0x0000000000000b83       0xfd c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(altera_avalon_timer_sc.o)
+ .debug_line    0x0000000000000c80      0x139 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_alarm_start.o)
+ .debug_line    0x0000000000000db9      0x1ac c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_close.o)
+ .debug_line    0x0000000000000f65       0x6e c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_dcache_flush_all.o)
+ .debug_line    0x0000000000000fd3      0x19f c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_dev.o)
+ .debug_line    0x0000000000001172      0x106 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_dev_llist_insert.o)
+ .debug_line    0x0000000000001278       0x66 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_do_ctors.o)
+ .debug_line    0x00000000000012de       0x66 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_do_dtors.o)
+ .debug_line    0x0000000000001344       0x51 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_errno.o)
+ .debug_line    0x0000000000001395       0x56 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_icache_flush_all.o)
+ .debug_line    0x00000000000013eb      0x127 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_iic.o)
+ .debug_line    0x0000000000001512       0xfc c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_iic_isr_register.o)
+ .debug_line    0x000000000000160e      0x1d2 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_io_redirect.o)
+ .debug_line    0x00000000000017e0       0x6b c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_irq_entry.o)
+ .debug_line    0x000000000000184b       0xd4 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_irq_handler.o)
+ .debug_line    0x000000000000191f       0x50 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_irq_vars.o)
+ .debug_line    0x000000000000196f      0x1a1 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_open.o)
+ .debug_line    0x0000000000001b10       0xb6 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_release_fd.o)
+ .debug_line    0x0000000000001bc6      0x160 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_tick.o)
+ .debug_line    0x0000000000001d26       0x57 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(altera_nios2_gen2_irq.o)
+ .debug_line    0x0000000000001d7d       0xb3 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_exception_entry.o)
+ .debug_line    0x0000000000001e30       0xb8 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_find_dev.o)
+ .debug_line    0x0000000000001ee8      0x103 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_find_file.o)
+ .debug_line    0x0000000000001feb       0xfa c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_get_fd.o)
+ .debug_line    0x00000000000020e5       0xa0 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_icache_flush.o)
+ .debug_line    0x0000000000002185       0xd9 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_instruction_exception_entry.o)
+ .debug_line    0x000000000000225e       0xf4 d:/intelfpga_lite/20.1/nios2eds/bin/gnu/h-x86_64-mingw32/bin/../lib/gcc/nios2-elf/10.1.1/../../../../../H-x86_64-mingw32/nios2-elf/lib\libc.a(lib_a-atexit.o)
+ .debug_line    0x0000000000002352      0x227 d:/intelfpga_lite/20.1/nios2eds/bin/gnu/h-x86_64-mingw32/bin/../lib/gcc/nios2-elf/10.1.1/../../../../../H-x86_64-mingw32/nios2-elf/lib\libc.a(lib_a-exit.o)
+ .debug_line    0x0000000000002579      0x164 d:/intelfpga_lite/20.1/nios2eds/bin/gnu/h-x86_64-mingw32/bin/../lib/gcc/nios2-elf/10.1.1/../../../../../H-x86_64-mingw32/nios2-elf/lib\libc.a(lib_a-impure.o)
+ .debug_line    0x00000000000026dd       0x5e d:/intelfpga_lite/20.1/nios2eds/bin/gnu/h-x86_64-mingw32/bin/../lib/gcc/nios2-elf/10.1.1/../../../../../H-x86_64-mingw32/nios2-elf/lib\libc.a(lib_a-int_errno.o)
+ .debug_line    0x000000000000273b      0x1e3 d:/intelfpga_lite/20.1/nios2eds/bin/gnu/h-x86_64-mingw32/bin/../lib/gcc/nios2-elf/10.1.1/../../../../../H-x86_64-mingw32/nios2-elf/lib\libc.a(lib_a-memcmp.o)
+ .debug_line    0x000000000000291e      0x235 d:/intelfpga_lite/20.1/nios2eds/bin/gnu/h-x86_64-mingw32/bin/../lib/gcc/nios2-elf/10.1.1/../../../../../H-x86_64-mingw32/nios2-elf/lib\libc.a(lib_a-memcpy.o)
+ .debug_line    0x0000000000002b53      0x1d8 d:/intelfpga_lite/20.1/nios2eds/bin/gnu/h-x86_64-mingw32/bin/../lib/gcc/nios2-elf/10.1.1/../../../../../H-x86_64-mingw32/nios2-elf/lib\libc.a(lib_a-strlen.o)
+ .debug_line    0x0000000000002d2b      0x218 d:/intelfpga_lite/20.1/nios2eds/bin/gnu/h-x86_64-mingw32/bin/../lib/gcc/nios2-elf/10.1.1/../../../../../H-x86_64-mingw32/nios2-elf/lib\libc.a(lib_a-__atexit.o)
+ .debug_line    0x0000000000002f43      0x2a0 d:/intelfpga_lite/20.1/nios2eds/bin/gnu/h-x86_64-mingw32/bin/../lib/gcc/nios2-elf/10.1.1/../../../../../H-x86_64-mingw32/nios2-elf/lib\libc.a(lib_a-__call_atexit.o)
+ .debug_line    0x00000000000031e3       0x85 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_exit.o)
+
+.debug_frame    0x0000000000000000      0xaa4
+ *(.debug_frame)
+ .debug_frame   0x0000000000000000       0x5c c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_load.o)
+ .debug_frame   0x000000000000005c       0x2c c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_main.o)
+ .debug_frame   0x0000000000000088       0x88 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_sys_init.o)
+ .debug_frame   0x0000000000000110       0xb0 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(altera_avalon_jtag_uart_fd.o)
+ .debug_frame   0x00000000000001c0       0xa4 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(altera_avalon_jtag_uart_init.o)
+ .debug_frame   0x0000000000000264       0x34 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(altera_avalon_jtag_uart_ioctl.o)
+ .debug_frame   0x0000000000000298       0x38 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(altera_avalon_jtag_uart_read.o)
+ .debug_frame   0x00000000000002d0       0x38 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(altera_avalon_jtag_uart_write.o)
+ .debug_frame   0x0000000000000308       0x60 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(altera_avalon_timer_sc.o)
+ .debug_frame   0x0000000000000368       0x34 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_alarm_start.o)
+ .debug_frame   0x000000000000039c       0x60 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_close.o)
+ .debug_frame   0x00000000000003fc       0x34 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_dcache_flush_all.o)
+ .debug_frame   0x0000000000000430       0x34 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_dev.o)
+ .debug_frame   0x0000000000000464       0x60 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_dev_llist_insert.o)
+ .debug_frame   0x00000000000004c4       0x38 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_do_ctors.o)
+ .debug_frame   0x00000000000004fc       0x38 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_do_dtors.o)
+ .debug_frame   0x0000000000000534       0x38 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_icache_flush_all.o)
+ .debug_frame   0x000000000000056c       0xa4 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_iic.o)
+ .debug_frame   0x0000000000000610       0x38 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_iic_isr_register.o)
+ .debug_frame   0x0000000000000648       0x60 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_io_redirect.o)
+ .debug_frame   0x00000000000006a8       0x38 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_irq_handler.o)
+ .debug_frame   0x00000000000006e0       0x84 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_open.o)
+ .debug_frame   0x0000000000000764       0x34 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_release_fd.o)
+ .debug_frame   0x0000000000000798       0x5c c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_tick.o)
+ .debug_frame   0x00000000000007f4       0x34 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(altera_nios2_gen2_irq.o)
+ .debug_frame   0x0000000000000828       0x38 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_find_dev.o)
+ .debug_frame   0x0000000000000860       0x38 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_find_file.o)
+ .debug_frame   0x0000000000000898       0x34 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_get_fd.o)
+ .debug_frame   0x00000000000008cc       0x34 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_icache_flush.o)
+ .debug_frame   0x0000000000000900       0x5c c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_instruction_exception_entry.o)
+ .debug_frame   0x000000000000095c       0x20 d:/intelfpga_lite/20.1/nios2eds/bin/gnu/h-x86_64-mingw32/bin/../lib/gcc/nios2-elf/10.1.1/../../../../../H-x86_64-mingw32/nios2-elf/lib\libc.a(lib_a-atexit.o)
+ .debug_frame   0x000000000000097c       0x28 d:/intelfpga_lite/20.1/nios2eds/bin/gnu/h-x86_64-mingw32/bin/../lib/gcc/nios2-elf/10.1.1/../../../../../H-x86_64-mingw32/nios2-elf/lib\libc.a(lib_a-exit.o)
+ .debug_frame   0x00000000000009a4       0x20 d:/intelfpga_lite/20.1/nios2eds/bin/gnu/h-x86_64-mingw32/bin/../lib/gcc/nios2-elf/10.1.1/../../../../../H-x86_64-mingw32/nios2-elf/lib\libc.a(lib_a-memcmp.o)
+ .debug_frame   0x00000000000009c4       0x20 d:/intelfpga_lite/20.1/nios2eds/bin/gnu/h-x86_64-mingw32/bin/../lib/gcc/nios2-elf/10.1.1/../../../../../H-x86_64-mingw32/nios2-elf/lib\libc.a(lib_a-memcpy.o)
+ .debug_frame   0x00000000000009e4       0x20 d:/intelfpga_lite/20.1/nios2eds/bin/gnu/h-x86_64-mingw32/bin/../lib/gcc/nios2-elf/10.1.1/../../../../../H-x86_64-mingw32/nios2-elf/lib\libc.a(lib_a-strlen.o)
+ .debug_frame   0x0000000000000a04       0x20 d:/intelfpga_lite/20.1/nios2eds/bin/gnu/h-x86_64-mingw32/bin/../lib/gcc/nios2-elf/10.1.1/../../../../../H-x86_64-mingw32/nios2-elf/lib\libc.a(lib_a-__atexit.o)
+ .debug_frame   0x0000000000000a24       0x54 d:/intelfpga_lite/20.1/nios2eds/bin/gnu/h-x86_64-mingw32/bin/../lib/gcc/nios2-elf/10.1.1/../../../../../H-x86_64-mingw32/nios2-elf/lib\libc.a(lib_a-__call_atexit.o)
+ .debug_frame   0x0000000000000a78       0x2c c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_exit.o)
+
+.debug_str      0x0000000000000000     0x1ad8
+ *(.debug_str)
+ .debug_str     0x0000000000000000       0x65 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp//obj/HAL/src/crt0.o
+ .debug_str     0x0000000000000065      0x19c c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_load.o)
+                                        0x21c (size before relaxing)
+ .debug_str     0x0000000000000201       0x44 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_main.o)
+                                        0x176 (size before relaxing)
+ .debug_str     0x0000000000000245      0x1b6 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_sys_init.o)
+                                        0x345 (size before relaxing)
+ .debug_str     0x00000000000003fb       0xb9 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(altera_avalon_jtag_uart_fd.o)
+                                        0x386 (size before relaxing)
+ .debug_str     0x00000000000004b4       0xe0 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(altera_avalon_jtag_uart_init.o)
+                                        0x329 (size before relaxing)
+ .debug_str     0x0000000000000594       0x4a c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(altera_avalon_jtag_uart_ioctl.o)
+                                        0x275 (size before relaxing)
+ .debug_str     0x00000000000005de       0x7f c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(altera_avalon_jtag_uart_read.o)
+                                        0x2ca (size before relaxing)
+ .debug_str     0x000000000000065d       0x4a c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(altera_avalon_jtag_uart_write.o)
+                                        0x2cb (size before relaxing)
+ .debug_str     0x00000000000006a7       0x72 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(altera_avalon_timer_sc.o)
+                                        0x218 (size before relaxing)
+ .debug_str     0x0000000000000719       0x65 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_alarm_start.o)
+                                        0x288 (size before relaxing)
+ .debug_str     0x000000000000077e       0x44 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_close.o)
+                                        0x208 (size before relaxing)
+ .debug_str     0x00000000000007c2       0x34 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_dcache_flush_all.o)
+                                        0x15f (size before relaxing)
+ .debug_str     0x00000000000007f6      0x150 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_dev.o)
+                                        0x36e (size before relaxing)
+ .debug_str     0x0000000000000946       0x34 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_dev_llist_insert.o)
+                                        0x1d6 (size before relaxing)
+ .debug_str     0x000000000000097a       0x48 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_do_ctors.o)
+                                         0xe3 (size before relaxing)
+ .debug_str     0x00000000000009c2       0x4c c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_do_dtors.o)
+                                         0xe2 (size before relaxing)
+ .debug_str     0x0000000000000a0e       0x14 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_errno.o)
+                                        0x149 (size before relaxing)
+ .debug_str     0x0000000000000a22       0x34 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_icache_flush_all.o)
+                                        0x15f (size before relaxing)
+ .debug_str     0x0000000000000a56       0xb2 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_iic.o)
+                                        0x236 (size before relaxing)
+ .debug_str     0x0000000000000b08       0x4c c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_iic_isr_register.o)
+                                        0x1f2 (size before relaxing)
+ .debug_str     0x0000000000000b54       0x56 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_io_redirect.o)
+                                        0x372 (size before relaxing)
+ .debug_str     0x0000000000000baa       0x18 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_irq_entry.o)
+                                         0x6e (size before relaxing)
+ .debug_str     0x0000000000000bc2       0x3a c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_irq_handler.o)
+                                        0x1a1 (size before relaxing)
+ .debug_str     0x0000000000000bfc       0x29 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_irq_vars.o)
+                                        0x14d (size before relaxing)
+ .debug_str     0x0000000000000c25       0x2f c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_open.o)
+                                        0x255 (size before relaxing)
+ .debug_str     0x0000000000000c54       0x28 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_release_fd.o)
+                                        0x1d9 (size before relaxing)
+ .debug_str     0x0000000000000c7c       0x4a c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_tick.o)
+                                        0x25c (size before relaxing)
+ .debug_str     0x0000000000000cc6       0x3b c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(altera_nios2_gen2_irq.o)
+                                        0x166 (size before relaxing)
+ .debug_str     0x0000000000000d01       0x1e c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_exception_entry.o)
+                                         0x74 (size before relaxing)
+ .debug_str     0x0000000000000d1f       0x24 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_find_dev.o)
+                                        0x1e9 (size before relaxing)
+ .debug_str     0x0000000000000d43       0x26 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_find_file.o)
+                                        0x1f7 (size before relaxing)
+ .debug_str     0x0000000000000d69       0x30 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_get_fd.o)
+                                        0x219 (size before relaxing)
+ .debug_str     0x0000000000000d99       0x2c c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_icache_flush.o)
+                                        0x165 (size before relaxing)
+ .debug_str     0x0000000000000dc5      0x48b c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_instruction_exception_entry.o)
+                                        0x5b3 (size before relaxing)
+ .debug_str     0x0000000000001250      0x162 d:/intelfpga_lite/20.1/nios2eds/bin/gnu/h-x86_64-mingw32/bin/../lib/gcc/nios2-elf/10.1.1/../../../../../H-x86_64-mingw32/nios2-elf/lib\libc.a(lib_a-atexit.o)
+                                        0x1fe (size before relaxing)
+ .debug_str     0x00000000000013b2      0x3c4 d:/intelfpga_lite/20.1/nios2eds/bin/gnu/h-x86_64-mingw32/bin/../lib/gcc/nios2-elf/10.1.1/../../../../../H-x86_64-mingw32/nios2-elf/lib\libc.a(lib_a-exit.o)
+                                        0x5a5 (size before relaxing)
+ .debug_str     0x0000000000001776       0xcb d:/intelfpga_lite/20.1/nios2eds/bin/gnu/h-x86_64-mingw32/bin/../lib/gcc/nios2-elf/10.1.1/../../../../../H-x86_64-mingw32/nios2-elf/lib\libc.a(lib_a-impure.o)
+                                        0x59c (size before relaxing)
+ .debug_str     0x0000000000001841       0x3e d:/intelfpga_lite/20.1/nios2eds/bin/gnu/h-x86_64-mingw32/bin/../lib/gcc/nios2-elf/10.1.1/../../../../../H-x86_64-mingw32/nios2-elf/lib\libc.a(lib_a-int_errno.o)
+                                        0x1ba (size before relaxing)
+ .debug_str     0x000000000000187f       0xc8 d:/intelfpga_lite/20.1/nios2eds/bin/gnu/h-x86_64-mingw32/bin/../lib/gcc/nios2-elf/10.1.1/../../../../../H-x86_64-mingw32/nios2-elf/lib\libc.a(lib_a-memcmp.o)
+                                        0x1c1 (size before relaxing)
+ .debug_str     0x0000000000001947       0x6a d:/intelfpga_lite/20.1/nios2eds/bin/gnu/h-x86_64-mingw32/bin/../lib/gcc/nios2-elf/10.1.1/../../../../../H-x86_64-mingw32/nios2-elf/lib\libc.a(lib_a-memcpy.o)
+                                        0x1e8 (size before relaxing)
+ .debug_str     0x00000000000019b1       0x50 d:/intelfpga_lite/20.1/nios2eds/bin/gnu/h-x86_64-mingw32/bin/../lib/gcc/nios2-elf/10.1.1/../../../../../H-x86_64-mingw32/nios2-elf/lib\libc.a(lib_a-strlen.o)
+                                        0x1d4 (size before relaxing)
+ .debug_str     0x0000000000001a01       0x43 d:/intelfpga_lite/20.1/nios2eds/bin/gnu/h-x86_64-mingw32/bin/../lib/gcc/nios2-elf/10.1.1/../../../../../H-x86_64-mingw32/nios2-elf/lib\libc.a(lib_a-__atexit.o)
+                                        0x5d6 (size before relaxing)
+ .debug_str     0x0000000000001a44       0x6a d:/intelfpga_lite/20.1/nios2eds/bin/gnu/h-x86_64-mingw32/bin/../lib/gcc/nios2-elf/10.1.1/../../../../../H-x86_64-mingw32/nios2-elf/lib\libc.a(lib_a-__call_atexit.o)
+                                        0x5cf (size before relaxing)
+ .debug_str     0x0000000000001aae       0x2a c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_exit.o)
+                                        0x15b (size before relaxing)
+
+.debug_loc      0x0000000000000000      0x827
+ *(.debug_loc)
+ .debug_loc     0x0000000000000000       0x32 d:/intelfpga_lite/20.1/nios2eds/bin/gnu/h-x86_64-mingw32/bin/../lib/gcc/nios2-elf/10.1.1/../../../../../H-x86_64-mingw32/nios2-elf/lib\libc.a(lib_a-atexit.o)
+ .debug_loc     0x0000000000000032       0x22 d:/intelfpga_lite/20.1/nios2eds/bin/gnu/h-x86_64-mingw32/bin/../lib/gcc/nios2-elf/10.1.1/../../../../../H-x86_64-mingw32/nios2-elf/lib\libc.a(lib_a-exit.o)
+ .debug_loc     0x0000000000000054      0x158 d:/intelfpga_lite/20.1/nios2eds/bin/gnu/h-x86_64-mingw32/bin/../lib/gcc/nios2-elf/10.1.1/../../../../../H-x86_64-mingw32/nios2-elf/lib\libc.a(lib_a-memcmp.o)
+ .debug_loc     0x00000000000001ac      0x347 d:/intelfpga_lite/20.1/nios2eds/bin/gnu/h-x86_64-mingw32/bin/../lib/gcc/nios2-elf/10.1.1/../../../../../H-x86_64-mingw32/nios2-elf/lib\libc.a(lib_a-memcpy.o)
+ .debug_loc     0x00000000000004f3       0x73 d:/intelfpga_lite/20.1/nios2eds/bin/gnu/h-x86_64-mingw32/bin/../lib/gcc/nios2-elf/10.1.1/../../../../../H-x86_64-mingw32/nios2-elf/lib\libc.a(lib_a-strlen.o)
+ .debug_loc     0x0000000000000566       0xf7 d:/intelfpga_lite/20.1/nios2eds/bin/gnu/h-x86_64-mingw32/bin/../lib/gcc/nios2-elf/10.1.1/../../../../../H-x86_64-mingw32/nios2-elf/lib\libc.a(lib_a-__atexit.o)
+ .debug_loc     0x000000000000065d      0x1ca d:/intelfpga_lite/20.1/nios2eds/bin/gnu/h-x86_64-mingw32/bin/../lib/gcc/nios2-elf/10.1.1/../../../../../H-x86_64-mingw32/nios2-elf/lib\libc.a(lib_a-__call_atexit.o)
+
+.debug_macinfo
+ *(.debug_macinfo)
+
+.debug_weaknames
+ *(.debug_weaknames)
+
+.debug_funcnames
+ *(.debug_funcnames)
+
+.debug_typenames
+ *(.debug_typenames)
+
+.debug_varnames
+ *(.debug_varnames)
+
+.debug_alt_sim_info
+                0x0000000000000000       0x30
+ *(.debug_alt_sim_info)
+ .debug_alt_sim_info
+                0x0000000000000000       0x30 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp//obj/HAL/src/crt0.o
+                0x00000000000186a0                __alt_data_end = 0x186a0
+                0x00000000000186a0                PROVIDE (__alt_stack_pointer = __alt_data_end)
+                [!provide]                        PROVIDE (__alt_stack_limit = __alt_stack_base)
+                [!provide]                        PROVIDE (__alt_heap_start = end)
+                [!provide]                        PROVIDE (__alt_heap_limit = 0x186a0)
+OUTPUT(video_app2.elf elf32-littlenios2)
+LOAD linker stubs
+
+.debug_ranges   0x0000000000000000      0x180
+ .debug_ranges  0x0000000000000000       0x20 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp//obj/HAL/src/crt0.o
+ .debug_ranges  0x0000000000000020       0x30 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(altera_avalon_jtag_uart_init.o)
+ .debug_ranges  0x0000000000000050       0x18 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(altera_avalon_jtag_uart_read.o)
+ .debug_ranges  0x0000000000000068       0x28 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_irq_entry.o)
+ .debug_ranges  0x0000000000000090       0x10 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_irq_handler.o)
+ .debug_ranges  0x00000000000000a0       0x30 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_exception_entry.o)
+ .debug_ranges  0x00000000000000d0       0x18 c:/Workspace/quartus/video_processing/nios_software/nios_ddr3_test_bsp/\libhal_bsp.a(alt_instruction_exception_entry.o)
+ .debug_ranges  0x00000000000000e8       0x10 d:/intelfpga_lite/20.1/nios2eds/bin/gnu/h-x86_64-mingw32/bin/../lib/gcc/nios2-elf/10.1.1/../../../../../H-x86_64-mingw32/nios2-elf/lib\libc.a(lib_a-atexit.o)
+ .debug_ranges  0x00000000000000f8       0x10 d:/intelfpga_lite/20.1/nios2eds/bin/gnu/h-x86_64-mingw32/bin/../lib/gcc/nios2-elf/10.1.1/../../../../../H-x86_64-mingw32/nios2-elf/lib\libc.a(lib_a-exit.o)
+ .debug_ranges  0x0000000000000108       0x10 d:/intelfpga_lite/20.1/nios2eds/bin/gnu/h-x86_64-mingw32/bin/../lib/gcc/nios2-elf/10.1.1/../../../../../H-x86_64-mingw32/nios2-elf/lib\libc.a(lib_a-memcmp.o)
+ .debug_ranges  0x0000000000000118       0x10 d:/intelfpga_lite/20.1/nios2eds/bin/gnu/h-x86_64-mingw32/bin/../lib/gcc/nios2-elf/10.1.1/../../../../../H-x86_64-mingw32/nios2-elf/lib\libc.a(lib_a-memcpy.o)
+ .debug_ranges  0x0000000000000128       0x10 d:/intelfpga_lite/20.1/nios2eds/bin/gnu/h-x86_64-mingw32/bin/../lib/gcc/nios2-elf/10.1.1/../../../../../H-x86_64-mingw32/nios2-elf/lib\libc.a(lib_a-strlen.o)
+ .debug_ranges  0x0000000000000138       0x10 d:/intelfpga_lite/20.1/nios2eds/bin/gnu/h-x86_64-mingw32/bin/../lib/gcc/nios2-elf/10.1.1/../../../../../H-x86_64-mingw32/nios2-elf/lib\libc.a(lib_a-__atexit.o)
+ .debug_ranges  0x0000000000000148       0x38 d:/intelfpga_lite/20.1/nios2eds/bin/gnu/h-x86_64-mingw32/bin/../lib/gcc/nios2-elf/10.1.1/../../../../../H-x86_64-mingw32/nios2-elf/lib\libc.a(lib_a-__call_atexit.o)

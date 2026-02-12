@@ -73,5 +73,32 @@ Step 3: Verifying HW DMA Integrity...
 [SUCCESS] 100 iterations complete! DMA wins! 🎉
 ```
 
-## 6. Conclusion
-The **AXI Bridge** relocation, combined with the **Burst Master DMA**, provides a high-performance, stable path for DDR3 access. This setup is the definitive solution for real-time video processing projects on the DE10-Nano when SDRAM ports are locked.
+---
+
+## 6. Phase 2: DDR-to-DDR Pipeline DMA & Memory Protection
+
+단순 전송을 넘어, 연산 파이프라인이 포함된 `burst_master_4`를 통해 DDR-to-DDR 성능을 측정하였습니다. 또한, HPS(ARM/Linux)의 시스템 영역 보호를 위한 주소 관리 기법을 적용하였습니다.
+
+### 🛑 Challenge 4: HPS Memory Conflict (0x0 Address)
+- **문제**: 물리 주소 0x0 지점은 ARM의 Vector Table 및 Kernel 영역으로, DMA가 이 대역을 침범할 경우 시스템 크래시가 발생합니다.
+- **해결**: 모든 DMA 테스트 주소를 **512MB (0x20000000)** 이후의 안전 영역으로 상향 조정하였습니다.
+- **구현**: `Address Span Extender`의 윈도우 베이스를 초기화 시 `0x20000000`으로 설정하여 Nios II와 하드웨어 간의 주소 정렬을 유지하였습니다.
+
+### 📊 DDR-to-DDR Benchmark (1 MB)
+| Method | Transfer Size | Time | Throughput | Speedup |
+| :--- | :--- | :--- | :--- | :--- |
+| **Software Copy** (Division) | 1 MB | 4.683 s | 0.21 MB/s | Baseline |
+| **Hardware DMA** (4-Stage) | **1 MB** | **0.008 s** | **125.00 MB/s** | **~585x** |
+
+### 📝 Final Verification Log
+```text
+Setting Span Extender window to 0x20000000... Done.
+--- Test 2: DDR to DDR DMA (1MB, Coeff=800) ---
+  -> SW Time: 4.683 s, Rate: 0.21 MB/s
+  -> HW Time: 0.008 s, Rate: 125.00 MB/s
+  -> Speedup: 585.38x
+[SUCCESS] HW DMA results match SW reference! 🎉
+```
+
+## 7. 결론 (Conclusion)
+AXI Bridge와 Burst Master DMA의 조합은 DE10-Nano 플랫폼에서 DDR3 자원을 활용하기 위한 가장 안정적이고 강력한 방법임을 확인하였습니다. 특히 125MB/s의 확정 대역폭은 실시간 720p HD 비디오 스트리밍 처리에 충분한 수치이며, 고속 연산 파이프라인과의 통합이 성공적으로 검증되었습니다.

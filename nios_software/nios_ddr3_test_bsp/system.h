@@ -4,7 +4,7 @@
  * Machine generated for CPU 'nios2_gen2_0' in SOPC Builder design 'soc_system'
  * SOPC Builder design path: ../../soc_system.sopcinfo
  *
- * Generated: Wed Feb 11 15:53:17 EST 2026
+ * Generated: Wed Feb 11 20:44:33 EST 2026
  */
 
 /*
@@ -147,6 +147,7 @@
 #define __ALTERA_AVALON_TIMER
 #define __ALTERA_NIOS2_GEN2
 #define __BURST_MASTER
+#define __BURST_MASTER_4
 
 
 /*
@@ -239,12 +240,26 @@
  */
 
 #define ALT_MODULE_CLASS_burst_master_0 burst_master
-#define BURST_MASTER_0_BASE 0x20040
+#define BURST_MASTER_0_BASE 0x20060
 #define BURST_MASTER_0_IRQ -1
 #define BURST_MASTER_0_IRQ_INTERRUPT_CONTROLLER_ID -1
 #define BURST_MASTER_0_NAME "/dev/burst_master_0"
 #define BURST_MASTER_0_SPAN 32
 #define BURST_MASTER_0_TYPE "burst_master"
+
+
+/*
+ * burst_master_4_0 configuration
+ *
+ */
+
+#define ALT_MODULE_CLASS_burst_master_4_0 burst_master_4
+#define BURST_MASTER_4_0_BASE 0x20020
+#define BURST_MASTER_4_0_IRQ -1
+#define BURST_MASTER_4_0_IRQ_INTERRUPT_CONTROLLER_ID -1
+#define BURST_MASTER_4_0_NAME "/dev/burst_master_4_0"
+#define BURST_MASTER_4_0_SPAN 32
+#define BURST_MASTER_4_0_TYPE "burst_master_4"
 
 
 /*
@@ -312,7 +327,7 @@
 
 #define ALT_MODULE_CLASS_timer_0 altera_avalon_timer
 #define TIMER_0_ALWAYS_RUN 0
-#define TIMER_0_BASE 0x20020
+#define TIMER_0_BASE 0x20040
 #define TIMER_0_COUNTER_SIZE 32
 #define TIMER_0_FIXED_PERIOD 0
 #define TIMER_0_FREQ 50000000
