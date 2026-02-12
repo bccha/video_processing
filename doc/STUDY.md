@@ -1,4 +1,5 @@
 # Study Notes: HDMI Video Pipeline Implementation
+[⬅️ Back to README](../README.md)
 
 This document provides technical details required to implement a custom HDMI video pipeline on the DE10-Nano, specifically focusing on 1280x720 (720p) resolution.
 

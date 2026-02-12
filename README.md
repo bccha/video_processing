@@ -40,7 +40,10 @@ graph LR
 | | **Hardware DMA (BM4/Pipe)** | **125.00 MB/s** | **~585x Speedup** |
 
 ## 📖 Documentation
-- [DESIGN.md](./DESIGN.md): Comprehensive system architecture and DDR-to-HDMI pipeline specification.
-- [BURST_DMA.md](./BURST_DMA.md): Detailed debugging history, performance benchmarks, and memory protection strategies.
+- [DESIGN.md](doc/DESIGN.md): Comprehensive system architecture and DDR-to-HDMI pipeline specification.
+- [BURST_DMA.md](doc/BURST_DMA.md): Detailed debugging history, performance benchmarks, and memory protection strategies.
+- [STUDY.md](doc/STUDY.md): Technical study notes on HDMI timing, ADV7513, and video processing.
+- [RESULT.md](doc/RESULT.md): Official performance benchmark results and hardware status logs.
+- [TODO.md](doc/TODO.md): Project roadmap and remaining tasks.
 - [soc_system.qsys](./soc_system.qsys): Platform Designer (Qsys) hardware configuration.
 - [nios_software/](./nios_software/): Nios II benchmark and verification source code.

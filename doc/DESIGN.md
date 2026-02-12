@@ -1,4 +1,6 @@
-# DE10-Nano DDR-to-HDMI Video Pipeline Specification
+# Design Specification: HDMI Video Pipeline
+[⬅️ Back to README](../README.md)
+ Specification
 
 This document outlines the architecture and technical design for streaming video data from HPS DDR3 memory to the HDMI display interface on the DE10-Nano platform.
 

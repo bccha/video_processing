@@ -2,7 +2,9 @@
 
 This document records the performance benchmarks and hardware initialization status of the DE10-Nano video processing pipeline.
 
-## 1. DMA Performance Benchmarks (2026-02-12)
+## 1. DMA# Performance Benchmark Results
+[⬅️ Back to README](../README.md)
+ (2026-02-12)
 
 | Test Case | Size | Software (cycles) | Hardware (cycles) | MB/s (HW) | Speedup |
 | :--- | :--- | :--- | :--- | :--- | :--- |
