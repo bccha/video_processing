@@ -35,7 +35,7 @@ graph LR
 | :--- | :--- | :--- |
 | Software Copy (CPU) | 4.55 MB/s | Baseline |
 | **Hardware DMA (Burst)** | **136.53 MB/s** | **~30x faster** |
-| Software (w/ Pipeline Math) | 0.21 MB/s | Ref (Complex) |
+| Software (w/ Arithmetic) | 0.21 MB/s | Ref (Complex) |
 | **Hardware DMA (BM4/Pipe)** | **125.00 MB/s** | **~585x faster** |
 
 ## 📖 Documentation
