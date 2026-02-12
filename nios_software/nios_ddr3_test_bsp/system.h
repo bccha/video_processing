@@ -4,7 +4,7 @@
  * Machine generated for CPU 'nios2_gen2_0' in SOPC Builder design 'soc_system'
  * SOPC Builder design path: ../../soc_system.sopcinfo
  *
- * Generated: Tue Dec 13 10:53:04 CST 2016
+ * Generated: Wed Feb 11 15:53:17 EST 2026
  */
 
 /*
@@ -146,6 +146,7 @@
 #define __ALTERA_AVALON_ONCHIP_MEMORY2
 #define __ALTERA_AVALON_TIMER
 #define __ALTERA_NIOS2_GEN2
+#define __BURST_MASTER
 
 
 /*
@@ -230,6 +231,20 @@
 #define ADDRESS_SPAN_EXTENDER_0_WINDOWED_SLAVE_SUB_WINDOW_COUNT 1
 #define ADDRESS_SPAN_EXTENDER_0_WINDOWED_SLAVE_TYPE "altera_address_span_extender"
 #define ALT_MODULE_CLASS_address_span_extender_0_windowed_slave altera_address_span_extender
+
+
+/*
+ * burst_master_0 configuration
+ *
+ */
+
+#define ALT_MODULE_CLASS_burst_master_0 burst_master
+#define BURST_MASTER_0_BASE 0x20040
+#define BURST_MASTER_0_IRQ -1
+#define BURST_MASTER_0_IRQ_INTERRUPT_CONTROLLER_ID -1
+#define BURST_MASTER_0_NAME "/dev/burst_master_0"
+#define BURST_MASTER_0_SPAN 32
+#define BURST_MASTER_0_TYPE "burst_master"
 
 
 /*

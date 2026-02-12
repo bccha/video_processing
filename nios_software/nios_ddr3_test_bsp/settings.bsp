@@ -2,9 +2,9 @@
 <sch:Settings xmlns:sch="http://www.altera.com/embeddedsw/bsp/schema">
         <BspType>hal</BspType>
         <BspVersion>default</BspVersion>
-        <BspGeneratedTimeStamp>2016-12-13 10:56:13</BspGeneratedTimeStamp>
-        <BspGeneratedUnixTimeStamp>1481597773268</BspGeneratedUnixTimeStamp>
-        <BspGeneratedLocation>E:\SVN\DE10_NANO_SOC\SoCFPGA\DE10_NANO_SoC_Nios_Access_DDR3\nios_software\nios_ddr3_test_bsp</BspGeneratedLocation>
+        <BspGeneratedTimeStamp>Feb 11, 2026 7:15:49 PM</BspGeneratedTimeStamp>
+        <BspGeneratedUnixTimeStamp>1770855349221</BspGeneratedUnixTimeStamp>
+        <BspGeneratedLocation>C:\Workspace\quartus\video_processing\nios_software\nios_ddr3_test_bsp</BspGeneratedLocation>
         <BspSettingsFile>settings.bsp</BspSettingsFile>
         <SopcDesignFile>..\..\soc_system.sopcinfo</SopcDesignFile>
         <JdiFile>default</JdiFile>
@@ -323,18 +323,6 @@
                 <Group>common</Group>
         </Setting>
         <Setting>
-                <SettingName>hal.make.cflags_mgpopt</SettingName>
-                <Identifier>CFLAGS_MGPOPT</Identifier>
-                <Type>UnquotedString</Type>
-                <Value>-mgpopt=local</Value>
-                <DefaultValue>-mgpopt=local</DefaultValue>
-                <DestinationFile>makefile_variable</DestinationFile>
-                <Description>C/C++ compiler to generate (do not generate) GP-relative accesses. 'none' tells the compilter not to generate GP-relative accesses. 'local' will generate GP-relative accesses for small data objects that are not external, weak, or uninitialized common symbols. Also use GP-relative addressing for objects that have been explicitly placed in a small data section via a section attribute. provides the default set of debug symbols typically required to debug a typical application. 'global' is same as 'local' but also generate GP-relative accesses for small data objects that are external, weak, or common.</Description>
-                <Restrictions>none</Restrictions>
-                <Enabled>false</Enabled>
-                <Group>common</Group>
-        </Setting>
-        <Setting>
                 <SettingName>hal.make.ar</SettingName>
                 <Identifier>AR</Identifier>
                 <Type>UnquotedString</Type>
@@ -549,6 +537,18 @@
                 <Restrictions>none</Restrictions>
                 <Enabled>false</Enabled>
                 <Group>none</Group>
+        </Setting>
+        <Setting>
+                <SettingName>hal.make.cflags_mgpopt</SettingName>
+                <Identifier>CFLAGS_MGPOPT</Identifier>
+                <Type>UnquotedString</Type>
+                <Value>-mgpopt=local</Value>
+                <DefaultValue>-mgpopt=global</DefaultValue>
+                <DestinationFile>public_mk_define</DestinationFile>
+                <Description>C/C++ compiler to generate (do not generate) GP-relative accesses. 'none' tells the compilter not to generate GP-relative accesses. 'local' will generate GP-relative accesses for small data objects that are not external, weak, or uninitialized common symbols. Also use GP-relative addressing for objects that have been explicitly placed in a small data section via a section attribute. provides the default set of debug symbols typically required to debug a typical application. 'global' is same as 'local' but also generate GP-relative accesses for small data objects that are external, weak, or common.</Description>
+                <Restrictions>none</Restrictions>
+                <Enabled>false</Enabled>
+                <Group>common</Group>
         </Setting>
         <Setting>
                 <SettingName>hal.make.ignore_system_derived.sopc_system_id</SettingName>
@@ -921,6 +921,12 @@
                 <addressRange>0x00020020 - 0x0002003F</addressRange>
                 <addressSpan>32</addressSpan>
                 <attributes>timer</attributes>
+        </MemoryMap>
+        <MemoryMap>
+                <slaveDescriptor>burst_master_0</slaveDescriptor>
+                <addressRange>0x00020040 - 0x0002005F</addressRange>
+                <addressSpan>32</addressSpan>
+                <attributes/>
         </MemoryMap>
         <MemoryMap>
                 <slaveDescriptor>address_span_extender_0_windowed_slave</slaveDescriptor>

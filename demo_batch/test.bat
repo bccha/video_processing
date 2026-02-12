@@ -18,8 +18,6 @@
 @set QUARTUS_BIN=%QUARTUS_ROOTDIR%\\bin32
 
 :DownLoad
-%QUARTUS_BIN%\\quartus_pgm.exe -m jtag -c 1 -o "p;DE10_NANO_SoC_GHRD.sof@2" 
+%QUARTUS_BIN%\\quartus_pgm.exe -m jtag -c 1 -o "p;../output_files/DE10_NANO_SoC_GHRD_time_limited.sof@2" 
 @ set SOPC_BUILDER_PATH=%SOPC_KIT_NIOS2%+%SOPC_BUILDER_PATH%
-@ "%QUARTUS_BIN%\\cygwin\bin\bash.exe" --rcfile ".\test.sh" 
-
-pause
+call "D:\intelFPGA_lite\20.1\nios2eds\Nios II Command Shell.bat" ./test.sh
