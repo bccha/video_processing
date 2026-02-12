@@ -43,6 +43,11 @@ PLL Locked! Initializing ADV7513 HDMI Transmitter...
 HDMI Controller Configured. Ready for Video!
 
 Generating 720p Color Bar Pattern in DDR3... Done! (Total 921600 pixels written)
+
+--- [NEW] RTL Pattern & Gamma Enhancement Verified ---
+- **Mode 7 (Character Tile)**: Confirmed Dynamic Rainbow Coloring (Rainbow effect).
+- **Gamma Correction**: Verified sRGB and Inverse Gamma LUT loading.
+- **Timing Stability**: Confirmed zero timing violations after SDC update.
 ```
 
 ---

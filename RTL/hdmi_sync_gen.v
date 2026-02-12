@@ -169,7 +169,11 @@ module hdmi_sync_gen (
     wire [3:0] char_col_idx = h_cnt[5:2]; // 0-15
     wire [15:0] current_row_bits = char_bitmap[char_row_idx];
     wire char_pixel = current_row_bits[15 - char_col_idx]; // Leftmost bit is col 0
-    wire [23:0] char_color = char_pixel ? 24'hFF00FF : 24'h000000; // Magenta on Black
+    // Dynamic Color for Character Rendering (Rainbow effect based on coordinates)
+    wire [7:0] fancy_r = h_cnt[7:0] + v_cnt[7:0];
+    wire [7:0] fancy_g = h_cnt[9:2];
+    wire [7:0] fancy_b = v_cnt[9:2];
+    wire [23:0] char_color = char_pixel ? {fancy_r, fancy_g, fancy_b} : 24'h000000;
 
     always @(*) begin
         case (reg_mode[2:0])

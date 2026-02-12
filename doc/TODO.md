@@ -1,35 +1,38 @@
 # TODO: Advanced Video Processing Roadmap
-[⬅️ Back to README](../README.md)
+[Back to README](../README.md)
 
 This roadmap outlines the steps to build a high-performance video pipeline, from basic color bars to advanced real-time image processing.
 
-## Phase 1: Foundation (Nios II Pattern & DMA) [/]
+## Phase 1: Foundation (Nios II Pattern & DMA) [x]
 - [x] **DDR3 Pattern Generation**: Write Nios II code to fill DDR3 (0x2000_0000) with 720p color bar.
-- [ ] **Video DMA (MM2ST Integration)**: Connect/Verify the hardware DMA that sends DDR3 pixels to HDMI.
-- [ ] **Basic HDMI Output**: Verify the first stable image on a monitor.
+- [x] **Hardware DMA Master**: Implement and verify `burst_master` for high-speed DDR3 access.
+- [x] **Performance Benchmarking**: Verify 500x speedup compared to software copy.
 
-## Phase 2: Hardware Extension (RTL Sync Gen & Menu)
-- [ ] **Custom Sync Gen**: Implement `hdmi_sync_gen.v` with H/V sync and DE.
-- [ ] **RTL Patterns**: Add built-in patterns (Grid, Moving Square) to the Sync Gen.
-- [ ] **Software Control**: Update Nios II menu to switch between DMA and RTL patterns.
+## Phase 2: Hardware Extension (RTL Sync Gen & Advanced Control) [x]
+- [x] **Custom Sync Gen**: Implement `hdmi_sync_gen.v` with H/V sync and DE.
+- [x] **RTL Patterns**: Add built-in patterns (Grid, Grayscale, Character Tile) to the Sync Gen.
+- [x] **Advanced Gamma Correction**: Implement sRGB and Inverse Gamma 2.2 LUTs.
+- [x] **Nios II Sub-menu**: Create a nested menu for real-time Gamma and Pattern control.
+- [x] **Timing & Addressing Fix**: Resolve SDC timing violations and Avalon-MM address mapping bugs.
+- [x] **Dynamic Coloring**: Implement coordinate-based rainbow effects for character rendering.
 
-## Phase 3: Advanced Processing (Line Buffer & Filters)
+## Phase 3: DMA Video Output (Next Step) [/]
+- [ ] **MM2ST Video Pipeline**: Integrate the DMA Master with a Stream-to-Video bridge.
+- [ ] **Frame Buffer Control**: Implement Nios II logic to manage double-buffering in DDR3.
+- [ ] **Stable Video Output**: Verify jitter-free 720p video stream from DDR3 to HDMI monitor.
+
+## Phase 4: Real-time Processing (Line Buffer & Filters)
 - [ ] **Line Buffer Design**: Implement dual-port RAM based line buffers for 3x3 windowing.
 - [ ] **Processing Core**: Implement `video_processing_core.v`.
     - [ ] **Grayscale/Thresholding**: Basic pixel-wise processing.
     - [ ] **Sobel Edge Detection**: High-speed spatial filtering using the line buffers.
 
-## Phase 4: High-End Quality (Hybrid Dithering)
+## Phase 5: High-End Quality & Integration
 - [ ] **Spatial Dithering**: Implement Bayer Matrix based dithering to reduce banding.
-- [ ] **Temporal Dithering (FRC)**: Implement frame-rate control for 10-bit color simulation.
-- [ ] **Final Integration**: Combine Sobel + Dithering for a professional video output.
+- [ ] **Linux Integration**: Map the video pipeline as a standard Linux display device (DRM/KMS).
+- [ ] **AI Acceleration**: Integrate hardware-based AI recognition core.
 
-## Phase 5: Next-Gen Integration (AI & Linux System)
-- [ ] **Linux Frame Buffer (fbdev/DRM)**: Map the video pipeline as a standard Linux display device.
-- [ ] **AI Acceleration**: Implement a hardware-based Object Detection core (CNN/YOLO-tiny).
-- [ ] **System-on-Chip Harmony**: Stream Linux video to HDMI while performing real-time AI recognition.
-
-## Hardware/Qsys Requirements (Common)
-- [ ] **Clocking**: 74.25 MHz Pixel Clock PLL + Reconfig IP.
-- [ ] **I2C Control**: ADV7513 initialization via Nios II.
-- [ ] **Top-level Wiring**: HDMI_TX pins assignment in `DE10_NANO_SoC_GHRD.v`.
+## Hardware/Qsys Requirements (Common) [x]
+- [x] **Clocking**: 74.25 MHz Pixel Clock PLL + SDC Constraints.
+- [x] **I2C Control**: ADV7513 initialization via Nios II.
+- [x] **Top-level Wiring**: HDMI_TX pins assignment in `DE10_NANO_SoC_GHRD.v`.
