@@ -10,6 +10,10 @@ By utilizing the **FPGA-to-HPS AXI Bridge**, we bypass the common preloader/brid
 - **Performance Optimized**: Achieved ~30x throughput improvement using hardware-driven bursts compared to software-based copy loops.
 - **Stable Coherency**: Implemented proper cache management (`alt_dcache_flush_all`) for reliable data shared between Nios II and hardware masters.
 
+- **Video Pipeline Optimization**: Resolved timing violations (Negative Slack -6.5ns) by applying asynchronous clock group constraints in SDC.
+- **Advanced HDMI Control**: Implemented sophisticated gamma correction (sRGB, Inverse Gamma 2.2) and custom character tile-rendering (Mode 7).
+- **Stable Address Mapping**: Fixed Avalon-MM byte-to-word addressing issues, ensuring reliable register control.
+
 ## 🏗 System Architecture
 ```mermaid
 graph LR
@@ -17,6 +21,7 @@ graph LR
         Nios["Nios II Processor"]
         BM["Burst Master (DMA)"]
         ASE["Address Span Extender"]
+        HCP["HDMI Control (RTL)"]
     end
 
     subgraph HPS
@@ -25,6 +30,7 @@ graph LR
     end
 
     Nios --> ASE
+    Nios --> HCP
     BM --> ASE
     ASE --> AXI
     AXI --> DDR
@@ -41,6 +47,7 @@ graph LR
 
 ## 📖 Documentation
 - [DESIGN.md](doc/DESIGN.md): Comprehensive system architecture and DDR-to-HDMI pipeline specification.
+- [NIOS.md](doc/nios.md): Detailed Interactive Menu tree structure and control logic.
 - [BURST_DMA.md](doc/BURST_DMA.md): Detailed debugging history, performance benchmarks, and memory protection strategies.
 - [STUDY.md](doc/STUDY.md): Technical study notes on HDMI timing, ADV7513, and video processing.
 - [RESULT.md](doc/RESULT.md): Official performance benchmark results and hardware status logs.
