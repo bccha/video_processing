@@ -1,4 +1,6 @@
 # 🎬 Video Playback Implementation
+[**English**] | [**한국어**](./VIDEO_PLAYBACK_kor.md)
+[⬅️ Back to README](../README.md)
 
 ## Overview
 

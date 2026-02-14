@@ -1,4 +1,5 @@
 # Design Specification: HDMI Video Pipeline
+[**English**] | [**한국어**](./DESIGN_kor.md)
 [⬅️ Back to README](../README.md)
  Specification
 

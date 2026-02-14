@@ -1,4 +1,5 @@
 # Burst Master DMA: Trial, Error, and Success
+[**English**] | [**한국어**](./BURST_DMA_kor.md)
 [⬅️ Back to README](../README.md)
 
 This document records the technical challenges and evolution of the DDR3 connectivity strategy for the DE10-Nano video processing project.

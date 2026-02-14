@@ -1,4 +1,5 @@
 # TODO: Advanced Video Processing Roadmap
+[**English**] | [**한국어**](./TODO_kor.md)
 [Back to README](../README.md)
 
 This roadmap outlines the steps to build a high-performance video pipeline, from basic color bars to advanced real-time image processing.

@@ -30,3 +30,6 @@ hc_output/
 software/*/
 obj/
 bin/
+linux_software/image_converter/*.jpg
+tests/cocotb/*.bmp
+tests/cocotb/*.bin

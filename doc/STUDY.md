@@ -1,4 +1,5 @@
 # Study Notes: HDMI Video Pipeline Implementation
+[**English**] | [**한국어**](./STUDY_kor.md)
 [⬅️ Back to README](../README.md)
 
 This document provides technical details required to implement a custom HDMI video pipeline on the DE10-Nano, specifically focusing on 1280x720 (720p) resolution.
@@ -300,7 +301,57 @@ By repeating this at 30 or 60 times per second, you get a full-speed movie playi
 ## 16. Real-time Decoding: MP4 and CPU Limits
 Handling compressed formats like **MP4 (H.264)** is much more CPU-intensive than just copying raw pixel data.
 
-### Can ARM (Cortex-A9) handle it?
+### 🚀 Solution: "No-Install FFmpeg" & Pipe Method (Recommended)
+Instead of dealing with complex library installations, using a **Static Build** version is the most efficient way. You simply download a single file and run it.
+
+**1. Download on PC**
+The DE10-Nano uses the **ARMv7 (32bit)** architecture (armhf). Download the following file on your PC and transfer it to the SD card.
+- **Filename**: `ffmpeg-release-armhf-static.tar.xz`
+- **Source**: [John Van Sickle - FFmpeg Static Builds](https://johnvansickle.com/ffmpeg/)
+
+**2. Install on DE10-Nano**
+```bash
+# Extract the archive
+tar -xvf ffmpeg-release-armhf-static.tar.xz
+
+# Move to the directory
+cd ffmpeg-*-armhf-static
+
+# Verify execution
+./ffmpeg -version
+```
+
+**3. Interfacing with C Code (Pipe Method)**
+You can elegantly solve this using Linux **Pipes (|)** without needing any library headers.
+- **FFmpeg**: Decodes the video and outputs to **Standard Output (stdout)**.
+- **C Program**: Reads from **Standard Input (stdin)** and writes to memory.
+
+**Terminal Command:**
+```bash
+# ffmpeg reads mp4 -> converts to raw RGBA -> sends via pipe -> player receives and writes to memory
+./ffmpeg -i input.mp4 -f rawvideo -pix_fmt rgba - | ./player
+```
+
+**C Code Modification (Read from stdin):**
+Use Standard Input (file descriptor `0` or `stdin`) instead of `fopen`.
+
+```c
+// player.c core part
+unsigned char buffer[960 * 540 * 4]; // One frame buffer (qHD)
+
+while(1) {
+    // 1. Read one frame from Standard Input (stdin)
+    // fread automatically blocks until data is available
+    int bytes_read = fread(buffer, 1, sizeof(buffer), stdin);
+    
+    if (bytes_read < sizeof(buffer)) break; // End of stream
+
+    // 2. Copy read data to FPGA memory (mmap) - Double buffering logic needed
+    memcpy(fb_ptr, buffer, sizeof(buffer));
+}
+```
+
+### CPU Limits Context (Reference)
 - **Software Decoding**: Using libraries like **FFmpeg (libav codec)**, the dual-core 800MHz A9 can handle 480p or basic 720p at 24/30fps. However, reaching 60fps for 720p/1080p via pure software is very difficult.
 - **NEON Acceleration**: To make it work, the code must use the **NEON SIMD engine** inside the Cortex-A9 cores. This allows the CPU to process multiple data points in parallel, which is critical for video decoding.
 - **The Bottleneck**: The HPS on Cyclone V doesn't have a dedicated hard-wired H.264 decoder (VPU). Therefore, the CPU must do all the heavy lifting (Calculating DCT, Entropy coding, etc.).

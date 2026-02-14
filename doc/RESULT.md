@@ -1,4 +1,5 @@
 # Video Processing Pipeline - Test Results
+[**English**] | [**한국어**](./RESULT_kor.md)
 
 [⬅️ Back to README](../README.md)
 

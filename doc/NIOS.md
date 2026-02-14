@@ -1,4 +1,6 @@
 # Nios II Interactive Menu System
+[**English**] | [**한국어**](./NIOS_kor.md)
+[⬅️ Back to README](../README.md)
 
 This document describes the structure and functionality of the interactive console menu used for controlling the HDMI video pipeline.
 

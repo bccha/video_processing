@@ -1,4 +1,5 @@
 # Debugging Log: Video DMA & FIFO Integration
+[**English**] | [**한국어**](./TRYERROR_kor.md)
 
 This document records the issues encountered and solutions implemented during the verification of the Video DMA pipeline.
 
