@@ -473,6 +473,10 @@ set_global_assignment -name USE_DLL_FREQUENCY_FOR_DQS_DELAY_CHAIN ON
 set_global_assignment -name UNIPHY_SEQUENCER_DQS_CONFIG_ENABLE ON
 set_global_assignment -name OPTIMIZE_MULTI_CORNER_TIMING ON
 set_global_assignment -name ECO_REGENERATE_REPORT ON
+set_global_assignment -name VERILOG_FILE RTL/simple_dcfifo.v
+set_global_assignment -name VERILOG_FILE RTL/video_pipeline.v
+set_global_assignment -name VERILOG_FILE RTL/video_dma_master.v
+set_global_assignment -name VERILOG_FILE RTL/async_fifo.v
 set_global_assignment -name SDC_FILE DE10_NANO_SOC_GHRD.sdc
 set_global_assignment -name VERILOG_FILE RTL/DE10_NANO_SoC_GHRD.v
 set_global_assignment -name VERILOG_FILE RTL/burst_master.v

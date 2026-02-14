@@ -1150,7 +1150,7 @@
   <parameter name="PIPELINE_COMMAND" value="1" />
   <parameter name="PIPELINE_RESPONSE" value="1" />
   <parameter name="SYMBOL_WIDTH" value="8" />
-  <parameter name="SYSINFO_ADDR_WIDTH" value="17" />
+  <parameter name="SYSINFO_ADDR_WIDTH" value="18" />
   <parameter name="USE_AUTO_ADDRESS_WIDTH" value="1" />
   <parameter name="USE_RESPONSE" value="0" />
  </module>
@@ -1487,7 +1487,7 @@
   <parameter name="gui_multiply_factor" value="1" />
   <parameter name="gui_number_of_clocks" value="1" />
   <parameter name="gui_operation_mode" value="direct" />
-  <parameter name="gui_output_clock_frequency0" value="74.25" />
+  <parameter name="gui_output_clock_frequency0" value="37.8336" />
   <parameter name="gui_output_clock_frequency1" value="100.0" />
   <parameter name="gui_output_clock_frequency10" value="100.0" />
   <parameter name="gui_output_clock_frequency11" value="100.0" />
@@ -1801,6 +1801,15 @@
    end="hps_0.f2h_axi_slave">
   <parameter name="arbitrationPriority" value="1" />
   <parameter name="baseAddress" value="0x0000" />
+  <parameter name="defaultConnection" value="false" />
+ </connection>
+ <connection
+   kind="avalon"
+   version="20.1"
+   start="mm_bridge_0.m0"
+   end="hdmi_sync_mm.s0">
+  <parameter name="arbitrationPriority" value="1" />
+  <parameter name="baseAddress" value="0x00020020" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection kind="avalon" version="20.1" start="mm_bridge_0.m0" end="led_pio.s1">

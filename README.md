@@ -14,6 +14,14 @@ By utilizing the **FPGA-to-HPS AXI Bridge**, we bypass the common preloader/brid
 - **Advanced HDMI Control**: Implemented sophisticated gamma correction (sRGB, Inverse Gamma 2.2) and custom character tile-rendering (Mode 7).
 - **Stable Address Mapping**: Fixed Avalon-MM byte-to-word addressing issues, ensuring reliable register control.
 
+### 🎬 Video Playback (New!)
+- **qHD Resolution (960×540@60Hz)**: Optimized for 50MHz bus bandwidth (124 MB/s vs 200 MB/s available)
+- **Static Image Display**: Nios II software loads and displays images from DDR3
+- **Linux Video Playback**: High-performance "Store-and-Forward" architecture (RAM Preload)
+- **Network Streaming**: Support for piping video from host PC via SSH (`cat | ssh`)
+- **Dual-Clock Architecture**: Separate CSR (50MHz) and Pixel (37.8MHz) clocks with proper CDC
+- **V-Sync Synchronization**: Tear-free frame updates via hardware latching
+
 ## 🏗 System Architecture
 ```mermaid
 graph LR
@@ -46,6 +54,7 @@ graph LR
 | | **Hardware DMA (BM4/Pipe)** | **125.00 MB/s** | **~585x Speedup** |
 
 ## 📖 Documentation
+- [VIDEO_PLAYBACK.md](doc/VIDEO_PLAYBACK.md): **⭐ NEW** - qHD video playback implementation, Linux integration, and performance analysis.
 - [DESIGN.md](doc/DESIGN.md): Comprehensive system architecture and DDR-to-HDMI pipeline specification.
 - [NIOS.md](doc/NIOS.md): Detailed Interactive Menu tree structure and control logic.
 - [BURST_DMA.md](doc/BURST_DMA.md): Detailed debugging history, performance benchmarks, and memory protection strategies.
@@ -54,3 +63,4 @@ graph LR
 - [TODO.md](doc/TODO.md): Project roadmap and remaining tasks.
 - [soc_system.qsys](./soc_system.qsys): Platform Designer (Qsys) hardware configuration.
 - [nios_software/](./nios_software/): Nios II benchmark and verification source code.
+- [linux_software/](./linux_software/): Linux HPS applications for video playback.

@@ -13,6 +13,7 @@ void print_menu() {
   printf(" [4] Generate 720p Color Bar Pattern in DDR3\n");
   printf(" [5] Change RTL Test Pattern (Red, Green, Blue, etc.)\n");
   printf(" [6] Gamma Correction Settings (Table, Toggle, Standard)\n");
+  printf(" [8] DMA & Video Source Debug Submenu\n");
   printf(" [C] Load Custom Character Bitmap\n");
   printf(" [r] Reset RTL Pattern Generator\n");
   printf(" [q] Quit\n");
@@ -22,7 +23,6 @@ void print_menu() {
 
 void run_interactive_menu() {
   char choice;
-  static int gamma_en = 0;
   while (1) {
     print_menu();
     choice = 0;
@@ -33,11 +33,28 @@ void run_interactive_menu() {
 
     switch (choice) {
     case '1':
-      run_ocm_to_ddr_test(BURST_MASTER_0_BASE | CACHE_BYPASS_MASK);
+      // Switch Window to 0x20000000 for Benchmark
+      IOWR_32DIRECT(ADDRESS_SPAN_EXTENDER_0_CNTL_BASE, 0, 0x20000000);
+      printf("[Switch] Window mapped to 0x20000000 for Benchmark\n");
+
+      run_ocm_to_ddr_test(BURST_MASTER_0_BASE | CACHE_BYPASS_MASK, 0x20000000);
+
+      // Restore Window to 0x30000000 for Video
+      IOWR_32DIRECT(ADDRESS_SPAN_EXTENDER_0_CNTL_BASE, 0, 0x30000000);
+      printf("[Restore] Window mapped to 0x30000000 for Video\n");
       break;
     case '2':
 #ifdef BURST_MASTER_4_0_BASE
-      run_ddr_to_ddr_test(BURST_MASTER_4_0_BASE | CACHE_BYPASS_MASK);
+      // Switch Window to 0x20000000 for Benchmark
+      IOWR_32DIRECT(ADDRESS_SPAN_EXTENDER_0_CNTL_BASE, 0, 0x20000000);
+      printf("[Switch] Window mapped to 0x20000000 for Benchmark\n");
+
+      run_ddr_to_ddr_test(BURST_MASTER_4_0_BASE | CACHE_BYPASS_MASK,
+                          0x20000000);
+
+      // Restore Window to 0x30000000 for Video
+      IOWR_32DIRECT(ADDRESS_SPAN_EXTENDER_0_CNTL_BASE, 0, 0x30000000);
+      printf("[Restore] Window mapped to 0x30000000 for Video\n");
 #else
       printf("Error: BURST_MASTER_4_0 not found in system.h\n");
 #endif
@@ -50,6 +67,9 @@ void run_interactive_menu() {
       break;
     case '5':
       change_rtl_pattern();
+      break;
+    case '8':
+      run_dma_debug_submenu();
       break;
     case '6':
       run_gamma_submenu();
@@ -94,11 +114,25 @@ int main() {
   }
 
 #ifdef ADDRESS_SPAN_EXTENDER_0_CNTL_BASE
-  unsigned int ddr_phys_base = 0x20000000;
+  // HW default DMA address is 0x30000000.
+  // Window Size is 128MB.
+  // So we map the window start to 0x30000000 directly.
+  unsigned int ddr_phys_base = 0x30000000;
   printf("Initializing Span Extender to 0x%08X... ", ddr_phys_base);
   IOWR_32DIRECT(ADDRESS_SPAN_EXTENDER_0_CNTL_BASE, 0, ddr_phys_base);
   IOWR_32DIRECT(ADDRESS_SPAN_EXTENDER_0_CNTL_BASE, 4, 0);
   printf("Done.\n");
+#endif
+
+#ifdef PLL_LOCKED_BASE
+  printf("Checking PLL Lock Status... ");
+  unsigned int pll_locked = IORD_32DIRECT(PLL_LOCKED_BASE, 0);
+  if (pll_locked & 1) {
+    printf("LOCKED (0x%x)\n", pll_locked);
+  } else {
+    printf("FAILED (0x%x)\n", pll_locked);
+    printf("WARNING: HDMI Clock might be dead!\n");
+  }
 #endif
 
   run_interactive_menu();

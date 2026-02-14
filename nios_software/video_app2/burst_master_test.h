@@ -14,7 +14,7 @@
 #define REG_WR_BURST (6 * 4)
 #define REG_COEFF (7 * 4)
 
-void run_ocm_to_ddr_test(unsigned int csr_base);
-void run_ddr_to_ddr_test(unsigned int csr_base);
+void run_ocm_to_ddr_test(unsigned int csr_base, unsigned int ddr_base);
+void run_ddr_to_ddr_test(unsigned int csr_base, unsigned int ddr_base);
 
 #endif /* BURST_MASTER_TEST_H_ */

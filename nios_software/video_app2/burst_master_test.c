@@ -4,7 +4,7 @@
 
 static unsigned int ocm_src_buffer[OCM_TEST_WORDS] __attribute__((aligned(32)));
 
-void run_ocm_to_ddr_test(unsigned int csr_base) {
+void run_ocm_to_ddr_test(unsigned int csr_base, unsigned int ddr_base) {
   printf("\n--- [TEST 1] OCM to DDR DMA (burst_master_0) ---\n");
 
   unsigned int *src_ptr = ocm_src_buffer;
@@ -38,7 +38,7 @@ void run_ocm_to_ddr_test(unsigned int csr_base) {
 
   printf("Starting HW DMA (4KB x 100)... ");
   unsigned long long hw_t_start = get_total_cycles();
-  unsigned int ddr_phys_base = 0x20000000;
+  unsigned int ddr_phys_base = 0x30000000;
   for (int j = 0; j < 100; j++) {
     IOWR_32DIRECT(csr_base, REG_SRC_ADDR, src_phys);
     IOWR_32DIRECT(csr_base, REG_DST_ADDR, ddr_phys_base);
@@ -76,7 +76,7 @@ void run_ocm_to_ddr_test(unsigned int csr_base) {
     printf("FAILURE: %d errors in OCM test.\n", errors);
 }
 
-void run_ddr_to_ddr_test(unsigned int csr_base) {
+void run_ddr_to_ddr_test(unsigned int csr_base, unsigned int ddr_base) {
   printf("\n--- [TEST 2] DDR to DDR DMA (Burst Master 4) ---\n");
   printf("Transfer Size: 1 MB\n");
 
@@ -120,7 +120,7 @@ void run_ddr_to_ddr_test(unsigned int csr_base) {
 
   printf("Starting HW DMA (1MB)... ");
   unsigned long long hw_t_start = get_total_cycles();
-  unsigned int ddr_phys_base = 0x20000000;
+  unsigned int ddr_phys_base = 0x30000000;
   IOWR_32DIRECT(csr_base, REG_SRC_ADDR, ddr_phys_base + src_offset);
   IOWR_32DIRECT(csr_base, REG_DST_ADDR, ddr_phys_base + dst_hw_offset);
   IOWR_32DIRECT(csr_base, REG_LEN, DDR_TEST_WORDS * 4);

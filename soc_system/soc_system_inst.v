@@ -2,6 +2,16 @@
 		.button_pio_external_connection_export (<connected-to-button_pio_external_connection_export>), // button_pio_external_connection.export
 		.clk_clk                               (<connected-to-clk_clk>),                               //                            clk.clk
 		.dipsw_pio_external_connection_export  (<connected-to-dipsw_pio_external_connection_export>),  //  dipsw_pio_external_connection.export
+		.hdmi_sync_master_waitrequest          (<connected-to-hdmi_sync_master_waitrequest>),          //               hdmi_sync_master.waitrequest
+		.hdmi_sync_master_readdata             (<connected-to-hdmi_sync_master_readdata>),             //                               .readdata
+		.hdmi_sync_master_readdatavalid        (<connected-to-hdmi_sync_master_readdatavalid>),        //                               .readdatavalid
+		.hdmi_sync_master_burstcount           (<connected-to-hdmi_sync_master_burstcount>),           //                               .burstcount
+		.hdmi_sync_master_writedata            (<connected-to-hdmi_sync_master_writedata>),            //                               .writedata
+		.hdmi_sync_master_address              (<connected-to-hdmi_sync_master_address>),              //                               .address
+		.hdmi_sync_master_write                (<connected-to-hdmi_sync_master_write>),                //                               .write
+		.hdmi_sync_master_read                 (<connected-to-hdmi_sync_master_read>),                 //                               .read
+		.hdmi_sync_master_byteenable           (<connected-to-hdmi_sync_master_byteenable>),           //                               .byteenable
+		.hdmi_sync_master_debugaccess          (<connected-to-hdmi_sync_master_debugaccess>),          //                               .debugaccess
 		.hps_0_f2h_cold_reset_req_reset_n      (<connected-to-hps_0_f2h_cold_reset_req_reset_n>),      //       hps_0_f2h_cold_reset_req.reset_n
 		.hps_0_f2h_debug_reset_req_reset_n     (<connected-to-hps_0_f2h_debug_reset_req_reset_n>),     //      hps_0_f2h_debug_reset_req.reset_n
 		.hps_0_f2h_stm_hw_events_stm_hwevents  (<connected-to-hps_0_f2h_stm_hw_events_stm_hwevents>),  //        hps_0_f2h_stm_hw_events.stm_hwevents
@@ -87,16 +97,6 @@
 		.video_dma_s_write                     (<connected-to-video_dma_s_write>),                     //                               .write
 		.video_dma_s_read                      (<connected-to-video_dma_s_read>),                      //                               .read
 		.video_dma_s_byteenable                (<connected-to-video_dma_s_byteenable>),                //                               .byteenable
-		.video_dma_s_debugaccess               (<connected-to-video_dma_s_debugaccess>),               //                               .debugaccess
-		.hdmi_sync_master_waitrequest          (<connected-to-hdmi_sync_master_waitrequest>),          //               hdmi_sync_master.waitrequest
-		.hdmi_sync_master_readdata             (<connected-to-hdmi_sync_master_readdata>),             //                               .readdata
-		.hdmi_sync_master_readdatavalid        (<connected-to-hdmi_sync_master_readdatavalid>),        //                               .readdatavalid
-		.hdmi_sync_master_burstcount           (<connected-to-hdmi_sync_master_burstcount>),           //                               .burstcount
-		.hdmi_sync_master_writedata            (<connected-to-hdmi_sync_master_writedata>),            //                               .writedata
-		.hdmi_sync_master_address              (<connected-to-hdmi_sync_master_address>),              //                               .address
-		.hdmi_sync_master_write                (<connected-to-hdmi_sync_master_write>),                //                               .write
-		.hdmi_sync_master_read                 (<connected-to-hdmi_sync_master_read>),                 //                               .read
-		.hdmi_sync_master_byteenable           (<connected-to-hdmi_sync_master_byteenable>),           //                               .byteenable
-		.hdmi_sync_master_debugaccess          (<connected-to-hdmi_sync_master_debugaccess>)           //                               .debugaccess
+		.video_dma_s_debugaccess               (<connected-to-video_dma_s_debugaccess>)                //                               .debugaccess
 	);
 

@@ -2,12 +2,16 @@
 #include "common.h"
 #include <math.h>
 #include <stdio.h>
+#include <unistd.h>
 
 void generate_color_bar_pattern() {
-  printf("\nGenerating 720p Color Bar Pattern in DDR3... ");
+  printf("\nGenerating 540p Color Bar Pattern in DDR3... ");
+  // Window Base is now mapped to 0x30000000 in main.c
   unsigned int *fb = (unsigned int *)DDR3_WINDOW_BASE;
-  const int width = 1280;
-  const int height = 720;
+  printf("[DEBUG] Frame Buffer Addr: 0x%08X (Physical: 0x30000000)\n",
+         (unsigned int)fb);
+  const int width = 960;
+  const int height = 540;
   const int bar_width = width / 8;
 
   const unsigned int colors[8] = {0xFFFFFF, 0xFFFF00, 0x00FFFF, 0x00FF00,
@@ -24,6 +28,13 @@ void generate_color_bar_pattern() {
 
   alt_dcache_flush_all();
   printf("Done! (Total %d pixels written)\n", width * height);
+
+  // [DEBUG] Verify Write Back
+  volatile unsigned int *check_fb = (volatile unsigned int *)fb;
+  printf("[DEBUG] Verify @ 0x%08X: Wrote 0x%08X, Read 0x%08X\n",
+         (unsigned int)fb, 0xFFFFFF, check_fb[0]);
+  printf("[DEBUG] Verify @ 0x%08X: Wrote 0xFFFF00, Read 0x%08X\n",
+         (unsigned int)&fb[width / 8], check_fb[width / 8]);
 }
 
 void run_gamma_submenu() {
@@ -89,15 +100,19 @@ void change_rtl_pattern() {
 
 void load_gamma_table(float gamma_val) {
   printf("Calculating and Loading Gamma Table (index^1/%.1f)... \n", gamma_val);
-  float inv_gamma = 1.0f / gamma_val;
+  if (gamma_val <= 0.1f)
+    gamma_val = 2.2f; // Safety check
+  double inv_gamma = 1.0 / (double)gamma_val;
 
   for (int i = 0; i < 256; i++) {
-    float normalized = (float)i / 255.0f;
-    float corrected = powf(normalized, inv_gamma);
-    unsigned char val = (unsigned char)(corrected * 255.0f + 0.5f);
+    double normalized = (double)i / 255.0;
+    double corrected = pow(normalized, inv_gamma);
+    unsigned char val = (unsigned char)(corrected * 255.0 + 0.5);
 
     IOWR_32DIRECT(HDMI_SYNC_GEN_BASE | CACHE_BYPASS_MASK, REG_LUT_ADDR, i);
+    usleep(10); // Short delay for hardware stability
     IOWR_32DIRECT(HDMI_SYNC_GEN_BASE | CACHE_BYPASS_MASK, REG_LUT_DATA, val);
+    usleep(10); // Ensure write is complete
 
     // Print values (16 per line)
     printf("%3d ", val);
@@ -108,28 +123,36 @@ void load_gamma_table(float gamma_val) {
 }
 
 void set_gamma_enable(int enable) {
-  IOWR_32DIRECT(HDMI_SYNC_GEN_BASE | CACHE_BYPASS_MASK, REG_GAMMA_CTRL,
-                enable ? 1 : 0);
+  unsigned int ctrl =
+      IORD_32DIRECT(HDMI_SYNC_GEN_BASE | CACHE_BYPASS_MASK, REG_DMA_CTRL);
+  if (enable)
+    ctrl |= AS_GAMMA_EN_MSK;
+  else
+    ctrl &= ~AS_GAMMA_EN_MSK;
+
+  IOWR_32DIRECT(HDMI_SYNC_GEN_BASE | CACHE_BYPASS_MASK, REG_DMA_CTRL, ctrl);
   printf("Gamma Correction %s\n", enable ? "Enabled" : "Disabled");
 }
 
 void load_srgb_gamma_table() {
   printf("Calculating and Loading sRGB Gamma Table...\n");
   for (int i = 0; i < 256; i++) {
-    float normalized = (float)i / 255.0f;
-    float corrected;
+    double normalized = (double)i / 255.0;
+    double corrected;
 
     // sRGB Forward Transformation (Linear to sRGB space)
-    if (normalized <= 0.0031308f) {
-      corrected = 12.92f * normalized;
+    if (normalized <= 0.0031308) {
+      corrected = 12.92 * normalized;
     } else {
-      corrected = 1.055f * powf(normalized, 1.0f / 2.4f) - 0.055f;
+      corrected = 1.055 * pow(normalized, 1.0 / 2.4) - 0.055;
     }
 
-    unsigned char val = (unsigned char)(corrected * 255.0f + 0.5f);
+    unsigned char val = (unsigned char)(corrected * 255.0 + 0.5);
 
     IOWR_32DIRECT(HDMI_SYNC_GEN_BASE | CACHE_BYPASS_MASK, REG_LUT_ADDR, i);
+    usleep(10);
     IOWR_32DIRECT(HDMI_SYNC_GEN_BASE | CACHE_BYPASS_MASK, REG_LUT_DATA, val);
+    usleep(10);
 
     printf("%3d ", val);
     if ((i + 1) % 16 == 0)
@@ -142,12 +165,14 @@ void load_inverse_gamma_table() {
   printf("Calculating and Loading Inverse Gamma Table (x^2.2) for Linear "
          "Panels...\n");
   for (int i = 0; i < 256; i++) {
-    float normalized = (float)i / 255.0f;
-    float corrected = powf(normalized, 2.2f);
-    unsigned char val = (unsigned char)(corrected * 255.0f + 0.5f);
+    double normalized = (double)i / 255.0;
+    double corrected = pow(normalized, 2.2);
+    unsigned char val = (unsigned char)(corrected * 255.0 + 0.5);
 
     IOWR_32DIRECT(HDMI_SYNC_GEN_BASE | CACHE_BYPASS_MASK, REG_LUT_ADDR, i);
+    usleep(10);
     IOWR_32DIRECT(HDMI_SYNC_GEN_BASE | CACHE_BYPASS_MASK, REG_LUT_DATA, val);
+    usleep(10);
   }
   printf("Inverse Gamma Loaded.\n");
 }
@@ -179,4 +204,91 @@ void load_char_bitmap() {
                   bitmap[i]);
   }
   printf("Done.\n");
+}
+
+void dma_start_single() {
+  unsigned int ctrl =
+      IORD_32DIRECT(HDMI_SYNC_GEN_BASE | CACHE_BYPASS_MASK, REG_DMA_CTRL);
+  // Pulse Start Bit (Bit 2)
+  IOWR_32DIRECT(HDMI_SYNC_GEN_BASE | CACHE_BYPASS_MASK, REG_DMA_CTRL,
+                ctrl | AS_DMA_START_MSK);
+  printf("DMA Single Frame Transfer Started.\n");
+}
+
+void dma_set_continuous(int enable) {
+  unsigned int ctrl =
+      IORD_32DIRECT(HDMI_SYNC_GEN_BASE | CACHE_BYPASS_MASK, REG_DMA_CTRL);
+  if (enable) {
+    IOWR_32DIRECT(HDMI_SYNC_GEN_BASE | CACHE_BYPASS_MASK, REG_DMA_CTRL,
+                  ctrl | AS_DMA_CONT_MSK);
+    printf("DMA Continuous Mode: ENABLED\n");
+  } else {
+    IOWR_32DIRECT(HDMI_SYNC_GEN_BASE | CACHE_BYPASS_MASK, REG_DMA_CTRL,
+                  ctrl & ~AS_DMA_CONT_MSK);
+    printf("DMA Continuous Mode: DISABLED\n");
+  }
+}
+
+void print_dma_status() {
+  unsigned int ctrl =
+      IORD_32DIRECT(HDMI_SYNC_GEN_BASE | CACHE_BYPASS_MASK, REG_DMA_CTRL);
+  printf("\n--- DMA Status ---\n");
+  printf("  Busy: %s\n", (ctrl & AS_DMA_BUSY_MSK) ? "YES" : "NO");
+  printf("  Done: %s\n",
+         (ctrl & AS_DMA_DONE_MSK) ? "YES (Read-to-Clear)" : "NO");
+  printf("  Cont: %s\n", (ctrl & AS_DMA_CONT_MSK) ? "ON" : "OFF");
+}
+
+void run_dma_debug_submenu() {
+  static int dma_mode_active = 0; // 0: Pattern, 1: DMA
+  static int cont_active = 0;
+
+  while (1) {
+    unsigned int ctrl =
+        IORD_32DIRECT(HDMI_SYNC_GEN_BASE | CACHE_BYPASS_MASK, REG_DMA_CTRL);
+    unsigned int mode =
+        IORD_32DIRECT(HDMI_SYNC_GEN_BASE | CACHE_BYPASS_MASK, REG_PATTERN_MODE);
+    dma_mode_active = (mode == 8);
+    cont_active = (ctrl & AS_DMA_CONT_MSK) ? 1 : 0;
+
+    printf("\n========= DMA DEBUG MENU =========\n");
+    printf(" [1] Toggle Source    : [%s]\n",
+           dma_mode_active ? "DMA (DDR3)" : "Test Pattern");
+    printf(" [2] Toggle Cont Mode : [%s]\n",
+           cont_active ? "ENABLED" : "DISABLED");
+    printf(" [3] Trigger Single   : [START PULSE]\n");
+    printf(" [4] Refresh Status   : [Busy:%s, Done:%s]\n",
+           (ctrl & AS_DMA_BUSY_MSK) ? "Y" : "N",
+           (ctrl & AS_DMA_DONE_MSK) ? "Y" : "N");
+    printf(" [b] Back to Main Menu\n");
+    printf("----------------------------------\n");
+    printf("Select option: ");
+
+    char c = get_char_polled();
+    printf("%c\n", c);
+
+    if (c == 'b')
+      break;
+    switch (c) {
+    case '1':
+      dma_mode_active = !dma_mode_active;
+      IOWR_32DIRECT(HDMI_SYNC_GEN_BASE | CACHE_BYPASS_MASK, REG_PATTERN_MODE,
+                    dma_mode_active ? 8 : 0);
+      printf("Source switched to %s\n", dma_mode_active ? "DMA" : "Pattern 0");
+      break;
+    case '2':
+      cont_active = !cont_active;
+      dma_set_continuous(cont_active);
+      break;
+    case '3':
+      dma_start_single();
+      break;
+    case '4':
+      print_dma_status();
+      break;
+    default:
+      printf("Invalid choice!\n");
+      break;
+    }
+  }
 }

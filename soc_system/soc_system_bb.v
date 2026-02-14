@@ -3,6 +3,16 @@ module soc_system (
 	button_pio_external_connection_export,
 	clk_clk,
 	dipsw_pio_external_connection_export,
+	hdmi_sync_master_waitrequest,
+	hdmi_sync_master_readdata,
+	hdmi_sync_master_readdatavalid,
+	hdmi_sync_master_burstcount,
+	hdmi_sync_master_writedata,
+	hdmi_sync_master_address,
+	hdmi_sync_master_write,
+	hdmi_sync_master_read,
+	hdmi_sync_master_byteenable,
+	hdmi_sync_master_debugaccess,
 	hps_0_f2h_cold_reset_req_reset_n,
 	hps_0_f2h_debug_reset_req_reset_n,
 	hps_0_f2h_stm_hw_events_stm_hwevents,
@@ -88,21 +98,21 @@ module soc_system (
 	video_dma_s_write,
 	video_dma_s_read,
 	video_dma_s_byteenable,
-	video_dma_s_debugaccess,
-	hdmi_sync_master_waitrequest,
-	hdmi_sync_master_readdata,
-	hdmi_sync_master_readdatavalid,
-	hdmi_sync_master_burstcount,
-	hdmi_sync_master_writedata,
-	hdmi_sync_master_address,
-	hdmi_sync_master_write,
-	hdmi_sync_master_read,
-	hdmi_sync_master_byteenable,
-	hdmi_sync_master_debugaccess);	
+	video_dma_s_debugaccess);	
 
 	input	[1:0]	button_pio_external_connection_export;
 	input		clk_clk;
 	input	[3:0]	dipsw_pio_external_connection_export;
+	input		hdmi_sync_master_waitrequest;
+	input	[31:0]	hdmi_sync_master_readdata;
+	input		hdmi_sync_master_readdatavalid;
+	output	[0:0]	hdmi_sync_master_burstcount;
+	output	[31:0]	hdmi_sync_master_writedata;
+	output	[2:0]	hdmi_sync_master_address;
+	output		hdmi_sync_master_write;
+	output		hdmi_sync_master_read;
+	output	[3:0]	hdmi_sync_master_byteenable;
+	output		hdmi_sync_master_debugaccess;
 	input		hps_0_f2h_cold_reset_req_reset_n;
 	input		hps_0_f2h_debug_reset_req_reset_n;
 	input	[27:0]	hps_0_f2h_stm_hw_events_stm_hwevents;
@@ -189,14 +199,4 @@ module soc_system (
 	input		video_dma_s_read;
 	input	[3:0]	video_dma_s_byteenable;
 	input		video_dma_s_debugaccess;
-	input		hdmi_sync_master_waitrequest;
-	input	[31:0]	hdmi_sync_master_readdata;
-	input		hdmi_sync_master_readdatavalid;
-	output	[0:0]	hdmi_sync_master_burstcount;
-	output	[31:0]	hdmi_sync_master_writedata;
-	output	[2:0]	hdmi_sync_master_address;
-	output		hdmi_sync_master_write;
-	output		hdmi_sync_master_read;
-	output	[3:0]	hdmi_sync_master_byteenable;
-	output		hdmi_sync_master_debugaccess;
 endmodule

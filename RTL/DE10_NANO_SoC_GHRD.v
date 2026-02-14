@@ -99,16 +99,15 @@ module DE10_NANO_SoC_GHRD(
   wire [27:0] stm_hw_events;
   wire 		  fpga_clk_50;
   
+  assign fpga_clk_50 = FPGA_CLK1_50;
+  
   // Video DMA Interface Wires
   wire        dma_waitrequest;
   wire [31:0] dma_readdata;
   wire        dma_readdatavalid;
   wire [7:0]  dma_burstcount;
-  wire [31:0] dma_writedata;
   wire [31:0] dma_address;
-  wire        dma_write;
   wire        dma_read;
-  wire [3:0]  dma_byteenable;
 
   // HDMI Sync Gen Control Interface (Exported from Qsys)
   wire [2:0]  hsg_s_address;
@@ -119,14 +118,37 @@ module DE10_NANO_SoC_GHRD(
   wire        hsg_s_readdatavalid;
 
   // HDMI I2C Wires
+
+  // HDMI I2C Wires
   wire        hdmi_i2c_sda_in;
   wire        hdmi_i2c_scl_in;
   wire        hdmi_i2c_sda_oe;
   wire        hdmi_i2c_scl_oe;
 // connection of internal logics
-  assign LED[7:1] = fpga_led_internal;
-  assign fpga_clk_50=FPGA_CLK1_50;
-  assign stm_hw_events    = {{15{1'b0}}, SW, fpga_led_internal, fpga_debounced_buttons};
+//   assign LED[7:1] = fpga_led_internal; // Removed old connection
+   assign LED[0] = led_level; // Heartbeat
+
+   // Debug LEDs from Video Pipeline
+   // LED[1]: DMA Busy
+   // LED[2]: DMA Done (Toggle)
+   // LED[3]: FIFO Not Empty
+   // LED[4]: FIFO Full
+   // LED[5]: DMA Start Pulse (50MHz)
+   // LED[6]: DMA Start Toggle (74MHz)
+   // LED[7]: DMA Cont Mode
+   
+   // video_pipeline debug_leds mapping:
+   // [0] Busy, [1] Done, [2] !Empty, [3] Full, [4] Start(50), [5] Start(74), [6] Cont, [7] VSync
+   
+   assign LED[1] = pipeline_debug[0]; // Busy
+   assign LED[2] = pipeline_debug[1]; // Done
+   assign LED[3] = pipeline_debug[3]; // FIFO Full (Warning)
+   assign LED[4] = pipeline_debug[4]; // Start Pulse 50MHz
+   assign LED[5] = pipeline_debug[5]; // Start Toggle 74MHz
+   assign LED[6] = pipeline_debug[6]; // Cont Mode
+   assign LED[7] = pipeline_debug[7]; // V-Sync Edge
+
+   assign stm_hw_events    = {{15{1'b0}}, SW, fpga_led_internal, fpga_debounced_buttons};
 
 
 
@@ -225,12 +247,13 @@ soc_system u0 (
 	  .video_dma_s_waitrequest               (dma_waitrequest),       //                    video_dma_s.waitrequest
 	  .video_dma_s_readdata                  (dma_readdata),          //                               .readdata
 	  .video_dma_s_readdatavalid             (dma_readdatavalid),     //                               .readdatavalid
-	  .video_dma_s_burstcount                (dma_burstcount),        //                               .burstcount
-	  .video_dma_s_writedata                 (dma_writedata),         //                               .writedata
+	  .video_dma_s_burstcount                ({1'b0, dma_burstcount}),//                               .burstcount
+	  .video_dma_s_writedata                 (32'd0),                 //                               .writedata
 	  .video_dma_s_address                   (dma_address),           //                               .address
-	  .video_dma_s_write                     (dma_write),             //                               .write
+	  .video_dma_s_write                     (1'b0),                  //                               .write
 	  .video_dma_s_read                      (dma_read),              //                               .read
-	  .video_dma_s_byteenable                (dma_byteenable),        //                               .byteenable
+	  .video_dma_s_byteenable                (4'h0),                  //                               .byteenable
+	  .video_dma_s_debugaccess               (1'b0),                  //                               .debugaccess
 
 		// HDMI I2C
 	  .i2c_hdmi_sda_in                       (hdmi_i2c_sda_in),       //                       i2c_hdmi.sda_in
@@ -239,7 +262,7 @@ soc_system u0 (
 	  .i2c_hdmi_scl_oe                       (hdmi_i2c_scl_oe),       //                               .scl_oe
 
 		// HDMI Sync Gen Control (Master Exported)
-	  .hdmi_sync_master_waitrequest          (1'b0),                  //                     Waitrequest: Always ready
+	  .hdmi_sync_master_waitrequest          (1'b0),
 	  .hdmi_sync_master_readdata             (hsg_s_readdata),        //                               .readdata
 	  .hdmi_sync_master_readdatavalid        (hsg_s_readdatavalid),   //                               .readdatavalid
 	  .hdmi_sync_master_burstcount           (),                      //                               .burstcount (Not used)
@@ -252,22 +275,39 @@ soc_system u0 (
  );
 
 // HDMI Sync & Pattern Generator (Solid Red)
-hdmi_sync_gen u_hdmi_sync (
-    .clk               (HDMI_TX_CLK),           // 74.25 MHz from Qsys PLL
-    .reset_n           (hps_fpga_reset_n),      // Reset from HPS
-    .hdmi_d            (HDMI_TX_D),             // 24-bit Data
-    .hdmi_de           (HDMI_TX_DE),            // Display Enable
-    .hdmi_hs           (HDMI_TX_HS),            // H-Sync
-    .hdmi_vs           (HDMI_TX_VS),            // V-Sync
+// HDMI Video Pipeline (Includes DMA Master & Sync Gen)
+video_pipeline u_pipeline (
+    // Clocks & Reset
+    .clk_50            (fpga_clk_50),           // 50 MHz for DMA & CSR
+    .clk_hdmi          (HDMI_TX_CLK),           // ~37.8 MHz for Video
+    .reset_n           (hps_fpga_reset_n),
+
+    // Avalon-MM Master Interface (DMA to DDR3)
+    .m_waitrequest     (dma_waitrequest),
+    .m_readdata        (dma_readdata),
+    .m_readdatavalid   (dma_readdatavalid),
+    .m_address         (dma_address),
+    .m_read            (dma_read),
+    .m_burstcount      (dma_burstcount),
+
+    // Avalon-MM Slave Interface (CSR from Nios II)
+    .s_address         (hsg_s_address),
+    .s_read            (hsg_s_read),
+    .s_write           (hsg_s_write),
+    .s_writedata       (hsg_s_writedata),
+    .s_readdata        (hsg_s_readdata),
+    .s_readdatavalid   (hsg_s_readdatavalid),
+
+    // HDMI Physical Output Signals
+    .hdmi_d            (HDMI_TX_D),
+    .hdmi_de           (HDMI_TX_DE),
+    .hdmi_hs           (HDMI_TX_HS),
+    .hdmi_vs           (HDMI_TX_VS),
     
-    // Control Interface
-    .avs_address       (hsg_s_address),    // 3-bit local address
-    .avs_read          (hsg_s_read),            // Read Request
-    .avs_write         (hsg_s_write),           // Write Request
-    .avs_writedata     (hsg_s_writedata),       // Write Data
-    .avs_readdata      (hsg_s_readdata),        // Read Data
-    .avs_readdatavalid (hsg_s_readdatavalid)    // Read Data Valid
+    .debug_leds        (pipeline_debug)
 );
+
+wire [7:0] pipeline_debug;
 
 // HDMI I2C Tri-state Buffer
 assign HDMI_I2C_SCL = hdmi_i2c_scl_oe ? 1'b0 : 1'bz;
