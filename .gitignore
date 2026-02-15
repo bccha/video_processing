@@ -30,3 +30,21 @@ hc_output/
 software/*/
 obj/
 bin/
+*.objdump
+*.map
+*.bin
+*.obj
+*.vvp
+
+# Python/Testing artifacts
+__pycache__/
+.pytest_cache/
+tests/sim_build/
+tests/cocotb/*.bmp
+tests/cocotb/*.bin
+
+# Large binaries (Backup separately)
+linux_software/video_player/video_qhd.bin
+linux_software/video_player/*.ts
+linux_software/video_player/*.mp4
+linux_software/video_player/*.xz
