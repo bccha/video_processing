@@ -7,7 +7,6 @@ module soc_system (
 	hps_0_f2h_debug_reset_req_reset_n,
 	hps_0_f2h_stm_hw_events_stm_hwevents,
 	hps_0_f2h_warm_reset_req_reset_n,
-	hps_0_h2f_reset_reset_n,
 	hps_0_hps_io_hps_io_emac1_inst_TX_CLK,
 	hps_0_hps_io_hps_io_emac1_inst_TXD0,
 	hps_0_hps_io_hps_io_emac1_inst_TXD1,
@@ -77,7 +76,6 @@ module soc_system (
 	memory_mem_odt,
 	memory_mem_dm,
 	memory_oct_rzqin,
-	pll_outclk_clk,
 	reset_reset_n,
 	video_dma_s_waitrequest,
 	video_dma_s_readdata,
@@ -98,7 +96,9 @@ module soc_system (
 	hdmi_sync_master_write,
 	hdmi_sync_master_read,
 	hdmi_sync_master_byteenable,
-	hdmi_sync_master_debugaccess);	
+	hdmi_sync_master_debugaccess,
+	pll_clk_video_clk,
+	hps_0_h2f_reset_reset_n);	
 
 	input	[1:0]	button_pio_external_connection_export;
 	input		clk_clk;
@@ -107,7 +107,6 @@ module soc_system (
 	input		hps_0_f2h_debug_reset_req_reset_n;
 	input	[27:0]	hps_0_f2h_stm_hw_events_stm_hwevents;
 	input		hps_0_f2h_warm_reset_req_reset_n;
-	output		hps_0_h2f_reset_reset_n;
 	output		hps_0_hps_io_hps_io_emac1_inst_TX_CLK;
 	output		hps_0_hps_io_hps_io_emac1_inst_TXD0;
 	output		hps_0_hps_io_hps_io_emac1_inst_TXD1;
@@ -177,7 +176,6 @@ module soc_system (
 	output		memory_mem_odt;
 	output	[3:0]	memory_mem_dm;
 	input		memory_oct_rzqin;
-	output		pll_outclk_clk;
 	input		reset_reset_n;
 	output		video_dma_s_waitrequest;
 	output	[31:0]	video_dma_s_readdata;
@@ -199,4 +197,6 @@ module soc_system (
 	output		hdmi_sync_master_read;
 	output	[3:0]	hdmi_sync_master_byteenable;
 	output		hdmi_sync_master_debugaccess;
+	output		pll_clk_video_clk;
+	output		hps_0_h2f_reset_reset_n;
 endmodule

@@ -22,7 +22,7 @@ void hdmi_i2c_write(uint8_t reg, uint8_t data) {
 
 int hdmi_init() {
   int timeout = 1000; // 1 second timeout (1ms * 1000)
-  printf("Waiting for PLL Lock (74.25 MHz)...\n");
+  printf("Waiting for PLL Lock (37.8 MHz)...\n");
 
   // Wait until PLL is locked with timeout
   while (!(IORD_ALTERA_AVALON_PIO_DATA(PLL_LOCKED_BASE))) {

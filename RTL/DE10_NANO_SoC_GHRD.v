@@ -221,7 +221,7 @@ soc_system u0 (
      .hps_0_f2h_warm_reset_req_reset_n      (~hps_warm_reset ),      //       hps_0_f2h_warm_reset_req.reset_n
 
 		// HDMI Video Pipeline
-	  .pll_outclk_clk                        (HDMI_TX_CLK),           //                     pll_outclk.clk
+	  .pll_clk_video_clk                     (HDMI_TX_CLK),           //                     pll_clk_video.clk
 	  .video_dma_s_waitrequest               (dma_waitrequest),       //                    video_dma_s.waitrequest
 	  .video_dma_s_readdata                  (dma_readdata),          //                               .readdata
 	  .video_dma_s_readdatavalid             (dma_readdatavalid),     //                               .readdatavalid

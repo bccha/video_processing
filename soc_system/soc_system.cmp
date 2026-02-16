@@ -87,7 +87,7 @@
 			memory_mem_odt                        : out   std_logic;                                        -- mem_odt
 			memory_mem_dm                         : out   std_logic_vector(3 downto 0);                     -- mem_dm
 			memory_oct_rzqin                      : in    std_logic                     := 'X';             -- oct_rzqin
-			pll_outclk_clk                        : out   std_logic;                                        -- clk
+			pll_clk_video_clk                     : out   std_logic;                                        -- clk
 			reset_reset_n                         : in    std_logic                     := 'X';             -- reset_n
 			video_dma_s_waitrequest               : out   std_logic;                                        -- waitrequest
 			video_dma_s_readdata                  : out   std_logic_vector(31 downto 0);                    -- readdata

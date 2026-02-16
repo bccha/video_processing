@@ -1,9 +1,9 @@
 
-// 720p (1280x720 @ 60Hz) HDMI Sync Generator
-// Pixel Clock: 74.25 MHz
+// 960x540 (qHD @ 60Hz) HDMI Sync Generator
+// Pixel Clock: ~37.8 MHz
 
 module hdmi_sync_gen (
-    input  wire        clk,      // 74.25 MHz
+    input  wire        clk,      // HDMI Pixel Clock (~37.8 MHz)
     input  wire        reset_n,
     
     // HDMI Signals
@@ -89,18 +89,18 @@ module hdmi_sync_gen (
         end
     end
 
-    // 720p Timing Parameters
-    parameter H_VISIBLE    = 1280;
-    parameter H_FRONT      = 110;
-    parameter H_SYNC       = 40;
-    parameter H_BACK       = 220;
-    parameter H_TOTAL      = 1650;
+    // 960x540 (qHD) Timing Parameters
+    parameter H_VISIBLE    = 960;
+    parameter H_FRONT      = 48;
+    parameter H_SYNC       = 32;
+    parameter H_BACK       = 80;
+    parameter H_TOTAL      = 1120;
 
-    parameter V_VISIBLE    = 720;
-    parameter V_FRONT      = 5;
+    parameter V_VISIBLE    = 540;
+    parameter V_FRONT      = 3;
     parameter V_SYNC       = 5;
-    parameter V_BACK       = 20;
-    parameter V_TOTAL      = 750;
+    parameter V_BACK       = 15;
+    parameter V_TOTAL      = 563;
 
     reg [11:0] h_cnt;
     reg [11:0] v_cnt;
@@ -145,7 +145,6 @@ module hdmi_sync_gen (
     end
 
     // Pixel Data Generation Based on Mode
-    wire [7:0] plain_r, plain_g, plain_b;
     reg  [23:0] pre_gamma_d;
 
     // LUT Logic (Apply only if Gamma Enable is 1)
@@ -153,16 +152,28 @@ module hdmi_sync_gen (
     wire [7:0] gamma_g = lut_mem[pre_gamma_d[15:8]];
     wire [7:0] gamma_b = lut_mem[pre_gamma_d[7:0]];
 
-    wire [7:0] gray = h_cnt[7:0];
+    reg [7:0] roll_offset;
+    always @(posedge clk or negedge reset_n) begin
+        if (!reset_n)
+            roll_offset <= 8'd0;
+        else if (h_cnt == H_TOTAL-1 && v_cnt == V_TOTAL-1)
+            roll_offset <= roll_offset + 8'd1;
+    end
+
+    // Simplified ramp logic to avoid expensive division and fix timing violations
+    wire [7:0] gray_ramp = h_cnt[7:0]; 
+    wire [7:0] gray = gray_ramp + roll_offset;
     wire grid_line = (h_cnt[5:0] == 6'd0) || (v_cnt[5:0] == 6'd0);
-    wire [2:0] bar_idx = (h_cnt < 160)  ? 3'd0 :
-                         (h_cnt < 320)  ? 3'd1 :
-                         (h_cnt < 480)  ? 3'd2 :
-                         (h_cnt < 640)  ? 3'd3 :
-                         (h_cnt < 800)  ? 3'd4 :
-                         (h_cnt < 960)  ? 3'd5 :
-                         (h_cnt < 1120) ? 3'd6 : 3'd7;
-    wire [7:0] gray8_val = {bar_idx, 5'd0}; // Each step is 32
+    
+    // Fixed 8-bars (960 / 8 = 120 pixels each)
+    wire [2:0] bar_idx = (h_cnt < 120) ? 3'd0 :
+                         (h_cnt < 240) ? 3'd1 :
+                         (h_cnt < 360) ? 3'd2 :
+                         (h_cnt < 480) ? 3'd3 :
+                         (h_cnt < 600) ? 3'd4 :
+                         (h_cnt < 720) ? 3'd5 :
+                         (h_cnt < 840) ? 3'd6 : 3'd7;
+    wire [7:0] gray8_val = {bar_idx, 5'd0}; // No roll for bars
 
     // Character Tile Logic (16x16 Scaling 4x -> 64x64 Tile)
     wire [3:0] char_row_idx = v_cnt[5:2]; // 0-15
@@ -193,7 +204,7 @@ module hdmi_sync_gen (
         if (!reset_n) begin
             hdmi_d <= 24'h000000;
         end else begin
-            if (visible) begin // Use 'visible' wire to align with hdmi_de register update
+            if (visible) begin 
                 if (reg_gamma_ctrl[0])
                     hdmi_d <= {gamma_r, gamma_g, gamma_b};
                 else

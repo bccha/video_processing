@@ -4,7 +4,7 @@
  * Machine generated for CPU 'nios2_gen2_0' in SOPC Builder design 'soc_system'
  * SOPC Builder design path: ../../soc_system.sopcinfo
  *
- * Generated: Thu Feb 12 14:08:14 EST 2026
+ * Generated: Sun Feb 15 19:39:12 EST 2026
  */
 
 /*
@@ -144,7 +144,7 @@
 #define __ALTERA_ADDRESS_SPAN_EXTENDER
 #define __ALTERA_AVALON_I2C
 #define __ALTERA_AVALON_JTAG_UART
-#define __ALTERA_AVALON_MM_BRIDGE
+#define __ALTERA_AVALON_MM_CLOCK_CROSSING_BRIDGE
 #define __ALTERA_AVALON_ONCHIP_MEMORY2
 #define __ALTERA_AVALON_PIO
 #define __ALTERA_AVALON_TIMER
@@ -278,17 +278,17 @@
 
 
 /*
- * hdmi_sync_mm configuration
+ * hdmi_symc_master configuration
  *
  */
 
-#define ALT_MODULE_CLASS_hdmi_sync_mm altera_avalon_mm_bridge
-#define HDMI_SYNC_MM_BASE 0x20020
-#define HDMI_SYNC_MM_IRQ -1
-#define HDMI_SYNC_MM_IRQ_INTERRUPT_CONTROLLER_ID -1
-#define HDMI_SYNC_MM_NAME "/dev/hdmi_sync_mm"
-#define HDMI_SYNC_MM_SPAN 32
-#define HDMI_SYNC_MM_TYPE "altera_avalon_mm_bridge"
+#define ALT_MODULE_CLASS_hdmi_symc_master altera_avalon_mm_clock_crossing_bridge
+#define HDMI_SYMC_MASTER_BASE 0x20020
+#define HDMI_SYMC_MASTER_IRQ -1
+#define HDMI_SYMC_MASTER_IRQ_INTERRUPT_CONTROLLER_ID -1
+#define HDMI_SYMC_MASTER_NAME "/dev/hdmi_symc_master"
+#define HDMI_SYMC_MASTER_SPAN 32
+#define HDMI_SYMC_MASTER_TYPE "altera_avalon_mm_clock_crossing_bridge"
 
 
 /*

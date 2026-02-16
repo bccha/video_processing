@@ -503,8 +503,8 @@ https://fpgasoftware.intel.com/eula.
 	(port
 		(pt 752 576)
 		(output)
-		(text "pll_outclk_clk" (rect 0 0 51 12)(font "Arial" (font_size 8)))
-		(text "pll_outclk_clk" (rect 685 565 769 576)(font "Arial" (font_size 8)))
+		(text "pll_clk_video_clk" (rect 0 0 67 12)(font "Arial" (font_size 8)))
+		(text "pll_clk_video_clk" (rect 667 565 769 576)(font "Arial" (font_size 8)))
 		(line (pt 752 576)(pt 480 576)(line_width 1))
 	)
 	(port
@@ -818,7 +818,7 @@ https://fpgasoftware.intel.com/eula.
 		(text "mem_odt" (rect 437 499 916 1008)(font "Arial" (color 0 0 0)))
 		(text "mem_dm" (rect 437 515 910 1040)(font "Arial" (color 0 0 0)))
 		(text "oct_rzqin" (rect 438 531 930 1072)(font "Arial" (color 0 0 0)))
-		(text "pll_outclk" (rect 481 547 1022 1107)(font "Arial" (color 128 0 0)(font_size 9)))
+		(text "pll_clk_video" (rect 481 547 1040 1107)(font "Arial" (color 128 0 0)(font_size 9)))
 		(text "clk" (rect 465 571 948 1152)(font "Arial" (color 0 0 0)))
 		(text "reset" (rect 243 1243 516 2499)(font "Arial" (color 128 0 0)(font_size 9)))
 		(text "reset_n" (rect 277 1267 596 2544)(font "Arial" (color 0 0 0)))

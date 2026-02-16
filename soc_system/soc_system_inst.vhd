@@ -7,7 +7,6 @@
 			hps_0_f2h_debug_reset_req_reset_n     : in    std_logic                     := 'X';             -- reset_n
 			hps_0_f2h_stm_hw_events_stm_hwevents  : in    std_logic_vector(27 downto 0) := (others => 'X'); -- stm_hwevents
 			hps_0_f2h_warm_reset_req_reset_n      : in    std_logic                     := 'X';             -- reset_n
-			hps_0_h2f_reset_reset_n               : out   std_logic;                                        -- reset_n
 			hps_0_hps_io_hps_io_emac1_inst_TX_CLK : out   std_logic;                                        -- hps_io_emac1_inst_TX_CLK
 			hps_0_hps_io_hps_io_emac1_inst_TXD0   : out   std_logic;                                        -- hps_io_emac1_inst_TXD0
 			hps_0_hps_io_hps_io_emac1_inst_TXD1   : out   std_logic;                                        -- hps_io_emac1_inst_TXD1
@@ -77,7 +76,6 @@
 			memory_mem_odt                        : out   std_logic;                                        -- mem_odt
 			memory_mem_dm                         : out   std_logic_vector(3 downto 0);                     -- mem_dm
 			memory_oct_rzqin                      : in    std_logic                     := 'X';             -- oct_rzqin
-			pll_outclk_clk                        : out   std_logic;                                        -- clk
 			reset_reset_n                         : in    std_logic                     := 'X';             -- reset_n
 			video_dma_s_waitrequest               : out   std_logic;                                        -- waitrequest
 			video_dma_s_readdata                  : out   std_logic_vector(31 downto 0);                    -- readdata
@@ -98,7 +96,9 @@
 			hdmi_sync_master_write                : out   std_logic;                                        -- write
 			hdmi_sync_master_read                 : out   std_logic;                                        -- read
 			hdmi_sync_master_byteenable           : out   std_logic_vector(3 downto 0);                     -- byteenable
-			hdmi_sync_master_debugaccess          : out   std_logic                                         -- debugaccess
+			hdmi_sync_master_debugaccess          : out   std_logic;                                        -- debugaccess
+			pll_clk_video_clk                     : out   std_logic;                                        -- clk
+			hps_0_h2f_reset_reset_n               : out   std_logic                                         -- reset_n
 		);
 	end component soc_system;
 
@@ -111,7 +111,6 @@
 			hps_0_f2h_debug_reset_req_reset_n     => CONNECTED_TO_hps_0_f2h_debug_reset_req_reset_n,     --      hps_0_f2h_debug_reset_req.reset_n
 			hps_0_f2h_stm_hw_events_stm_hwevents  => CONNECTED_TO_hps_0_f2h_stm_hw_events_stm_hwevents,  --        hps_0_f2h_stm_hw_events.stm_hwevents
 			hps_0_f2h_warm_reset_req_reset_n      => CONNECTED_TO_hps_0_f2h_warm_reset_req_reset_n,      --       hps_0_f2h_warm_reset_req.reset_n
-			hps_0_h2f_reset_reset_n               => CONNECTED_TO_hps_0_h2f_reset_reset_n,               --                hps_0_h2f_reset.reset_n
 			hps_0_hps_io_hps_io_emac1_inst_TX_CLK => CONNECTED_TO_hps_0_hps_io_hps_io_emac1_inst_TX_CLK, --                   hps_0_hps_io.hps_io_emac1_inst_TX_CLK
 			hps_0_hps_io_hps_io_emac1_inst_TXD0   => CONNECTED_TO_hps_0_hps_io_hps_io_emac1_inst_TXD0,   --                               .hps_io_emac1_inst_TXD0
 			hps_0_hps_io_hps_io_emac1_inst_TXD1   => CONNECTED_TO_hps_0_hps_io_hps_io_emac1_inst_TXD1,   --                               .hps_io_emac1_inst_TXD1
@@ -181,7 +180,6 @@
 			memory_mem_odt                        => CONNECTED_TO_memory_mem_odt,                        --                               .mem_odt
 			memory_mem_dm                         => CONNECTED_TO_memory_mem_dm,                         --                               .mem_dm
 			memory_oct_rzqin                      => CONNECTED_TO_memory_oct_rzqin,                      --                               .oct_rzqin
-			pll_outclk_clk                        => CONNECTED_TO_pll_outclk_clk,                        --                     pll_outclk.clk
 			reset_reset_n                         => CONNECTED_TO_reset_reset_n,                         --                          reset.reset_n
 			video_dma_s_waitrequest               => CONNECTED_TO_video_dma_s_waitrequest,               --                    video_dma_s.waitrequest
 			video_dma_s_readdata                  => CONNECTED_TO_video_dma_s_readdata,                  --                               .readdata
@@ -202,6 +200,8 @@
 			hdmi_sync_master_write                => CONNECTED_TO_hdmi_sync_master_write,                --                               .write
 			hdmi_sync_master_read                 => CONNECTED_TO_hdmi_sync_master_read,                 --                               .read
 			hdmi_sync_master_byteenable           => CONNECTED_TO_hdmi_sync_master_byteenable,           --                               .byteenable
-			hdmi_sync_master_debugaccess          => CONNECTED_TO_hdmi_sync_master_debugaccess           --                               .debugaccess
+			hdmi_sync_master_debugaccess          => CONNECTED_TO_hdmi_sync_master_debugaccess,          --                               .debugaccess
+			pll_clk_video_clk                     => CONNECTED_TO_pll_clk_video_clk,                     --                  pll_clk_video.clk
+			hps_0_h2f_reset_reset_n               => CONNECTED_TO_hps_0_h2f_reset_reset_n                --                hps_0_h2f_reset.reset_n
 		);
 
