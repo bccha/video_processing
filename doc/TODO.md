@@ -30,7 +30,11 @@ This roadmap outlines the steps to build a high-performance video pipeline, from
     - [ ] **Sobel Edge Detection**: High-speed spatial filtering using the line buffers.
 
 ## Phase 5: High-End Quality & Integration
-- [ ] **Spatial Dithering**: Implement Bayer Matrix based dithering to reduce banding.
+- [ ] **Spatial Dithering**:
+    - [ ] **Ordered Dithering**: Implement Bayer Matrix (2x2, 4x4) to reduce color banding in gradients.
+    - [ ] **Error Diffusion**: Explore Floyd-Steinberg algorithm (requires line buffer for error propagation).
+- [ ] **Temporal Dithering (FRC)**: 
+    - [ ] **Frame Rate Control**: Implement temporal flickering between two intensive levels to increase perceived bit depth.
 - [ ] **Linux Integration**: Map the video pipeline as a standard Linux display device (DRM/KMS).
 - [ ] **AI Acceleration**: Integrate hardware-based AI recognition core.
 
