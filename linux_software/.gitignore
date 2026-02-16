@@ -1,0 +1,7 @@
+*.bin
+*.mp4
+*.raw
+*.ts
+*.bmp
+*.o
+video_player
