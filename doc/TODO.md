@@ -16,10 +16,12 @@ This roadmap outlines the steps to build a high-performance video pipeline, from
 - [x] **Timing & Addressing Fix**: Resolve SDC timing violations and Avalon-MM address mapping bugs.
 - [x] **Dynamic Coloring**: Implement coordinate-based rainbow effects for character rendering.
 
-## Phase 3: DMA Video Output (Next Step) [/]
-- [ ] **MM2ST Video Pipeline**: Integrate the DMA Master with a Stream-to-Video bridge.
-- [ ] **Frame Buffer Control**: Implement Nios II logic to manage double-buffering in DDR3.
-- [ ] **Stable Video Output**: Verify jitter-free 720p video stream from DDR3 to HDMI monitor.
+## Phase 3: DMA Video Output (960x540 qHD) [x]
+- [x] **MM2ST Video Pipeline**: Integrate the DMA Master with a Stream-to-Video bridge.
+- [x] **HPS-to-FPGA Connectivity**: Enable ARM (Linux) to control FPGA CSRs via Lightweight Bridge.
+- [x] **Frame Buffer Control**: Implement Linux/Nios II logic to manage double-buffering in DDR3.
+- [x] **Stable Video Output**: Verify 540p video stream from DDR3 to HDMI monitor.
+- [ ] **Hardware Refinement**: Replace handwritten FIFO with Intel **DCFIFO IP** to resolve frame jitter.
 
 ## Phase 4: Real-time Processing (Line Buffer & Filters)
 - [ ] **Line Buffer Design**: Implement dual-port RAM based line buffers for 3x3 windowing.
