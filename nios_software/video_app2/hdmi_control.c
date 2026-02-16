@@ -4,10 +4,10 @@
 #include <stdio.h>
 
 void generate_color_bar_pattern() {
-  printf("\nGenerating 720p Color Bar Pattern in DDR3... ");
+  printf("\nGenerating 540p (960x540) Color Bar Pattern in DDR3... ");
   unsigned int *fb = (unsigned int *)DDR3_WINDOW_BASE;
-  const int width = 1280;
-  const int height = 720;
+  const int width = 960;
+  const int height = 540;
   const int bar_width = width / 8;
 
   const unsigned int colors[8] = {0xFFFFFF, 0xFFFF00, 0x00FFFF, 0x00FF00,
@@ -24,6 +24,110 @@ void generate_color_bar_pattern() {
 
   alt_dcache_flush_all();
   printf("Done! (Total %d pixels written)\n", width * height);
+}
+
+void run_dma_control_submenu() {
+  while (1) {
+    unsigned int ctrl =
+        IORD_32DIRECT(HDMI_SYNC_GEN_BASE | CACHE_BYPASS_MASK, REG_GLOBAL_CTRL);
+    int busy = (ctrl >> 31) & 0x01;
+    int done = (ctrl >> 30) & 0x01;
+    int cont = (ctrl >> 1) & 0x01;
+
+    printf("\n--- HDMI DMA Control Submenu ---\n");
+    printf(" Status: %s | Continuous: %s | Done: %d\n", busy ? "BUSY" : "IDLE",
+           cont ? "ON" : "OFF", done);
+    printf(" [1] DMA Start (Pulse)\n");
+    printf(" [2] Toggle Continuous Mode (%s -> %s)\n", cont ? "ON" : "OFF",
+           cont ? "OFF" : "ON");
+    printf(" [3] DMA STOP (Disable Continuous)\n");
+    printf(" [4] Clear Done Flag\n");
+    printf(" [5] Set Frame Pointer Address\n");
+    printf(" [b] Back to Main Menu\n");
+    printf("Enter choice: ");
+
+    char c = get_char_polled();
+    printf("%c\n", c);
+
+    if (c == 'b')
+      break;
+
+    if (c == '1') {
+      // Set Start Bit (Bit 2)
+      IOWR_32DIRECT(HDMI_SYNC_GEN_BASE | CACHE_BYPASS_MASK, REG_GLOBAL_CTRL,
+                    ctrl | 0x04);
+      printf("DMA Start Pulse sent.\n");
+    } else if (c == '2') {
+      // Toggle Cont Bit (Bit 1)
+      unsigned int next_ctrl = ctrl ^ 0x02;
+      IOWR_32DIRECT(HDMI_SYNC_GEN_BASE | CACHE_BYPASS_MASK, REG_GLOBAL_CTRL,
+                    next_ctrl);
+      printf("Continuous Mode Toggled.\n");
+    } else if (c == '3') {
+      // Clear Cont Bit (Bit 1)
+      IOWR_32DIRECT(HDMI_SYNC_GEN_BASE | CACHE_BYPASS_MASK, REG_GLOBAL_CTRL,
+                    ctrl & ~0x02);
+      printf("DMA Stopped (Continuous Disable).\n");
+    } else if (c == '4') {
+      // Clear Done (Write 1 to bit 30)
+      IOWR_32DIRECT(HDMI_SYNC_GEN_BASE | CACHE_BYPASS_MASK, REG_GLOBAL_CTRL,
+                    ctrl | 0x40000000);
+      printf("Done flag cleared.\n");
+    } else if (c == '5') {
+      printf("Enter FB Physical Address (Hex, e.g., 20000000): ");
+      char addr_str[16];
+      get_string_polled(addr_str, sizeof(addr_str));
+      unsigned int new_addr = (unsigned int)strtoul(addr_str, NULL, 16);
+      IOWR_32DIRECT(HDMI_SYNC_GEN_BASE | CACHE_BYPASS_MASK, REG_FRAME_PTR,
+                    new_addr);
+      printf("Frame Pointer updated to 0x%08X\n", new_addr);
+    }
+  }
+}
+
+void run_dma_video_test() {
+  printf("\n--- Starting DMA Video Stream Test (960x540) ---\n");
+
+  // 1. Frame Buffer should be initialized via Option [4]
+  printf("Note: Ensure color bars are initialized via Option [4] first.\n");
+
+  // 2. Set Frame Pointer in RTL (DDR3 Physical Address 0x20000000)
+  unsigned int phys_addr = 0x20000000;
+  printf("Setting Frame Pointer to 0x%08X... ", phys_addr);
+  IOWR_32DIRECT(HDMI_SYNC_GEN_BASE | CACHE_BYPASS_MASK, REG_FRAME_PTR,
+                phys_addr);
+  printf("Done.\n");
+
+  // 3. Enable Continuous DMA (Bit 1 of Global Control)
+  printf("Enabling DMA Streaming Mode... ");
+  IOWR_32DIRECT(HDMI_SYNC_GEN_BASE | CACHE_BYPASS_MASK, REG_GLOBAL_CTRL, 0x02);
+  printf("Done.\n");
+
+  // 4. Switch Sync Gen to Mode 8 (DMA Stream)
+  printf("Switching Sync Gen to Mode 8 (DMA)... ");
+  IOWR_32DIRECT(HDMI_SYNC_GEN_BASE | CACHE_BYPASS_MASK, REG_PATTERN_MODE, 8);
+  printf("Done.\n");
+
+  printf("\nMonitoring DMA Status (Press any key to stop)...\n");
+  printf("CTRL_REG: [Busy][Done]...[Cont][Gamma]\n");
+
+  while (get_char_async() == 0) {
+    unsigned int status =
+        IORD_32DIRECT(HDMI_SYNC_GEN_BASE | CACHE_BYPASS_MASK, REG_GLOBAL_CTRL);
+    unsigned int mode =
+        IORD_32DIRECT(HDMI_SYNC_GEN_BASE | CACHE_BYPASS_MASK, REG_PATTERN_MODE);
+
+    int busy = (status >> 31) & 0x01;
+    int done = (status >> 30) & 0x01;
+
+    printf("\rStatus: 0x%08X | Busy: %d | Done: %d | Mode: %u ", status, busy,
+           done, mode);
+
+    // Minimal delay
+    for (volatile int i = 0; i < 50000; i++)
+      ;
+  }
+  printf("\nMonitoring stopped.\n");
 }
 
 void run_gamma_submenu() {
@@ -108,7 +212,7 @@ void load_gamma_table(float gamma_val) {
 }
 
 void set_gamma_enable(int enable) {
-  IOWR_32DIRECT(HDMI_SYNC_GEN_BASE | CACHE_BYPASS_MASK, REG_GAMMA_CTRL,
+  IOWR_32DIRECT(HDMI_SYNC_GEN_BASE | CACHE_BYPASS_MASK, REG_GLOBAL_CTRL,
                 enable ? 1 : 0);
   printf("Gamma Correction %s\n", enable ? "Enabled" : "Disabled");
 }

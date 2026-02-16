@@ -211,7 +211,7 @@ soc_system u0 (
 	  .hps_0_hps_io_hps_io_gpio_inst_GPIO54  ( HPS_KEY   ),  //                               .hps_io_gpio_inst_GPIO54
 	  .hps_0_hps_io_hps_io_gpio_inst_GPIO61  ( HPS_GSENSOR_INT ),  //                               .hps_io_gpio_inst_GPIO61
 		//FPGA Partion
-	  .led_pio_external_connection_export    ( fpga_led_internal 	),    //    led_pio_external_connection.export
+	  .led_pio_external_connection_export    (  	),    //    led_pio_external_connection.export
 	  .dipsw_pio_external_connection_export  ( SW	),  //  dipsw_pio_external_connection.export
 	  .button_pio_external_connection_export ( fpga_debounced_buttons	), // button_pio_external_connection.export
 	  .hps_0_h2f_reset_reset_n               ( hps_fpga_reset_n ),                //                hps_0_h2f_reset.reset_n
@@ -251,22 +251,36 @@ soc_system u0 (
 	  .hdmi_sync_master_debugaccess          ()                       //                               .debugaccess (Not used)
  );
 
-// HDMI Sync & Pattern Generator (Solid Red)
-hdmi_sync_gen u_hdmi_sync (
-    .clk               (HDMI_TX_CLK),           // 74.25 MHz from Qsys PLL
-    .reset_n           (hps_fpga_reset_n),      // Reset from HPS
-    .hdmi_d            (HDMI_TX_D),             // 24-bit Data
-    .hdmi_de           (HDMI_TX_DE),            // Display Enable
-    .hdmi_hs           (HDMI_TX_HS),            // H-Sync
-    .hdmi_vs           (HDMI_TX_VS),            // V-Sync
+// HDMI Video Pipeline (DMA + FIFO + Sync Gen)
+video_pipeline u_video_pipeline (
+    .clk_50            (fpga_clk_50),           // 50 MHz for DMA
+    .clk_hdmi          (HDMI_TX_CLK),           // 37.8 MHz for HDMI
+    .reset_n           (hps_fpga_reset_n),
     
-    // Control Interface
-    .avs_address       (hsg_s_address),    // 3-bit local address
-    .avs_read          (hsg_s_read),            // Read Request
-    .avs_write         (hsg_s_write),           // Write Request
-    .avs_writedata     (hsg_s_writedata),       // Write Data
-    .avs_readdata      (hsg_s_readdata),        // Read Data
-    .avs_readdatavalid (hsg_s_readdatavalid)    // Read Data Valid
+    // Avalon-MM Master (to DDR3 via Qsys)
+    .m_waitrequest     (dma_waitrequest),
+    .m_readdata        (dma_readdata),
+    .m_readdatavalid   (dma_readdatavalid),
+    .m_address         (dma_address),
+    .m_read            (dma_read),
+    .m_burstcount      (dma_burstcount),
+    
+    // Avalon-MM Slave (Control from Nios II)
+    .s_address         (hsg_s_address),
+    .s_read            (hsg_s_read),
+    .s_write           (hsg_s_write),
+    .s_writedata       (hsg_s_writedata),
+    .s_readdata        (hsg_s_readdata),
+    .s_readdatavalid   (hsg_s_readdatavalid),
+    
+    // HDMI Output
+    .hdmi_d            (HDMI_TX_D),
+    .hdmi_de           (HDMI_TX_DE),
+    .hdmi_hs           (HDMI_TX_HS),
+    .hdmi_vs           (HDMI_TX_VS),
+    
+    // Debug
+    .debug_leds        (fpga_led_internal)      // Map internal debug to LEDs
 );
 
 // HDMI I2C Tri-state Buffer

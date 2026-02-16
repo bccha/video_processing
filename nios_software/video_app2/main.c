@@ -10,9 +10,11 @@ void print_menu() {
   printf(" [1] Perform OCM-to-DDR DMA Test (4KB)\n");
   printf(" [2] Perform DDR-to-DDR Burst Master Test (1MB)\n");
   printf(" [3] Initialize HDMI (ADV7513 via I2C)\n");
-  printf(" [4] Generate 720p Color Bar Pattern in DDR3\n");
+  printf(" [4] Initialize 540p Color Bar in DDR3\n");
   printf(" [5] Change RTL Test Pattern (Red, Green, Blue, etc.)\n");
   printf(" [6] Gamma Correction Settings (Table, Toggle, Standard)\n");
+  printf(" [8] DMA Video Stream Test (Mode 8)\n");
+  printf(" [9] DMA Start/Stop Control Submenu\n");
   printf(" [C] Load Custom Character Bitmap\n");
   printf(" [r] Reset RTL Pattern Generator\n");
   printf(" [q] Quit\n");
@@ -53,6 +55,12 @@ void run_interactive_menu() {
       break;
     case '6':
       run_gamma_submenu();
+      break;
+    case '8':
+      run_dma_video_test();
+      break;
+    case '9':
+      run_dma_control_submenu();
       break;
     case 'C':
     case 'c':
