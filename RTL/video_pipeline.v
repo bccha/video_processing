@@ -38,7 +38,7 @@ module video_pipeline (
 
     // Internal signals (Missing declarations added)
     wire [31:0] shadow_ptr;
-    wire [8:0]  fifo_used;
+    wire [11:0] fifo_used;
     wire        fifo_wr_en;
     wire [31:0] fifo_wr_data;
     wire        fifo_full;
@@ -97,21 +97,19 @@ module video_pipeline (
         .busy              (dma_busy)
     );
 
-    // 3. Simple Dual Clock FIFO (Verilog Only)
-    simple_dcfifo #(
-        .DATA_WIDTH(32),
-        .ADDR_WIDTH(9) // 512 depth
-    ) u_simple_fifo (
-        .wrclk   (clk_50),
+    // 3. DC FIFO (Megafunction)
+    DC_FIFO u_dc_fifo (
+        .aclr    (~reset_n | vsync_edge_sync),
         .data    (fifo_wr_data),
-        .wrreq   (fifo_wr_en),
-        .wrusedw (fifo_used),
-        .wrfull  (fifo_full),
-        
         .rdclk   (clk_hdmi),
         .rdreq   (fifo_rd_en),
+        .wrclk   (clk_50),
+        .wrreq   (fifo_wr_en),
         .q       (fifo_rd_data),
-        .rdempty (fifo_empty)
+        .rdempty (fifo_empty),
+        .rdusedw (), // Not used
+        .wrfull  (fifo_full),
+        .wrusedw (fifo_used)
     );
 
     // 4. HDMI Sync & Pattern Generator

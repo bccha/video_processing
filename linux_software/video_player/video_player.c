@@ -1,12 +1,41 @@
-#define _POSIX_C_SOURCE 199309L
 #include <fcntl.h>
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <sys/mman.h>
+#include <sys/select.h>
+#include <sys/time.h>
+#include <sys/types.h>
+#include <termios.h>
 #include <time.h>
 #include <unistd.h>
+
+struct termios orig_termios;
+
+void reset_terminal_mode() { tcsetattr(0, TCSANOW, &orig_termios); }
+
+void set_conio_terminal_mode() {
+  struct termios new_termios;
+
+  // Save old settings
+  tcgetattr(0, &orig_termios);
+  atexit(reset_terminal_mode); // Ensure reset on exit
+
+  // Apply raw mode
+  new_termios = orig_termios;
+  new_termios.c_lflag &= ~(ICANON | ECHO);
+  tcsetattr(0, TCSANOW, &new_termios);
+}
+
+// Non-blocking keyboard hit check using select
+int kbhit() {
+  struct timeval tv = {0L, 0L};
+  fd_set fds;
+  FD_ZERO(&fds);
+  FD_SET(0, &fds);
+  return select(1, &fds, NULL, NULL, &tv) > 0;
+}
 
 // Configuration
 #define WIDTH 960
@@ -46,6 +75,9 @@ void *map_physical_memory(off_t base, size_t span) {
 }
 
 int main(int argc, char **argv) {
+  // Apply raw terminal mode for spacebar capture
+  set_conio_terminal_mode();
+
   printf("DE10-Nano RAM Preload Video Player\n");
   printf("Mode: Store-and-Forward (Load -> Play)\n");
 
@@ -137,33 +169,94 @@ int main(int argc, char **argv) {
 
   printf("Press Ctrl+C to stop.\n");
 
-  struct timespec next_frame;
-  clock_gettime(CLOCK_MONOTONIC, &next_frame);
+  struct timespec start_play_time;
+  clock_gettime(CLOCK_MONOTONIC, &start_play_time);
 
   long long frame_interval_ns = 1000000000LL / target_fps;
   size_t current_frame = 0;
+  int is_paused = 0;
+
+  printf("Playback Controls:\n");
+  printf("  [S] Pause/Resume\n");
+  printf("  [Ctrl+C] Quit\n");
 
   while (1) {
-    uint32_t frame_phy_addr =
-        PHY_ADDR_FRAME_BUF_BASE + (current_frame * FRAME_SIZE);
-
-    // Update Hardware Pointer
-    *(hdmi_csr + (REG_FRAME_PTR / 4)) = frame_phy_addr;
-
-    // Calculate next frame time
-    next_frame.tv_nsec += frame_interval_ns;
-    while (next_frame.tv_nsec >= 1000000000LL) {
-      next_frame.tv_sec++;
-      next_frame.tv_nsec -= 1000000000LL;
+    // Handle Keyboard Input
+    if (kbhit()) {
+      char c = getchar();
+      if (c == 's') {
+        is_paused = !is_paused;
+        if (is_paused) {
+          printf("\r[PAUSED] Press S to resume...       ");
+          fflush(stdout);
+        } else {
+          printf("\r[PLAYING] %d fps                        \n", target_fps);
+          // Reset timer so we don't fast-forward after unpausing
+          clock_gettime(CLOCK_MONOTONIC, &start_play_time);
+        }
+      }
     }
 
-    // Precise sleep until next frame
-    clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &next_frame, NULL);
+    if (is_paused) {
+      usleep(10000); // Sleep 10ms to save CPU
+      continue;
+    }
 
-    // Loop
+    // 1. FPS Throttling (Wait for target frame time)
+    struct timespec expected_time;
+    long long total_ns = current_frame * frame_interval_ns;
+
+    expected_time.tv_sec = start_play_time.tv_sec + (total_ns / 1000000000LL);
+    expected_time.tv_nsec = start_play_time.tv_nsec + (total_ns % 1000000000LL);
+    if (expected_time.tv_nsec >= 1000000000LL) {
+      expected_time.tv_sec++;
+      expected_time.tv_nsec -= 1000000000LL;
+    }
+
+    struct timespec now;
+    do {
+      clock_gettime(CLOCK_MONOTONIC, &now);
+      if (now.tv_sec < expected_time.tv_sec ||
+          (now.tv_sec == expected_time.tv_sec &&
+           now.tv_nsec < expected_time.tv_nsec)) {
+        usleep(500); // Yield CPU
+      }
+    } while (now.tv_sec < expected_time.tv_sec ||
+             (now.tv_sec == expected_time.tv_sec &&
+              now.tv_nsec < expected_time.tv_nsec));
+
+    // 2. Wait for the Next V-Sync Edge FIRST
+    // This ensures we are inside the active frame or just started the blanking
+    // period. By waiting first, we synchronize our software loop precisely with
+    // the hardware.
+    static uint32_t last_vs_state = 0;
+    while (1) {
+      uint32_t status = *(hdmi_csr + (REG_GLOBAL_CTRL / 4));
+      uint32_t current_vs_state = (status >> 29) & 0x01;
+      if (current_vs_state != last_vs_state) {
+        last_vs_state = current_vs_state;
+        break; // V-Sync edge detected
+      }
+      // usleep(1) instead of 100 to catch the edge more precisely and avoid
+      // jitter
+      usleep(1);
+    }
+
+    // 3. Update the Frame Pointer for the NEXT frame
+    // Writing this now guarantees reg_frame_ptr is absolutely stable before the
+    // hardware attempts to latch it into shadow_ptr at the *next* V-Sync edge.
+    // This eliminates the race condition where the CPU writes the address at
+    // the exact moment the DMA is copying it.
+    uint32_t frame_phy_addr =
+        PHY_ADDR_FRAME_BUF_BASE + (current_frame * FRAME_SIZE);
+    *(hdmi_csr + (REG_FRAME_PTR / 4)) = frame_phy_addr;
+
+    // 4. Advance Frame Logic
     current_frame++;
     if (current_frame >= frame_count) {
       current_frame = 0; // Loop back to start
+      clock_gettime(CLOCK_MONOTONIC,
+                    &start_play_time); // Reset time for next loop
     }
   }
 

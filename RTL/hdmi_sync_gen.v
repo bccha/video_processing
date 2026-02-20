@@ -90,10 +90,12 @@ module hdmi_sync_gen (
     reg [31:0] avs_readdata_reg;
     assign avs_readdata = avs_readdata_reg;
 
+    reg [1:0] vs_toggle_sync;
+    
     always @(*) begin
         case (avs_address)
             3'd0:    read_data_mux = reg_mode;
-            3'd1:    read_data_mux = {dma_busy, dma_done_sticky, 28'd0, reg_global_ctrl[1], reg_global_ctrl[0]}; 
+            3'd1:    read_data_mux = {dma_busy, dma_done_sticky, vs_toggle_sync[1], 27'd0, reg_global_ctrl[1], reg_global_ctrl[0]}; 
             3'd2:    read_data_mux = reg_lut_addr;
             3'd3:    read_data_mux = reg_lut_data;
             3'd4:    read_data_mux = reg_bitmap_addr;
@@ -120,16 +122,16 @@ module hdmi_sync_gen (
             avs_readdatavalid <= 1'b0;
             dma_start_pulse <= 1'b0;
             dma_done_sticky <= 1'b0;
-            dma_done_sticky <= 1'b0;
-            // Initialize bitmap to 0... [Omitted]
-             char_bitmap[0] <= 16'd0; char_bitmap[1] <= 16'd0; char_bitmap[2] <= 16'd0; char_bitmap[3] <= 16'd0;
+            vs_toggle_sync <= 2'b0;
+            char_bitmap[0] <= 16'd0; char_bitmap[1] <= 16'd0; char_bitmap[2] <= 16'd0; char_bitmap[3] <= 16'd0;
             char_bitmap[4] <= 16'd0; char_bitmap[5] <= 16'd0; char_bitmap[6] <= 16'd0; char_bitmap[7] <= 16'd0;
             char_bitmap[8] <= 16'd0; char_bitmap[9] <= 16'd0; char_bitmap[10] <= 16'd0; char_bitmap[11] <= 16'd0;
             char_bitmap[12] <= 16'd0; char_bitmap[13] <= 16'd0; char_bitmap[14] <= 16'd0; char_bitmap[15] <= 16'd0;
         end else begin
             dma_start_pulse <= 1'b0;
             
-            dma_start_pulse <= 1'b0;
+            // Synchronize vs_toggle to 50MHz CSR domain for safe reading
+            vs_toggle_sync <= {vs_toggle_sync[0], vs_toggle};
             
             // Set done sticky on DMA signal
             if (dma_done_in) dma_done_sticky <= 1'b1;

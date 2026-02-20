@@ -239,16 +239,16 @@ soc_system u0 (
 	  .i2c_hdmi_scl_oe                       (hdmi_i2c_scl_oe),       //                               .scl_oe
 
 		// HDMI Sync Gen Control (Master Exported)
-	  .hdmi_sync_master_waitrequest          (1'b0),                  //                     Waitrequest: Always ready
-	  .hdmi_sync_master_readdata             (hsg_s_readdata),        //                               .readdata
-	  .hdmi_sync_master_readdatavalid        (hsg_s_readdatavalid),   //                               .readdatavalid
-	  .hdmi_sync_master_burstcount           (),                      //                               .burstcount (Not used)
-	  .hdmi_sync_master_writedata            (hsg_s_writedata),       //                               .writedata
-	  .hdmi_sync_master_address              (hsg_s_address),         //                               .address
-	  .hdmi_sync_master_write                (hsg_s_write),           //                               .write
-	  .hdmi_sync_master_read                 (hsg_s_read),            //                               .read
-	  .hdmi_sync_master_byteenable           (),                      //                               .byteenable (Not used)
-	  .hdmi_sync_master_debugaccess          ()                       //                               .debugaccess (Not used)
+	  .hdmi_sync_waitrequest                 (1'b0),                  //                     Waitrequest: Always ready
+	  .hdmi_sync_readdata                    (hsg_s_readdata),        //                               .readdata
+	  .hdmi_sync_readdatavalid               (hsg_s_readdatavalid),   //                               .readdatavalid
+	  .hdmi_sync_burstcount                  (),                      //                               .burstcount (Not used)
+	  .hdmi_sync_writedata                   (hsg_s_writedata),       //                               .writedata
+	  .hdmi_sync_address                     (hsg_s_address),         //                               .address
+	  .hdmi_sync_write                       (hsg_s_write),           //                               .write
+	  .hdmi_sync_read                        (hsg_s_read),            //                               .read
+	  .hdmi_sync_byteenable                  (),                      //                               .byteenable (Not used)
+	  .hdmi_sync_debugaccess                 ()                       //                               .debugaccess (Not used)
  );
 
 // HDMI Video Pipeline (DMA + FIFO + Sync Gen)

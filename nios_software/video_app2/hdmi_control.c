@@ -76,11 +76,13 @@ void run_dma_control_submenu() {
     } else if (c == '5') {
       printf("Enter FB Physical Address (Hex, e.g., 20000000): ");
       char addr_str[16];
+      /*
       get_string_polled(addr_str, sizeof(addr_str));
       unsigned int new_addr = (unsigned int)strtoul(addr_str, NULL, 16);
       IOWR_32DIRECT(HDMI_SYNC_GEN_BASE | CACHE_BYPASS_MASK, REG_FRAME_PTR,
                     new_addr);
       printf("Frame Pointer updated to 0x%08X\n", new_addr);
+      */
     }
   }
 }
