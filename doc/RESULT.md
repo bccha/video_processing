@@ -45,16 +45,27 @@ SUCCESS: DDR to DDR Verified!
 - **Latency**: 3-clock pipeline delay matched across all modes.
 - **Visuals**: Confirmed zero jitter and correct spatial convolution.
 
-## 4. Filter Algorithm (Python Simulation) Results
-The `sim_filters.py` script provides a high-level reference implementation. The following images were generated to verify the mathematical correctness of the kernels:
+### RTL Hardware Verification (Cocotb)
+![RTL Sharpen (Mode 7)](./images/rtl_out_mode_7.jpg)
 
-- **Original**: `Beautiful-Nature-Wallpaper-1280x720-56498.jpg` (Source)
-- **Mode 1**: `out_1_grayscale.jpg`
-- **Mode 2**: `out_2_blur.jpg`
-- **Mode 3**: `out_3_edge_gray.jpg`
-- **Mode 4**: `out_4_edge_color.jpg`
-- **Mode 5**: `out_5_emboss.jpg`
-- **Mode 6**: `out_6_sharpen.jpg`
+## 4. Filter Algorithm (Python Simulation) Results
+The `sim_filters.py` script provides a high-level reference implementation.
+
+| Original | Grayscale |
+| :---: | :---: |
+| ![Original](./images/original.jpg) | ![Grayscale](./images/out_1_grayscale.jpg) |
+
+| Blur | Edge (Gray) |
+| :---: | :---: |
+| ![Blur](./images/out_2_blur.jpg) | ![Edge Gray](./images/out_3_edge_gray.jpg) |
+
+| Edge (Color) | Emboss |
+| :---: | :---: |
+| ![Edge Color](./images/out_4_edge_color.jpg) | ![Emboss](./images/out_5_emboss.jpg) |
+
+| Sharpen |
+| :---: |
+| ![Sharpen](./images/out_6_sharpen.jpg) |
 ```
 
 ---
