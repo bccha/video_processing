@@ -62,6 +62,39 @@ graph LR
 
 ---
 
-## 4. Final Verification
+## 4. Clock Domain Crossing (CDC) Design
+
+The system operates across two primary clock domains. Proper synchronization is implemented to prevent metastability and ensuring data integrity.
+
+### 4.1 Clock Domains
+| Clock Name | Frequency | Responsibility |
+|------------|-----------|----------------|
+| `clk_50`   | 50 MHz    | System Clock, CSR Interface, DMA Master, FIFO Write |
+| `clk_hdmi` | 37.8 MHz  | Pixel Clock, Sync Gen, Image Filters, FIFO Read |
+
+### 4.2 Synchronization Mechanisms
+
+The following 5 paths manage data and control flow across domains:
+
+1.  **Video Data Path (50MHz → 37.8MHz)**:
+    - **Mechanism**: Asynchronous FIFO (`DC_FIFO`).
+    - **Implementation**: Uses Gray-coded pointers for safe crossing of read/write pointers across domains. The FIFO handles internal synchronization and timing closure.
+2.  **V-Sync Edge Detection (37.8MHz → 50MHz)**:
+    - **Mechanism**: Toggle-Synchronizer + Edge Detect.
+    - **Implementation**: `vs_toggle` in the Pixel domain toggles on every V-Sync. In the 50MHz domain, it is sampled through a 3-stage shift register (`vsync_toggle_sync_50`). An **XOR** of stages [2] and [1] extracts the edge.
+    - **Why XOR?**: Detects any transition (0→1 or 1→0) of the toggled signal, ensuring short pulses aren't missed by a slower clock.
+3.  **CSR Status Synchronization (37.8MHz → 50MHz)**:
+    - **Mechanism**: Multi-stage (Dual-flop) Synchronizer.
+    - **Implementation**: The `vs_toggle` signal is sampled into a 2-stage register (`vs_toggle_sync`) in `hdmi_sync_gen.v` so the Nios II can safely read the V-Sync status via the Avalon-MM interface.
+4.  **Frame Pointer Snap (37.8MHz → 50MHz)**:
+    - **Mechanism**: Pulse Synchronizer (Edge Detect).
+    - **Implementation**: The internal `vs_wire` (Pixel domain) is sampled into a 3-stage register (`vs_sync_sh`) in the 50MHz domain. On the rising edge of the synchronized signal, `reg_frame_ptr` is latched into `shadow_ptr` to ensure a stable address for the next frame.
+5.  **Steady-State Control Signals (50MHz → 37.8MHz)**:
+    - **Mechanism**: Direct sampling.
+    - **Implementation**: Signals like `reg_mode` and `reg_global_ctrl[0]` (Gamma) are "quasi-static" (changed only via software and stable for millions of clock cycles). They are sampled directly in the `clk_hdmi` domain.
+
+---
+
+## 5. Final Verification
 1. **RTL Simulation (Cocotb)**: Cycle-accurate verification using real `.raw` image data.
 2. **Target Hardware**: Verified stable 60fps output on HDMI monitors.
