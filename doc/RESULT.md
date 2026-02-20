@@ -44,7 +44,7 @@ SUCCESS: DDR to DDR Verified!
 - **Verification**: Cocotb Simulation processed 518,400 pixels in 98.21s (Sim time).
 - **Latency**: 3-clock pipeline delay matched across all modes.
 - **Visuals**: Confirmed zero jitter and correct spatial convolution.
-
+```
 ### RTL Hardware Verification (Cocotb)
 ![RTL Sharpen (Mode 7)](./images/rtl_out_mode_7.jpg)
 
@@ -66,7 +66,7 @@ The `sim_filters.py` script provides a high-level reference implementation.
 | Sharpen |
 | :---: |
 | ![Sharpen](./images/out_6_sharpen.jpg) |
-```
+
 
 ---
 *Created by Nios II Performance Monitoring Unit.*
