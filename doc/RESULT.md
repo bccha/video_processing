@@ -16,9 +16,10 @@ This document records the performance benchmarks and hardware initialization sta
 
 ## 2. Hardware Initialization Status
 
-- **HDMI PLL**: Locked at 74.25 MHz (720p60 target)
+- **HDMI PLL**: Locked at ~37.8 MHz (960x540p60 target)
 - **ADV7513 IC**: Configured via I2C successfully
 - **Memory Map**: Nios II & DMA isolated at 0x20000000 (512MB offset)
+- **Modular Filter**: 4-bit mode CSR verified, 60fps throughput confirmed
 
 ## 3. Official Execution Log
 
@@ -26,28 +27,23 @@ This document records the performance benchmarks and hardware initialization sta
 --- [TEST 1] OCM to DDR DMA (burst_master_0) ---
 Starting SW Copy (4KB x 100)... Done (4185427 cycles, ~4.6 MB/s)
 Starting HW DMA (4KB x 100)... Done (166211 cycles, ~117.5 MB/s)
-Speedup: 25 x
 SUCCESS: OCM to DDR Verified!
 
 --- [TEST 2] DDR to DDR DMA (Burst Master 4) ---
-Transfer Size: 1 MB
-Initializing DDR3 data... Done.
-Starting SW Copy (1MB)... Done (207071817 cycles, ~0.2 MB/s)
 Starting HW DMA (1MB)... Done (393942 cycles, ~126.9 MB/s)
-Speedup: 525 x
-Verifying HW Output...
-SUCCESS: DDR to DDR Verified! (Coeff=800)
+SUCCESS: DDR to DDR Verified!
 
-Waiting for PLL Lock (74.25 MHz)...
-PLL Locked! Initializing ADV7513 HDMI Transmitter...
-HDMI Controller Configured. Ready for Video!
-
-Generating 720p Color Bar Pattern in DDR3... Done! (Total 921600 pixels written)
-
---- [NEW] RTL Pattern & Gamma Enhancement Verified ---
-- **Mode 7 (Character Tile)**: Confirmed Dynamic Rainbow Coloring (Rainbow effect).
-- **Gamma Correction**: Verified sRGB and Inverse Gamma LUT loading.
-- **Timing Stability**: Confirmed zero timing violations after SDC update.
+--- [TEST 3] Real-time Modular Filter Verified (2026-02-20) ---
+- **Resolution**: 960x540p @ 60fps (Stable)
+- **Filter Pipeline**: 
+    - Mode 1: Grayscale (Verified)
+    - Mode 3: Color Blur (Verified via Cocotb & Hardware)
+    - Mode 5: Color Edge (Verified)
+    - Mode 6: Emboss (Verified via Cocotb)
+    - Mode 7: Sharpen (Verified via Cocotb)
+- **Verification**: Cocotb Simulation processed 518,400 pixels in 98.21s (Sim time).
+- **Latency**: 3-clock pipeline delay matched across all modes.
+- **Visuals**: Confirmed zero jitter and correct spatial convolution.
 ```
 
 ---

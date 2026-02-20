@@ -112,15 +112,21 @@ module video_pipeline (
         .wrusedw (fifo_used)
     );
 
+    // Internal wires for raw HDMI signals from Sync Gen
+    wire [23:0] raw_hdmi_d;
+    wire        raw_hdmi_de;
+    wire        raw_hdmi_hs;
+    wire        raw_hdmi_vs;
+
     // 4. HDMI Sync & Pattern Generator
     hdmi_sync_gen u_hdmi_sync (
         .clk               (clk_50),           // CSR Clock
         .clk_pixel         (clk_hdmi),         // Pixel Clock
         .reset_n           (reset_n),
-        .hdmi_d            (hdmi_d),
-        .hdmi_de           (hdmi_de),
-        .hdmi_hs           (hdmi_hs),
-        .hdmi_vs           (hdmi_vs),
+        .hdmi_d            (raw_hdmi_d),
+        .hdmi_de           (raw_hdmi_de),
+        .hdmi_hs           (raw_hdmi_hs),
+        .hdmi_vs           (raw_hdmi_vs),
         
         .avs_address       (s_address),
         .avs_read          (s_read),
@@ -141,6 +147,34 @@ module video_pipeline (
         .dma_start_out     (dma_start_direct),
         .dma_cont_en_out   (dma_cont_direct),
         .vs_toggle         (vs_toggle_raw)
+    );
+
+    // 5. Image Processing Filter (Blur / Edge)
+    // For now, using filter_mode = 0 (Bypass) by default.
+    // To control this from software, we can use an unused register bit in hdmi_sync_gen,
+    // or just wire it to a constant for testing. Let's wire it to SW switches later.
+    // For now, let's tie it to reg_mode[7:4] (bits 4, 5, 6, 7 of the Pattern Mode register).
+    wire [3:0] current_filter_mode = reg_mode[7:4]; 
+
+    image_filter #(
+        .DATA_WIDTH(24),
+        .LINE_LENGTH(1120) // 960x540 H_TOTAL
+    ) u_img_filter (
+        .clk         (clk_hdmi),       // Filter runs on Pixel Clock!
+        .reset_n     (reset_n),
+        .filter_mode (current_filter_mode),
+        
+        // Input from Sync Gen
+        .din         (raw_hdmi_d),
+        .hs_in       (raw_hdmi_hs),
+        .vs_in       (raw_hdmi_vs),
+        .de_in       (raw_hdmi_de),
+        
+        // Output to Physical HDMI Pins
+        .dout        (hdmi_d),
+        .hs_out      (hdmi_hs),
+        .vs_out      (hdmi_vs),
+        .de_out      (hdmi_de)
     );
 
     // Debug LED Logic (Stretched Pulses for visibility)

@@ -3,6 +3,7 @@
 #include "hdmi_config.h"
 #include "hdmi_control.h"
 #include "nios2.h"
+#include <io.h>
 #include <stdio.h>
 
 void print_menu() {
@@ -13,6 +14,7 @@ void print_menu() {
   printf(" [4] Initialize 540p Color Bar in DDR3\n");
   printf(" [5] Change RTL Test Pattern (Red, Green, Blue, etc.)\n");
   printf(" [6] Gamma Correction Settings (Table, Toggle, Standard)\n");
+  printf(" [7] Image Filter Control (Bypass, Blur, Edge)\n");
   printf(" [8] DMA Video Stream Test (Mode 8)\n");
   printf(" [9] DMA Start/Stop Control Submenu\n");
   printf(" [C] Load Custom Character Bitmap\n");
@@ -55,6 +57,9 @@ void run_interactive_menu() {
       break;
     case '6':
       run_gamma_submenu();
+      break;
+    case '7':
+      run_image_filter_submenu();
       break;
     case '8':
       run_dma_video_test();

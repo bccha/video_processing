@@ -1,6 +1,8 @@
 #include "hdmi_control.h"
 #include "common.h"
+#include <io.h>
 #include <math.h>
+#include <stdint.h>
 #include <stdio.h>
 
 void generate_color_bar_pattern() {
@@ -285,4 +287,39 @@ void load_char_bitmap() {
                   bitmap[i]);
   }
   printf("Done.\n");
+}
+
+void run_image_filter_submenu() {
+  printf("\n--- Image Filter Control ---\n");
+  printf(" [0] Bypass (Full Color)\n");
+  printf(" [1] Grayscale\n");
+  printf(" [2] Blur (Grayscale)\n");
+  printf(" [3] Blur (Color)\n");
+  printf(" [4] Edge (Grayscale)\n");
+  printf(" [5] Edge (Color)\n");
+  printf(" [6] Emboss (Grayscale)\n");
+  printf(" [7] Sharpen (Color)\n");
+  printf(" [r] Return to main menu\n");
+  printf("Select filter mode: ");
+
+  char choice = 0;
+  while (choice < ' ') {
+    choice = get_char_polled();
+  }
+  printf("%c\n", choice);
+
+  if (choice >= '0' && choice <= '7') {
+    uint32_t filter_val = choice - '0';
+    // Read current mode, clear bits [7:4], set new mode, and write back
+    uint32_t current_mode =
+        IORD_32DIRECT(HDMI_SYNC_GEN_BASE | CACHE_BYPASS_MASK, REG_PATTERN_MODE);
+    current_mode = (current_mode & ~(0xF << 4)) | (filter_val << 4);
+    IOWR_32DIRECT(HDMI_SYNC_GEN_BASE | CACHE_BYPASS_MASK, REG_PATTERN_MODE,
+                  current_mode);
+    printf(">> Filter Mode set to %d\n", filter_val);
+  } else if (choice == 'r' || choice == 'R') {
+    return;
+  } else {
+    printf(">> Invalid selection.\n");
+  }
 }

@@ -457,3 +457,63 @@ In the 8086/DOS era, displaying text was much simpler for the CPU because the ha
 | **Flexibility** | Fixed font and size | Unlimited (Anti-aliasing, any font) |
 
 In modern systems like our DE10-Nano, **"Text Mode" no longer exists in hardware.** When you see text (like in our Linux UI), the ARM/Nios II has to manually "draw" each letter pixel-by-pixel into the DDR3 framebuffer using a font bitmap!
+
+## 22. 2D Spatial Filtering: The 3x3 Window
+To implement filters like Blur or Edge detection, the FPGA must look at a pixel and its neighbors simultaneously. This requires transforming a 1D pixel stream into a 2D spatial window.
+
+### Line Buffers: The Row Delay
+Since pixels arrive one by one (left-to-right, top-to-bottom), we cannot "look down" at the next row without waiting for a full line to pass.
+- **Line Buffer**: A FIFO-like structure that stores exactly one row of pixels ($N$ pixels).
+- **Structure**: By cascading two line buffers, we can access three rows ($Row_{n}$, $Row_{n-1}$, $Row_{n-2}$) at once.
+
+### Delay Lines: The Column Delay
+After aligning the rows, we use shift registers (Delay Lines) to align the columns.
+
+```mermaid
+graph TD
+    In[Pixel Input] --> LB1[Line Buffer 1]
+    LB1 --> LB2[Line Buffer 2]
+    
+    In --> D22[reg 22] --> D21[reg 21] --> D20[reg 20]
+    LB1 --> D12[reg 12] --> D11[reg 11] --> D10[reg 10]
+    LB2 --> D02[reg 02] --> D01[reg 01] --> D00[reg 00]
+    
+    subgraph "3x3 Window"
+        D00 --- D01 --- D02
+        D10 --- D11 --- D12
+        D20 --- D21 --- D22
+    end
+```
+
+## 23. Convolution Kernels: How they work
+Each filter is essentially a "Matrix Multiplication" (Convolution) where the center pixel is updated based on its neighbors using a **Kernel**.
+
+### [1] Blur (Box Filter)
+Adds all pixels in the window and divides by 9.
+$$
+\frac{1}{9} \times \begin{bmatrix} 1 & 1 & 1 \\ 1 & 1 & 1 \\ 1 & 1 & 1 \end{bmatrix}
+$$
+- **Effect**: High-frequency changes (noise/detail) are averaged out, resulting in a smoother image.
+- **HW Trick**: In FPGA, dividing by 9 is hard. We often use $1/8$ or $1/16$ (bit-shift) for efficiency.
+
+### [2] Edge Detection (Sobel)
+Detects the "Intensity Gradient" (rate of change).
+$$
+G_x = \begin{bmatrix} -1 & 0 & 1 \\ -2 & 0 & 2 \\ -1 & 0 & 1 \end{bmatrix}, \quad G_y = \begin{bmatrix} -1 & -2 & -1 \\ 0 & 0 & 0 \\ 1 & 2 & 1 \end{bmatrix}
+$$
+- **Effect**: If neighboring pixels have the same color, the sum is 0. If there is a sharp change (edge), the absolute sum becomes large.
+- **Logic**: $Edge = \sqrt{G_x^2 + G_y^2}$ (Approximated as $|G_x| + |G_y|$ in FPGA).
+
+### [3] Emboss (Directional Difference)
+Highlights changes along a 45-degree diagonal.
+$$
+\begin{bmatrix} -2 & -1 & 0 \\ -1 & 1 & 1 \\ 0 & 1 & 2 \end{bmatrix} + 128 \text{ (Offset)}
+$$
+- **Effect**: Creates a 3D "stamped" look. Adding 128 (Neutral Gray) makes flat areas gray and creates "highlights" and "shadows" on edges.
+
+### [4] Sharpen (High-Pass)
+Multiplies the center pixel by a large value and subtracts its neighbors.
+$$
+\begin{bmatrix} 0 & -1 & 0 \\ -1 & 5 & -1 \\ 0 & -1 & 0 \end{bmatrix}
+$$
+- **Effect**: It amplifies the difference between a pixel and its surroundings. Unlike Edge detection which removes low frequencies, Sharpen **adds** the high-frequency edges back onto the original image.

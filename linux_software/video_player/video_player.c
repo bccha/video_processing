@@ -1,40 +1,67 @@
+#define _GNU_SOURCE
 #include <fcntl.h>
+
+#include <signal.h>
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <sys/mman.h>
 #include <sys/select.h>
+#include <sys/stat.h>
 #include <sys/time.h>
 #include <sys/types.h>
 #include <termios.h>
 #include <time.h>
 #include <unistd.h>
 
+
+int tty_fd = -1;
 struct termios orig_termios;
 
-void reset_terminal_mode() { tcsetattr(0, TCSANOW, &orig_termios); }
+void reset_terminal_mode() {
+  if (tty_fd != -1) {
+    tcsetattr(tty_fd, TCSANOW, &orig_termios);
+    printf("\nTerminal mode restored.\n");
+    close(tty_fd);
+    tty_fd = -1;
+  }
+}
+
+void handle_sigint(int sig) {
+  exit(0); // This will trigger atexit(reset_terminal_mode)
+}
 
 void set_conio_terminal_mode() {
   struct termios new_termios;
 
+  // Open the current terminal explicitly (bypasses stdin pipe)
+  tty_fd = open("/dev/tty", O_RDWR | O_NONBLOCK);
+  if (tty_fd == -1) {
+    perror("Warning: Could not open /dev/tty for keyboard control");
+    return;
+  }
+
   // Save old settings
-  tcgetattr(0, &orig_termios);
-  atexit(reset_terminal_mode); // Ensure reset on exit
+  tcgetattr(tty_fd, &orig_termios);
+  atexit(reset_terminal_mode);   // Ensure reset on exit
+  signal(SIGINT, handle_sigint); // Handle Ctrl+C
 
   // Apply raw mode
   new_termios = orig_termios;
   new_termios.c_lflag &= ~(ICANON | ECHO);
-  tcsetattr(0, TCSANOW, &new_termios);
+  tcsetattr(tty_fd, TCSANOW, &new_termios);
 }
 
-// Non-blocking keyboard hit check using select
+// Non-blocking keyboard hit check using select on /dev/tty
 int kbhit() {
+  if (tty_fd == -1)
+    return 0;
   struct timeval tv = {0L, 0L};
   fd_set fds;
   FD_ZERO(&fds);
-  FD_SET(0, &fds);
-  return select(1, &fds, NULL, NULL, &tv) > 0;
+  FD_SET(tty_fd, &fds);
+  return select(tty_fd + 1, &fds, NULL, NULL, &tv) > 0;
 }
 
 // Configuration
@@ -72,6 +99,36 @@ void *map_physical_memory(off_t base, size_t span) {
   }
   close(fd);
   return virtual_base;
+}
+
+int handle_keyboard_input(volatile uint32_t *hdmi_csr,
+                          uint32_t *current_reg_mode, int *is_paused,
+                          int target_fps, struct timespec *start_play_time) {
+  // Handle Keyboard Input via Non-blocking Read on /dev/tty
+  char c = 0;
+  if (kbhit() && read(tty_fd, &c, 1) == 1) {
+    if (c >= '0' && c <= '7') {
+      uint32_t filter_val = c - '0';
+      // Clear bits [7:4] (4 bits) and set new filter mode
+      *current_reg_mode = (*current_reg_mode & ~(0xF << 4)) | (filter_val << 4);
+      *(hdmi_csr + (REG_PATTERN_MODE / 4)) = *current_reg_mode;
+      printf("\r[FILTER] Mode changed to %d                     \n",
+             filter_val);
+    } else if (c == 's' || c == 'S') {
+      *is_paused = !*is_paused;
+      if (*is_paused) {
+        printf("\r[PAUSED] Press S to resume...       ");
+        fflush(stdout);
+      } else {
+        printf("\r[PLAYING] %d fps                        \n", target_fps);
+        // Reset timer so we don't fast-forward after unpausing
+        clock_gettime(CLOCK_MONOTONIC, start_play_time);
+      }
+    } else if (c == 'q' || c == 'Q' || c == 3) { // 3 is Ctrl+C
+      return 1;                                  // Exit loop
+    }
+  }
+  return 0; // Continue loop
 }
 
 int main(int argc, char **argv) {
@@ -179,22 +236,19 @@ int main(int argc, char **argv) {
   printf("Playback Controls:\n");
   printf("  [S] Pause/Resume\n");
   printf("  [Ctrl+C] Quit\n");
+  printf("  [0] Bypass (Normal)\n");
+  printf("  [1] Grayscale\n");
+  printf("  [2] Blur (Grayscale)\n");
+  printf("  [3] Blur (Color)\n");
+  printf("  [4] Edge (Grayscale)\n");
+  printf("  [5] Edge (Color)\n");
+
+  uint32_t current_reg_mode = 8; // DMA Stream is bit 3
 
   while (1) {
-    // Handle Keyboard Input
-    if (kbhit()) {
-      char c = getchar();
-      if (c == 's') {
-        is_paused = !is_paused;
-        if (is_paused) {
-          printf("\r[PAUSED] Press S to resume...       ");
-          fflush(stdout);
-        } else {
-          printf("\r[PLAYING] %d fps                        \n", target_fps);
-          // Reset timer so we don't fast-forward after unpausing
-          clock_gettime(CLOCK_MONOTONIC, &start_play_time);
-        }
-      }
+    if (handle_keyboard_input(hdmi_csr, &current_reg_mode, &is_paused,
+                              target_fps, &start_play_time)) {
+      break;
     }
 
     if (is_paused) {

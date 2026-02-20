@@ -20,5 +20,6 @@ void set_gamma_enable(int enable);
 void load_char_bitmap();
 void load_srgb_gamma_table();
 void load_inverse_gamma_table();
+void run_image_filter_submenu();
 
 #endif /* HDMI_CONTROL_H_ */

@@ -473,6 +473,13 @@ set_global_assignment -name USE_DLL_FREQUENCY_FOR_DQS_DELAY_CHAIN ON
 set_global_assignment -name UNIPHY_SEQUENCER_DQS_CONFIG_ENABLE ON
 set_global_assignment -name OPTIMIZE_MULTI_CORNER_TIMING ON
 set_global_assignment -name ECO_REGENERATE_REPORT ON
+set_global_assignment -name VERILOG_FILE RTL/filter_sharpen.v
+set_global_assignment -name VERILOG_FILE RTL/filter_emboss.v
+set_global_assignment -name VERILOG_FILE RTL/filter_edge.v
+set_global_assignment -name VERILOG_FILE RTL/filter_blur.v
+set_global_assignment -name VERILOG_FILE RTL/line_buffer.v
+set_global_assignment -name VERILOG_FILE RTL/image_filter.v
+set_global_assignment -name VERILOG_FILE RTL/delay_line.v
 set_global_assignment -name VERILOG_FILE RTL/video_pipeline.v
 set_global_assignment -name VERILOG_FILE RTL/video_dma_master.v
 set_global_assignment -name VERILOG_FILE RTL/simple_dcfifo.v

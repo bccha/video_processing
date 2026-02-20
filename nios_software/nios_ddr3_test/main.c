@@ -16,16 +16,16 @@
 
 #include "mem_verify.h"
 #include "terasic_includes.h"
-int main()
-{
+int main() {
 
   printf("Hello from Nios II!\n");
-  bool  bPass;
+  bool bPass;
   printf("HPS DDR3 Memory test code\n");
-  bPass=TMEM_Verify(ADDRESS_SPAN_EXTENDER_0_WINDOWED_SLAVE_BASE, ADDRESS_SPAN_EXTENDER_0_WINDOWED_SLAVE_SPAN, 0x01, TRUE);
-  if(bPass)
-	  printf("HPS DDR3 test success\n");
+  bPass = TMEM_Verify(ADDRESS_SPAN_EXTENDER_0_WINDOWED_SLAVE_BASE,
+                      ADDRESS_SPAN_EXTENDER_0_WINDOWED_SLAVE_SPAN, 0x01, TRUE);
+  if (bPass)
+    printf("HPS DDR3 test success\n");
   else
-	  printf("HPS DDR3 test failed\n");
+    printf("HPS DDR3 test failed\n");
   return 0;
 }

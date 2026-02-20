@@ -10,8 +10,9 @@ By utilizing the **FPGA-to-HPS AXI Bridge**, we bypass the common preloader/brid
 - **Performance Optimized**: Achieved ~30x throughput improvement using hardware-driven bursts compared to software-based copy loops.
 - **Stable Coherency**: Implemented proper cache management (`alt_dcache_flush_all`) for reliable data shared between Nios II and hardware masters.
 
-- **Video Pipeline Optimization**: Resolved timing violations (Negative Slack -6.5ns) by applying asynchronous clock group constraints in SDC.
-- **Advanced HDMI Control**: Implemented sophisticated gamma correction (sRGB, Inverse Gamma 2.2) and custom character tile-rendering (Mode 7).
+- **Advanced HDMI Control**: Implemented sophisticated gamma correction (sRGB, Inverse Gamma 2.2) and custom character tile-rendering.
+- **Real-time Image Filtering**: Integrated a modular filter pipeline (Blur, Edge, Emboss, Sharpen) achieving 60fps at 540p.
+- **RTL Verification Framework**: Established a `cocotb` + `pytest` environment for cycle-accurate simulation with real image data.
 - **Stable Address Mapping**: Fixed Avalon-MM byte-to-word addressing issues, ensuring reliable register control.
 
 ## 🏗 System Architecture
@@ -21,7 +22,8 @@ graph LR
         Nios["Nios II Processor"]
         BM["Burst Master (DMA)"]
         ASE["Address Span Extender"]
-        HCP["HDMI Control (RTL)"]
+        HCP["HDMI Sync Gen"]
+        FLT["Image Filter (Modular)"]
     end
 
     subgraph HPS
@@ -34,6 +36,8 @@ graph LR
     BM --> ASE
     ASE --> AXI
     AXI --> DDR
+    HCP --> FLT
+    FLT --> Output[HDMI TX]
 ```
 
 ## Performance Summary
@@ -44,6 +48,7 @@ graph LR
 | | **Hardware DMA (Burst)** | **136.53 MB/s** | **~30x Speedup** |
 | **DDR3 to DDR3** | Software (w/ Arithmetic) | 0.21 MB/s | Reference |
 | | **Hardware DMA (BM4/Pipe)** | **125.00 MB/s** | **~585x Speedup** |
+| **Real-time Filter**| **960x540p @ 60fps** | **~93 MB/s** | **Zero Jitter** |
 
 ## 📖 Documentation
 - [DESIGN.md](doc/DESIGN.md): Comprehensive system architecture and DDR-to-HDMI pipeline specification.

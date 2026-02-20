@@ -23,11 +23,15 @@ This roadmap outlines the steps to build a high-performance video pipeline, from
 - [x] **Stable Video Output**: Verify 540p video stream from DDR3 to HDMI monitor.
 - [ ] **Hardware Refinement**: Replace handwritten FIFO with Intel **DCFIFO IP** to resolve frame jitter.
 
-## Phase 4: Real-time Processing (Line Buffer & Filters)
-- [ ] **Line Buffer Design**: Implement dual-port RAM based line buffers for 3x3 windowing.
-- [ ] **Processing Core**: Implement `video_processing_core.v`.
-    - [ ] **Grayscale/Thresholding**: Basic pixel-wise processing.
-    - [ ] **Sobel Edge Detection**: High-speed spatial filtering using the line buffers.
+## Phase 4: Real-time Processing (Line Buffer & Filters) [x]
+- [x] **Line Buffer Design**: Implement dual-port RAM based line buffers for 3x3 windowing.
+- [x] **Processing Core**: Implement pipelined 3x3 image filters (`image_filter.v`).
+    - [x] **Grayscale / Bypass**: Basic pixel-wise processing.
+    - [x] **Blur Filter**: Averaging 3x3 neighbor pixels.
+    - [x] **Sobel Edge Detection**: High-speed spatial filtering using the line buffers.
+    - [ ] **Embossing Filter**: Directional difference filtering for 3D depth effect.
+    - [ ] **Sharpening Filter**: High-pass filtering to enhance image details.
+
 
 ## Phase 5: High-End Quality & Integration
 - [ ] **Spatial Dithering**:
