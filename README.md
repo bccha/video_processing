@@ -12,6 +12,7 @@ By utilizing the **FPGA-to-HPS AXI Bridge**, we bypass the common preloader/brid
 
 - **Advanced HDMI Control**: Implemented sophisticated gamma correction (sRGB, Inverse Gamma 2.2) and custom character tile-rendering.
 - **Real-time Image Filtering**: Integrated a modular filter pipeline (Blur, Edge, Emboss, Sharpen) achieving 60fps at 540p.
+- **Advanced Dithering System**: Implemented True Ordered Dithering with 2D Temporal Scrambling and RGB Channel Decorrelation to eliminate 4-bit color banding.
 - **RTL Verification Framework**: Established a `cocotb` + `pytest` environment for cycle-accurate simulation with real image data.
 - **Stable Address Mapping**: Fixed Avalon-MM byte-to-word addressing issues, ensuring reliable register control.
 
@@ -49,6 +50,19 @@ graph LR
 | **DDR3 to DDR3** | Software (w/ Arithmetic) | 0.21 MB/s | Reference |
 | | **Hardware DMA (BM4/Pipe)** | **125.00 MB/s** | **~585x Speedup** |
 | **Real-time Filter**| **960x540p @ 60fps** | **~93 MB/s** | **Zero Jitter** |
+
+## 🎨 Advanced Dithering Demonstration
+
+To overcome the visual artifacts (color banding) caused by truncating 8-bit color channels to 4-bit, we implemented an Advanced True Ordered Dithering algorithm.
+
+| Original (8-bit) | Advanced Dithered (4-bit) |
+| :---: | :---: |
+| ![Original](./doc/images/korea.png) | ![Dithered](./doc/images/korea_dithered.png) |
+
+**Key Techniques used in our RTL pipeline:**
+1. **0x10 Thresholding:** Assuming pixels `< 0x10` emit no light on the 4-bit monitor, dithering is only conditionally mathematically applied to preserve pure blacks while perfectly distributing mid-tones.
+2. **RGB Channel Decorrelation:** Instead of applying the precise same 4x4 Bayer matrix to all colors simultaneously (which causes harsh Luma grid spots), the R, G, and B matrices are spatially offset from each other.
+3. **2D Temporal Scrambling:** The starting coordinates of the matrix are pseudo-randomly shifted every vertical sync frame, turning static grid patterns into a smooth, film-grain-like brightness illusion.
 
 ## 📖 Documentation
 - [DESIGN.md](doc/DESIGN.md): Comprehensive system architecture and DDR-to-HDMI pipeline specification.
