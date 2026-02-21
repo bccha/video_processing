@@ -68,5 +68,16 @@ The `sim_filters.py` script provides a high-level reference implementation.
 | ![Sharpen](./images/out_6_sharpen.jpg) |
 
 
+
+## 5. Dithering Algorithm Results
+The pipeline implements a 4x4 Bayer Matrix Ordered Dithering to compress 8-bit channels to 4-bit without harsh color banding.
+
+| 4-bit Truncated (Color Banding) | Advanced Dithering (Temporal + RGB Separated) |
+| :---: | :---: |
+| ![Truncated](./images/demo_top_to_bottom.png) | ![RGB Separated](./images/demo_rgb_separated.png) |
+
+> [!NOTE]
+> Assuming that values below `0x10` do not emit light in the 4-bit system, dithering is applied to gracefully express the low-light gradation. By applying different spatial Bayer patterns to the R, G, and B channels and temporally shifting the matrix positions every frame, the noise is naturally perceived as a smooth brightness difference rather than a static dither pattern.
+
 ---
 *Created by Nios II Performance Monitoring Unit.*

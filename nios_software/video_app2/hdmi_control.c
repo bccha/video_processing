@@ -299,6 +299,7 @@ void run_image_filter_submenu() {
   printf(" [5] Edge (Color)\n");
   printf(" [6] Emboss (Grayscale)\n");
   printf(" [7] Sharpen (Color)\n");
+  printf(" [8] Bayer Dithering (Split Screen)\n");
   printf(" [r] Return to main menu\n");
   printf("Select filter mode: ");
 
@@ -308,7 +309,7 @@ void run_image_filter_submenu() {
   }
   printf("%c\n", choice);
 
-  if (choice >= '0' && choice <= '7') {
+  if (choice >= '0' && choice <= '8') {
     uint32_t filter_val = choice - '0';
     // Read current mode, clear bits [7:4], set new mode, and write back
     uint32_t current_mode =

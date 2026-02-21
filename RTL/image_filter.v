@@ -79,6 +79,55 @@ module image_filter #(
     delay_line #(.WIDTH(DATA_WIDTH), .STAGES(1)) d10(.clk(clk), .reset_n(reset_n), .din(rgb11), .dout(rgb10));
     delay_line #(.WIDTH(DATA_WIDTH), .STAGES(1)) d20(.clk(clk), .reset_n(reset_n), .din(rgb21), .dout(rgb20));
 
+    // ==========================================
+    // 2.A Control Signal Delay (Match rgb11)
+    // ==========================================
+    // rgb11 has 1 clock horizontal delay from din
+    wire hs_st1, vs_st1, de_st1;
+    delay_line #(.WIDTH(3), .STAGES(1)) u_sync_st1 (
+        .clk(clk), .reset_n(reset_n), 
+        .din({vs_in, hs_in, de_in}), .dout({vs_st1, hs_st1, de_st1})
+    );
+
+    // ==========================================
+    // 2.B Coordinate Generation (Based on rgb11)
+    // ==========================================
+    reg [11:0] x_cnt;
+    reg [11:0] y_cnt;
+
+    // hs_st1 goes low at the start of H-Sync.
+    // vs_st1 goes low at the start of V-Sync.
+    // Since we only need relative coordinates for Bayer and Split-Screen during active video,
+    // counting `de_st1` is sufficient and safer for the visible area.
+    always @(posedge clk or negedge reset_n) begin
+        if (!reset_n) begin
+            x_cnt <= 0;
+        end else begin
+            // Simpler DE based counting:
+            if (de_st1) begin
+                x_cnt <= x_cnt + 1;
+            end else if (!hs_st1) begin
+                x_cnt <= 0;
+            end
+        end
+    end
+
+    // Y counter logic (increment at end of valid line)
+    reg de_st1_d1;
+    always @(posedge clk or negedge reset_n) begin
+        if (!reset_n) begin
+            de_st1_d1 <= 0;
+        end else begin
+            de_st1_d1 <= de_st1;
+            if (!vs_st1) begin
+                y_cnt <= 0;
+            end else if (de_st1_d1 == 1'b1 && de_st1 == 1'b0) begin
+                // Falling edge of DE -> Line ended
+                y_cnt <= y_cnt + 1;
+            end
+        end
+    end
+
     // Internal Intensity (Gray) calculation macro
     function [7:0] rgb2gray;
         input [23:0] rgb;
@@ -140,6 +189,17 @@ module image_filter #(
         .sharp_b (sharp_b)
     );
 
+    // Dither computations (Mode 8)
+    wire [23:0] dither_rgb;
+    filter_dither #(.DATA_WIDTH(DATA_WIDTH)) u_dither (
+        .clk      (clk),
+        .reset_n  (reset_n),
+        .pixel_in (rgb11),      // 1-clock delayed input
+        .x_coord  (x_cnt),      // Synchronized coordinates
+        .y_coord  (y_cnt),
+        .pixel_out(dither_rgb)  // 2-clocks internal delay (Total 3-clocks relative to row start)
+    );
+
     // ==========================================
     // 4. Center Pixel Delay Match (2 Clocks)
     // ==========================================
@@ -171,7 +231,8 @@ module image_filter #(
     wire is_edge = (edge_mag > 8'd40); // Threshold
     wire [23:0] color_edge = is_edge ? center_rgb_st2 : 24'd0;
 
-    assign dout = (safe_filter_mode == 4'd7) ? {sharp_r, sharp_g, sharp_b} :                  // Mode 7: Color Sharpen
+    assign dout = (safe_filter_mode == 4'd8) ? dither_rgb :                                  // Mode 8: Bayer Dithering
+                  (safe_filter_mode == 4'd7) ? {sharp_r, sharp_g, sharp_b} :                 // Mode 7: Color Sharpen
                   (safe_filter_mode == 4'd6) ? {emboss_gray, emboss_gray, emboss_gray} :     // Mode 6: Grayscale Emboss
                   (safe_filter_mode == 4'd5) ? color_edge :                                  // Mode 5: Color Edge
                   (safe_filter_mode == 4'd4) ? {edge_mag, edge_mag, edge_mag} :              // Mode 4: Grayscale Edge

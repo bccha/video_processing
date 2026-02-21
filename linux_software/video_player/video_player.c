@@ -15,7 +15,6 @@
 #include <time.h>
 #include <unistd.h>
 
-
 int tty_fd = -1;
 struct termios orig_termios;
 
@@ -107,7 +106,7 @@ int handle_keyboard_input(volatile uint32_t *hdmi_csr,
   // Handle Keyboard Input via Non-blocking Read on /dev/tty
   char c = 0;
   if (kbhit() && read(tty_fd, &c, 1) == 1) {
-    if (c >= '0' && c <= '7') {
+    if (c >= '0' && c <= '8') {
       uint32_t filter_val = c - '0';
       // Clear bits [7:4] (4 bits) and set new filter mode
       *current_reg_mode = (*current_reg_mode & ~(0xF << 4)) | (filter_val << 4);
@@ -242,8 +241,11 @@ int main(int argc, char **argv) {
   printf("  [3] Blur (Color)\n");
   printf("  [4] Edge (Grayscale)\n");
   printf("  [5] Edge (Color)\n");
+  printf("  [6] Emboss (Grayscale)\n");
+  printf("  [7] Sharpen (Color)\n");
+  printf("  [8] Bayer Dithering (Split Screen)\n");
 
-  uint32_t current_reg_mode = 8; // DMA Stream is bit 3
+  uint32_t current_reg_mode = 8; // DMA Stream is 8 in lower nibble
 
   while (1) {
     if (handle_keyboard_input(hdmi_csr, &current_reg_mode, &is_paused,
