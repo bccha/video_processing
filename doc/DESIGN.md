@@ -33,6 +33,8 @@ graph LR
     FLT --> HDMI_Chip
 ```
 
+<img src="./images/design.png" width="50%" alt="System Architecture Diagram">
+
 ---
 
 ## 2. Component Responsibilities
@@ -48,8 +50,19 @@ graph LR
 ### FPGA Fabric (High-Speed Data Path)
 - **Image Filter Pipeline**: 
     - **Line Buffers**: Utilizes dual line buffers to maintain 3 rows of pixel data in on-chip SRAM.
-    - **3x3 Windowing**: Generates a spatial window for convolution operations.
-    - **Parallel Processing**: Computes Blur, Edge, Emboss, and Sharpen in parallel, with a matched 3-clock pipeline delay.
+    - **3x3 Windowing**: Generates a spatial window for convolution operations (Blur, Edge, Sharpen, Emboss).
+    - **Point Processing**: Coordinates-based real-time filters.
+    - **2-Stage Hybrid Spatiotemporal Dithering (Mode 8)**:
+        - **Stage 1 (Pass 1): Temporal Ordered Dither**: Applies a 2-bit Bayer noise seed to the LSBs. If the pixel value is above `0x04`, it is bypassed to maintain high-frequency detail.
+        - **Stage 2 (Pass 2): Conditional Error Diffusion**: Implements Floyd-Steinberg diffusion with a user-configurable threshold. 
+        - **Energy Conservation**: Even when a pixel is bypassed (Value > Threshold), errors from neighboring pixels are accumulated and propagated to ensure seamless transitions.
+        - **Architecture**: Operates entirely on-chip using a single 960-word BRAM line buffer (M10K) to eliminate external frame buffer overhead.
+
+![Hybrid Dithering Pipeline](file:///C:/Users/morer/.gemini/antigravity/brain/179ebeb8-5d95-4a76-a3c2-062e8f98504a/dither_pipeline_flowchart.png)
+
+    - **Split-Screen Support**: Supports a real-time split-screen mode (x < 480) to compare clean (simple truncation) against processed output.
+
+    - **Parallel Processing**: Computes all filters (Bypass, Blur, Edge, Emboss, Sharpen, Dither) in parallel, with a perfectly matched 3-clock pipeline delay.
 - **Video DMA Master**: Fetches pixel data from DDR3 via Avalon-MM.
 
 ---
@@ -59,6 +72,8 @@ graph LR
 1. **Modular Filter Architecture**: Decoupling the filter logic into submodules (`filter_blur`, `filter_edge`, etc.) allows for independent verification and easy expansion of effects.
 2. **Fixed-Point Arithmetic**: Used for kernel convolutions to avoid the resource cost of floating-point units while maintaining visual quality.
 3. **Synchronous 540p Timing**: Standardized on 960x540p to maximize throughput while staying within the DE10-Nano's pixel clock limits.
+4. **Hybrid Dithering strategy**: Decouples the spatiotemporal process into a memory-less temporal domain (Pass 1) and a single-line-buffered spatial domain (Pass 2), achieving premium visual character with zero external memory bandwidth overhead.
+
 
 ---
 

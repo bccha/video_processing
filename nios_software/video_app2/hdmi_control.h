@@ -9,6 +9,7 @@
 #define REG_BITMAP_ADDR (4 * 4)
 #define REG_BITMAP_DATA (5 * 4)
 #define REG_FRAME_PTR (6 * 4)
+#define REG_FILTER_CONFIG (7 * 4)
 
 void generate_color_bar_pattern();
 void run_dma_video_test();

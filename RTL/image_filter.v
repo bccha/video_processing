@@ -13,6 +13,9 @@ module image_filter #(
     // 4: Edge (Gray), 5: Edge (Color lines on black)
     // 6: Emboss (Gray), 7: Sharpen (Color)
     input  wire  [3:0]           filter_mode, 
+    input  wire                  temporal_en,
+    input  wire                  dither_2bit_en,
+
     
     // Input Video Stream
     input  wire  [DATA_WIDTH-1:0] din,
@@ -192,12 +195,14 @@ module image_filter #(
     // Dither computations (Mode 8)
     wire [23:0] dither_rgb;
     filter_dither #(.DATA_WIDTH(DATA_WIDTH)) u_dither (
-        .clk      (clk),
-        .reset_n  (reset_n),
-        .pixel_in (rgb11),      // 1-clock delayed input
-        .x_coord  (x_cnt),      // Synchronized coordinates
-        .y_coord  (y_cnt),
-        .pixel_out(dither_rgb)  // 2-clocks internal delay (Total 3-clocks relative to row start)
+        .clk        (clk),
+        .reset_n    (reset_n),
+        .temporal_en(temporal_en),
+        .dither_2bit_en(dither_2bit_en),
+        .pixel_in   (rgb11),      // 1-clock delayed input
+        .x_coord    (x_cnt),      // Synchronized coordinates
+        .y_coord    (y_cnt),
+        .pixel_out  (dither_rgb)  // 2-clocks internal delay (Total 3-clocks relative to row start)
     );
 
     // ==========================================

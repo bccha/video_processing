@@ -290,37 +290,102 @@ void load_char_bitmap() {
 }
 
 void run_image_filter_submenu() {
-  printf("\n--- Image Filter Control ---\n");
-  printf(" [0] Bypass (Full Color)\n");
-  printf(" [1] Grayscale\n");
-  printf(" [2] Blur (Grayscale)\n");
-  printf(" [3] Blur (Color)\n");
-  printf(" [4] Edge (Grayscale)\n");
-  printf(" [5] Edge (Color)\n");
-  printf(" [6] Emboss (Grayscale)\n");
-  printf(" [7] Sharpen (Color)\n");
-  printf(" [8] Bayer Dithering (Split Screen)\n");
-  printf(" [r] Return to main menu\n");
-  printf("Select filter mode: ");
-
-  char choice = 0;
-  while (choice < ' ') {
-    choice = get_char_polled();
-  }
-  printf("%c\n", choice);
-
-  if (choice >= '0' && choice <= '8') {
-    uint32_t filter_val = choice - '0';
-    // Read current mode, clear bits [7:4], set new mode, and write back
+  while (1) {
     uint32_t current_mode =
         IORD_32DIRECT(HDMI_SYNC_GEN_BASE | CACHE_BYPASS_MASK, REG_PATTERN_MODE);
-    current_mode = (current_mode & ~(0xF << 4)) | (filter_val << 4);
-    IOWR_32DIRECT(HDMI_SYNC_GEN_BASE | CACHE_BYPASS_MASK, REG_PATTERN_MODE,
-                  current_mode);
-    printf(">> Filter Mode set to %d\n", filter_val);
-  } else if (choice == 'r' || choice == 'R') {
-    return;
-  } else {
-    printf(">> Invalid selection.\n");
+    int temporal_en = (current_mode >> 8) & 0x01;
+    int dither_2bit_en = (current_mode >> 9) & 0x01;
+    uint32_t filter_cfg = IORD_32DIRECT(HDMI_SYNC_GEN_BASE | CACHE_BYPASS_MASK,
+                                        REG_FILTER_CONFIG);
+    int err_diff_en = filter_cfg & 0x01;
+    int err_diff_th = (filter_cfg >> 8) & 0xFF;
+
+    printf("\n--- Image Filter Control ---\n");
+    printf(" [0] Bypass (Full Color)\n");
+    printf(" [1] Grayscale\n");
+    printf(" [2] Blur (Grayscale)\n");
+    printf(" [3] Blur (Color)\n");
+    printf(" [4] Edge (Grayscale)\n");
+    printf(" [5] Edge (Color)\n");
+    printf(" [6] Emboss (Grayscale)\n");
+    printf(" [7] Sharpen (Color)\n");
+    printf(" [8] Bayer Dithering (Split Screen)\n");
+    printf(" [9] Toggle Temporal Dithering (Current: %s)\n",
+           temporal_en ? "ON" : "OFF");
+    printf(" [a] Toggle 2-Bit Dither Mode (Current: %s)\n",
+           dither_2bit_en ? "2-Bit" : "4-Bit");
+    printf(" [c] Toggle Error Diffusion (Current: %s)\n",
+           err_diff_en ? "ON" : "OFF");
+    printf(" [t] Set Dither Threshold (Current: 0x%02X)\n", err_diff_th);
+    printf(" [b] Return to main menu\n");
+    printf("Select filter mode: ");
+
+    char choice = 0;
+    while (choice < ' ') {
+      choice = get_char_polled();
+    }
+    printf("%c\n", choice);
+
+    if (choice >= '0' && choice <= '8') {
+      uint32_t filter_val = choice - '0';
+      // Read current mode, clear bits [7:4], set new mode, and write back
+      current_mode = IORD_32DIRECT(HDMI_SYNC_GEN_BASE | CACHE_BYPASS_MASK,
+                                   REG_PATTERN_MODE);
+      current_mode = (current_mode & ~(0xF << 4)) | (filter_val << 4);
+      IOWR_32DIRECT(HDMI_SYNC_GEN_BASE | CACHE_BYPASS_MASK, REG_PATTERN_MODE,
+                    current_mode);
+      printf(">> Filter Mode set to %d\n", filter_val);
+    } else if (choice == '9') {
+      current_mode = IORD_32DIRECT(HDMI_SYNC_GEN_BASE | CACHE_BYPASS_MASK,
+                                   REG_PATTERN_MODE);
+      current_mode ^= (1 << 8); // Toggle bit 8
+      IOWR_32DIRECT(HDMI_SYNC_GEN_BASE | CACHE_BYPASS_MASK, REG_PATTERN_MODE,
+                    current_mode);
+      printf(">> Temporal Dithering %s\n",
+             (current_mode & (1 << 8)) ? "Enabled" : "Disabled");
+    } else if (choice == 'a' || choice == 'A') {
+      current_mode = IORD_32DIRECT(HDMI_SYNC_GEN_BASE | CACHE_BYPASS_MASK,
+                                   REG_PATTERN_MODE);
+      current_mode ^= (1 << 9); // Toggle bit 9
+      IOWR_32DIRECT(HDMI_SYNC_GEN_BASE | CACHE_BYPASS_MASK, REG_PATTERN_MODE,
+                    current_mode);
+      printf(">> Dither Mode set to %s\n",
+             (current_mode & (1 << 9)) ? "2-Bit" : "4-Bit");
+    } else if (choice == 'c' || choice == 'C') {
+      filter_cfg ^= 0x01;
+      IOWR_32DIRECT(HDMI_SYNC_GEN_BASE | CACHE_BYPASS_MASK, REG_FILTER_CONFIG,
+                    filter_cfg);
+      printf(">> Error Diffusion %s\n",
+             (filter_cfg & 0x01) ? "Enabled" : "Disabled");
+    } else if (choice == 't' || choice == 'T') {
+      printf("Enter threshold (Hex 00-FF): ");
+      char c1 = get_char_polled();
+      printf("%c", c1);
+      char c2 = get_char_polled();
+      printf("%c\n", c2);
+      int val = 0;
+      if (c1 >= '0' && c1 <= '9')
+        val += (c1 - '0') * 16;
+      else if (c1 >= 'a' && c1 <= 'f')
+        val += (c1 - 'a' + 10) * 16;
+      else if (c1 >= 'A' && c1 <= 'F')
+        val += (c1 - 'A' + 10) * 16;
+
+      if (c2 >= '0' && c2 <= '9')
+        val += (c2 - '0');
+      else if (c2 >= 'a' && c2 <= 'f')
+        val += (c2 - 'a' + 10);
+      else if (c2 >= 'A' && c2 <= 'F')
+        val += (c2 - 'A' + 10);
+
+      filter_cfg = (filter_cfg & ~(0xFF << 8)) | (val << 8);
+      IOWR_32DIRECT(HDMI_SYNC_GEN_BASE | CACHE_BYPASS_MASK, REG_FILTER_CONFIG,
+                    filter_cfg);
+      printf(">> Threshold set to 0x%02X\n", val);
+    } else if (choice == 'b' || choice == 'B') {
+      return;
+    } else {
+      printf(">> Invalid selection.\n");
+    }
   }
 }

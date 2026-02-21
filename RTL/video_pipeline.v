@@ -34,10 +34,23 @@ module video_pipeline (
     // Internal connections 
     // hdmi_d, hdmi_de, hdmi_hs, hdmi_vs are output ports
     
-    wire        vs_toggle_raw; // New VSync Toggle from Sync Gen
+    wire        vs_toggle_raw; // VSync Toggle from Sync Gen
 
-    // Internal signals (Missing declarations added)
+    // ==========================================
+    // Internal Wires & Control Signals
+    // ==========================================
+    
+    // Control Registers (from Sync Gen)
     wire [31:0] shadow_ptr;
+    wire [31:0] reg_mode;
+    wire [31:0] reg_filter_config;
+    
+    // DMA Status & Control
+    wire        dma_busy;
+    wire        dma_en;
+    wire        dma_done_50;
+
+    // Cross-Domain (DC) FIFO Signals
     wire [11:0] fifo_used;
     wire        fifo_wr_en;
     wire [31:0] fifo_wr_data;
@@ -45,14 +58,8 @@ module video_pipeline (
     wire        fifo_rd_en;
     wire [31:0] fifo_rd_data;
     wire        fifo_empty;
-    wire        dma_busy;
-    wire        dma_en;
-    wire [31:0] reg_mode;
-    wire        dma_done_50;
-    // wire        dma_start_74; // Removed, using direct connection
-    // wire        dma_cont_74;  // Removed, using direct connection
 
-    // Pipeline status (Internal)
+    // Pipeline status (Internal Debug)
     wire [7:0]  pipeline_debug;
     
     // 1. CDC (V-Sync, Start, Cont, Done)
@@ -140,6 +147,7 @@ module video_pipeline (
         
         .shadow_ptr_out    (shadow_ptr),
         .reg_mode_out      (reg_mode),
+        .reg_filter_config_out (reg_filter_config),
         .dma_enable_out    (dma_en),
         
         .dma_busy          (dma_busy),
@@ -156,6 +164,11 @@ module video_pipeline (
     // For now, let's tie it to reg_mode[7:4] (bits 4, 5, 6, 7 of the Pattern Mode register).
     wire [3:0] current_filter_mode = reg_mode[7:4]; 
 
+    wire [23:0] img_filter_dout;
+    wire        img_filter_hs;
+    wire        img_filter_vs;
+    wire        img_filter_de;
+
     image_filter #(
         .DATA_WIDTH(24),
         .LINE_LENGTH(1120) // 960x540 H_TOTAL
@@ -163,18 +176,46 @@ module video_pipeline (
         .clk         (clk_hdmi),       // Filter runs on Pixel Clock!
         .reset_n     (reset_n),
         .filter_mode (current_filter_mode),
+        .temporal_en (reg_mode[8]),
+        .dither_2bit_en (reg_mode[9]),
+
         
-        // Input from Sync Gen
+        // Pixel Input from Sync Gen
         .din         (raw_hdmi_d),
         .hs_in       (raw_hdmi_hs),
         .vs_in       (raw_hdmi_vs),
         .de_in       (raw_hdmi_de),
         
+        // Output to intermediate wires
+        .dout        (img_filter_dout),
+        .hs_out      (img_filter_hs),
+        .vs_out      (img_filter_vs),
+        .de_out      (img_filter_de)
+    );
+
+    // 6. Floyd-Steinberg Error Diffusion Filter
+    wire error_diffusion_en = reg_filter_config[0];
+    wire [7:0] dither_threshold = reg_filter_config[15:8];
+
+    filter_error_diffusion #(
+        .DATA_WIDTH(24)
+    ) u_err_diff (
+        .clk                (clk_hdmi),
+        .reset_n            (reset_n),
+        .error_diffusion_en (error_diffusion_en),
+        .dither_threshold   (dither_threshold),
+        
+        // Pixel Input from image_filter
+        .din                (img_filter_dout),
+        .hs_in              (img_filter_hs),
+        .vs_in              (img_filter_vs),
+        .de_in              (img_filter_de),
+        
         // Output to Physical HDMI Pins
-        .dout        (hdmi_d),
-        .hs_out      (hdmi_hs),
-        .vs_out      (hdmi_vs),
-        .de_out      (hdmi_de)
+        .dout               (hdmi_d),
+        .hs_out             (hdmi_hs),
+        .vs_out             (hdmi_vs),
+        .de_out             (hdmi_de)
     );
 
     // Debug LED Logic (Stretched Pulses for visibility)

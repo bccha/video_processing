@@ -113,6 +113,11 @@ int handle_keyboard_input(volatile uint32_t *hdmi_csr,
       *(hdmi_csr + (REG_PATTERN_MODE / 4)) = *current_reg_mode;
       printf("\r[FILTER] Mode changed to %d                     \n",
              filter_val);
+    } else if (c == '9') {
+      *current_reg_mode ^= (1 << 8); // Toggle temporal dither enable
+      *(hdmi_csr + (REG_PATTERN_MODE / 4)) = *current_reg_mode;
+      printf("\r[FILTER] Temporal Dithering %s                 \n",
+             (*current_reg_mode & (1 << 8)) ? "Enabled" : "Disabled");
     } else if (c == 's' || c == 'S') {
       *is_paused = !*is_paused;
       if (*is_paused) {
@@ -244,6 +249,7 @@ int main(int argc, char **argv) {
   printf("  [6] Emboss (Grayscale)\n");
   printf("  [7] Sharpen (Color)\n");
   printf("  [8] Bayer Dithering (Split Screen)\n");
+  printf("  [9] Toggle Temporal Dithering\n");
 
   uint32_t current_reg_mode = 8; // DMA Stream is 8 in lower nibble
 

@@ -2,8 +2,8 @@
 <sch:Settings xmlns:sch="http://www.altera.com/embeddedsw/bsp/schema">
         <BspType>hal</BspType>
         <BspVersion>default</BspVersion>
-        <BspGeneratedTimeStamp>Feb 20, 2026 12:48:49 PM</BspGeneratedTimeStamp>
-        <BspGeneratedUnixTimeStamp>1771609729409</BspGeneratedUnixTimeStamp>
+        <BspGeneratedTimeStamp>Feb 21, 2026 9:52:02 AM</BspGeneratedTimeStamp>
+        <BspGeneratedUnixTimeStamp>1771685522993</BspGeneratedUnixTimeStamp>
         <BspGeneratedLocation>C:\Workspace\quartus\video_processing\nios_software\nios_ddr3_test_bsp</BspGeneratedLocation>
         <BspSettingsFile>settings.bsp</BspSettingsFile>
         <SopcDesignFile>..\..\soc_system.sopcinfo</SopcDesignFile>

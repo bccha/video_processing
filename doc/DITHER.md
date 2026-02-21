@@ -70,9 +70,13 @@ If you apply the *exact same* Bayer noise value to the Red, Green, and Blue chan
 
 ---
 
-## 4. Visual Comparison: The Power of True Dithering
+## 4. Visual Comparison: The Power of 2-Stage Conditional Dithering
 
 To demonstrate the combined power of these enhancements, we simulated a display that physically cannot display values below `0x10` (they become absolute black `0x00`), and only has 4-bits of color depth per channel.
+
+Our final implemented architecture uses a **2-Stage Conditional Dither Pipeline**:
+1. **Pass 1 (Temporal Ordered Dither)**: Applies a 2-bit temporally scrambled Bayer matrix strictly to ultra-dark areas (`< 0x04`). Brighter values bypass this completely to avoid unnecessary noise.
+2. **Pass 2 (Conditional Error Diffusion)**: Applies Floyd-Steinberg diffusion only to dark values (`< 0x10`), but preserves mid-tones and highlights (`>= 0x10`) at full 8-bit precision by tracking and diffusing only the truncation errors from darker zones.
 
 ### Original (24-bit)
 ![Original](./images/dog_original_resized.png)
@@ -80,17 +84,17 @@ To demonstrate the combined power of these enhancements, we simulated a display 
 ### Hard Clamped (4-bit, No Dither, < 0x10 Black)
 ![Clamped](./images/dog_clamped.png)
 
-### Advanced Dithered (4-bit, Temporal Scrambled GIF)
-![Dithered](./images/dog_temporal_dither.gif)
+### Advanced 2-Stage Dithered (Hybrid Temporal & Floyd-Steinberg)
+![Dithered](./images/dog_2stage_dither.gif)
 
 Notice how in the **Hard Clamped** image, the shadows are completely crushed into black, and the background has harsh, distinct color bands. 
-In the **Advanced Dithered** image, the background gradient is perceptually smooth, and the details in the dark fur are recovered because the dithering noise conditionally pushes those sub-`0x10` values into the visible range, integrating perfectly over time!
+In the **Advanced 2-Stage Dithered** image, the bright background is perfectly preserved without grid noise (Bypass Logic), and the details in the dark fur are recovered because the hybrid dithering noise selectively pushes those sub-`0x10` values into the visible range, integrating perfectly over time!
 
 ---
 
 ## 5. Next Generation: Error Diffusion (Floyd-Steinberg)
 
-While Ordered Dithering is computationally cheap (purely parallel and context-free), it is visually outperformed by **Error Diffusion**.
+While Ordered Dithering is computationally cheap (purely parallel and context-free), we integrated it with **Error Diffusion** for the ultimate quality.
 
 Error Diffusion algorithms, such as **Floyd-Steinberg**, do not use a fixed matrix. Instead, when a pixel is quantized (truncated), the exact mathematical error (the discarded bits) is calculated exactly. This "error" is then mathematically pushed (diffused) into the neighboring pixels that have not yet been drawn (Right, Bottom-Left, Bottom, Bottom-Right). This preserves the precise local brightness of the image globally, eliminating both color banding and the repetitive grid artifacts of Ordered Dithering.
 

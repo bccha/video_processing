@@ -8,6 +8,8 @@ module filter_dither #(
     
     // Control Enable
     input  wire                  temporal_en,
+    input  wire                  dither_2bit_en, // 1 for 2-bit dither, 0 for 4-bit dither
+
     
     // Pixel Input (Latency = 1 relative to start of row)
     input  wire [DATA_WIDTH-1:0] pixel_in,
@@ -109,11 +111,18 @@ module filter_dither #(
             x_coord_st1 <= 0;
             r_in_st1 <= 0; g_in_st1 <= 0; b_in_st1 <= 0;
         end else begin
-            // Add full 4-bit Bayer noise (0-15) directly to 8-bit color
-            // Using separated RGB Bayer offsets
-            sum_r <= {1'b0, r_in} + {5'b0, bayer_val_r};
-            sum_g <= {1'b0, g_in} + {5'b0, bayer_val_g};
-            sum_b <= {1'b0, b_in} + {5'b0, bayer_val_b};
+            // Select noise magnitude depending on mode
+            if (dither_2bit_en) begin
+                // 2-bit Bayer noise (0-3)
+                sum_r <= {1'b0, r_in} + {7'b0, bayer_val_r[3:2]};
+                sum_g <= {1'b0, g_in} + {7'b0, bayer_val_g[3:2]};
+                sum_b <= {1'b0, b_in} + {7'b0, bayer_val_b[3:2]};
+            end else begin
+                // 4-bit Bayer noise (0-15)
+                sum_r <= {1'b0, r_in} + {5'b0, bayer_val_r};
+                sum_g <= {1'b0, g_in} + {5'b0, bayer_val_g};
+                sum_b <= {1'b0, b_in} + {5'b0, bayer_val_b};
+            end
             
             x_coord_st1 <= x_coord;
             
@@ -125,30 +134,31 @@ module filter_dither #(
     end
 
     // ==========================================
-    // Stage 2: Clamping, 4-bit Truncation, and Cutoff
+    // Stage 2: Clamping, Truncation, and Bypass
     // ==========================================
-    // Truncate lower 4 bits
+    // Determine thresholds and masks based on mode
+    wire [7:0] bypass_thresh = dither_2bit_en ? 8'h04 : 8'h10;
+    wire [7:0] trunc_mask    = dither_2bit_en ? 8'hFC : 8'hF0;
+
+    // Truncate lower bits (handle overflow clamping)
     wire [7:0] r_clamp = (sum_r > 255) ? 8'd255 : sum_r[7:0];
     wire [7:0] g_clamp = (sum_g > 255) ? 8'd255 : sum_g[7:0];
     wire [7:0] b_clamp = (sum_b > 255) ? 8'd255 : sum_b[7:0];
-
-    // Truncate masks (Lower 4 bits zeroed out)
-    localparam TRUNC_MASK = 8'hF0;
 
     always @(posedge clk or negedge reset_n) begin
         if (!reset_n) begin
             pixel_out <= 24'd0;
         end else begin
             if (x_coord_st1 < 12'd480) begin
-                // Left Screen: Original Truncated for dark areas
-                pixel_out[23:16] <= (r_in_st1 >= 8'h10) ? r_in_st1 : (r_in_st1 & TRUNC_MASK);
-                pixel_out[15:8]  <= (g_in_st1 >= 8'h10) ? g_in_st1 : (g_in_st1 & TRUNC_MASK);
-                pixel_out[7:0]   <= (b_in_st1 >= 8'h10) ? b_in_st1 : (b_in_st1 & TRUNC_MASK);
+                // Left Screen: Original Truncated (No Dither Noise)
+                pixel_out[23:16] <= (r_in_st1 >= bypass_thresh) ? r_in_st1 : (r_in_st1 & trunc_mask);
+                pixel_out[15:8]  <= (g_in_st1 >= bypass_thresh) ? g_in_st1 : (g_in_st1 & trunc_mask);
+                pixel_out[7:0]   <= (b_in_st1 >= bypass_thresh) ? b_in_st1 : (b_in_st1 & trunc_mask);
             end else begin
-                // Right Screen: Dithered & Truncated for dark areas
-                pixel_out[23:16] <= (r_in_st1 >= 8'h10) ? r_in_st1 : (r_clamp & TRUNC_MASK);
-                pixel_out[15:8]  <= (g_in_st1 >= 8'h10) ? g_in_st1 : (g_clamp & TRUNC_MASK);
-                pixel_out[7:0]   <= (b_in_st1 >= 8'h10) ? b_in_st1 : (b_clamp & TRUNC_MASK);
+                // Right Screen: Dither applied for values < threshold
+                pixel_out[23:16] <= (r_in_st1 >= bypass_thresh) ? r_in_st1 : (r_clamp & trunc_mask);
+                pixel_out[15:8]  <= (g_in_st1 >= bypass_thresh) ? g_in_st1 : (g_clamp & trunc_mask);
+                pixel_out[7:0]   <= (b_in_st1 >= bypass_thresh) ? b_in_st1 : (b_clamp & trunc_mask);
             end
         end
     end

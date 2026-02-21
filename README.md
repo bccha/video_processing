@@ -61,13 +61,13 @@ To overcome the visual artifacts (color banding) caused by truncating 8-bit colo
 ### Hard Clamped (4-bit, No Dither, < 0x10 Black)
 ![Clamped](./doc/images/dog_clamped.png)
 
-### Advanced Dithered (4-bit, Temporal Scrambled GIF)
-![Dithered](./doc/images/dog_temporal_dither.gif)
+### Advanced 2-Stage Dithered (Hybrid Temporal & Floyd-Steinberg)
+![Dithered](./doc/images/dog_2stage_dither.gif)
 
 **Key Techniques used in our RTL pipeline:**
-1. **0x10 Thresholding:** Assuming pixels `< 0x10` emit no light on the 4-bit monitor, dithering is only conditionally mathematically applied to preserve pure blacks while perfectly distributing mid-tones.
-2. **RGB Channel Decorrelation:** Instead of applying the precise same 4x4 Bayer matrix to all colors simultaneously (which causes harsh Luma grid spots), the R, G, and B matrices are spatially offset from each other.
-3. **2D Temporal Scrambling:** The starting coordinates of the matrix are pseudo-randomly shifted every vertical sync frame, turning static grid patterns into a smooth, film-grain-like brightness illusion.
+1. **Pass 1 (Temporal Ordered Dither):** Applies a 2-bit temporally scrambled Bayer matrix strictly to ultra-dark areas (`< 0x04`). Brighter values bypass this completely to avoid unnecessary noise.
+2. **Pass 2 (Conditional Error Diffusion):** Applies Floyd-Steinberg diffusion only to dark values (`< 0x10`). Instead of blindly truncating, mid-tones and highlights (`>= 0x10`) bypass quantization completely, enjoying full 8-bit precision, while perfectly tracking and diffusing the truncation errors from darker zones.
+3. **RGB Channel Decorrelation & 2D Scrambling:** R, G, and B matrices are spatially offset and pseudo-randomly shifted every V-Sync to prevent static grid patterns, creating a film-grain-like illusion for extreme shadows.
 
 ## 📖 Documentation
 - [DESIGN.md](doc/DESIGN.md): Comprehensive system architecture and DDR-to-HDMI pipeline specification.

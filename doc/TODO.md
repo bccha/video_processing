@@ -34,8 +34,8 @@ This roadmap outlines the steps to build a high-performance video pipeline, from
 
 
 ## Phase 5: High-End Quality & Integration
-- [ ] **Spatial Dithering**:
-    - [ ] **Ordered Dithering**: Implement Bayer Matrix (2x2, 4x4) to reduce color banding in gradients.
+- [x] **Spatial Dithering**:
+    - [x] **Ordered Dithering**: Implement Bayer Matrix (4x4) to restore color depth after truncation, including split-screen verification.
     - [ ] **Error Diffusion**: Explore Floyd-Steinberg algorithm (requires line buffer for error propagation).
 - [ ] **Temporal Dithering (FRC)**: 
     - [ ] **Frame Rate Control**: Implement temporal flickering between two intensive levels to increase perceived bit depth.

@@ -4,4 +4,7 @@
 *.ts
 *.bmp
 *.o
-video_player
+*.jpg
+*.png
+*.gif
+

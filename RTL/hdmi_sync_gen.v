@@ -38,7 +38,10 @@ module hdmi_sync_gen (
     // Control to DMA (CSR Domain)
     output wire        dma_start_out,
     output wire        dma_cont_en_out,
-    output reg         vs_toggle // Toggle from Pixel Domain
+    output reg         vs_toggle, // Toggle from Pixel Domain
+    
+    // Filter Configuration
+    output wire [31:0] reg_filter_config_out
 );
 
     // Control Registers
@@ -49,6 +52,7 @@ module hdmi_sync_gen (
     reg [31:0] reg_bitmap_addr; // Addr 4: Bitmap Update Addr (0-15)
     reg [31:0] reg_bitmap_data; // Addr 5: Bitmap Update Data (16-bit)
     reg [31:0] reg_frame_ptr;   // Addr 6: Frame Pointer (DDR3 Address)
+    reg [31:0] reg_filter_config; // Addr 7: Filter config [15:8] threshold, [0] Error Diffuse En
     reg [31:0] shadow_ptr;      // Internal Shadow Pointer
     
     reg        dma_start_pulse;
@@ -59,6 +63,7 @@ module hdmi_sync_gen (
     assign dma_cont_en_out = reg_global_ctrl[1];
     assign dma_start_out = dma_start_pulse;
     assign shadow_ptr_out = shadow_ptr;
+    assign reg_filter_config_out = reg_filter_config;
     reg [11:0] h_cnt;
     reg [11:0] v_cnt;
     reg        visible_d1;
@@ -101,6 +106,7 @@ module hdmi_sync_gen (
             3'd4:    read_data_mux = reg_bitmap_addr;
             3'd5:    read_data_mux = reg_bitmap_data;
             3'd6:    read_data_mux = reg_frame_ptr;
+            3'd7:    read_data_mux = reg_filter_config;
             default: read_data_mux = 32'd0;
         endcase
     end
@@ -119,6 +125,7 @@ module hdmi_sync_gen (
             reg_lut_addr <= 32'd0;
             reg_lut_data <= 32'd0;
             reg_frame_ptr <= 32'h30000000;
+            reg_filter_config <= 32'd0;
             avs_readdatavalid <= 1'b0;
             dma_start_pulse <= 1'b0;
             dma_done_sticky <= 1'b0;
@@ -155,6 +162,7 @@ module hdmi_sync_gen (
                         char_bitmap[reg_bitmap_addr[3:0]] <= avs_writedata[15:0];
                     end
                     3'd6: reg_frame_ptr <= avs_writedata;
+                    3'd7: reg_filter_config <= avs_writedata;
                     default: ;
                 endcase
             end
