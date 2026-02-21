@@ -517,3 +517,9 @@ $$
 \begin{bmatrix} 0 & -1 & 0 \\ -1 & 5 & -1 \\ 0 & -1 & 0 \end{bmatrix}
 $$
 - **Effect**: It amplifies the difference between a pixel and its surroundings. Unlike Edge detection which removes low frequencies, Sharpen **adds** the high-frequency edges back onto the original image.
+
+## 24. Advanced Dithering: Breaking the 4-bit Barrier
+
+The detailed lecture and theory behind compressing 8-bit color channels down to 4-bit (including True Ordered Dithering, Temporal Scrambling, and RGB Channel Decorrelation) has been moved to a dedicated document.
+
+👉 **[Read the Advanced Dithering Lecture here](DITHER.md)**
