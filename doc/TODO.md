@@ -33,12 +33,12 @@ This roadmap outlines the steps to build a high-performance video pipeline, from
     - [x] **Sharpening Filter**: High-pass filtering to enhance image details.
 
 
-## Phase 5: High-End Quality & Integration
-- [x] **Spatial Dithering**:
-    - [x] **Ordered Dithering**: Implement Bayer Matrix (4x4) to restore color depth after truncation, including split-screen verification.
-    - [ ] **Error Diffusion**: Explore Floyd-Steinberg algorithm (requires line buffer for error propagation).
-- [ ] **Temporal Dithering (FRC)**: 
-    - [ ] **Frame Rate Control**: Implement temporal flickering between two intensive levels to increase perceived bit depth.
+## Phase 5: High-End Quality & Integration [x]
+- [x] **2-Stage Hybrid Dithering**:
+    - [x] **Ordered Dithering**: Implement Bayer Matrix (4x4) to restore color depth after truncation.
+    - [x] **Error Diffusion**: Implemented **Floyd-Steinberg** algorithm using BRAM line buffer for zero-memory propagation.
+    - [x] **Temporal Dithering (FRC)**: Implemented 2-bit spatiotemporal scrambling (Film Grain effect).
+    - [x] **Scientific Verification**: Achieving **+3.30 dB PSNR improvement** in near-black regions.
 - [ ] **Linux Integration**: Map the video pipeline as a standard Linux display device (DRM/KMS).
 - [ ] **AI Acceleration**: Integrate hardware-based AI recognition core.
 

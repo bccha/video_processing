@@ -17,8 +17,9 @@ The top-level menu handles system-wide tests and hardware initialization.
 - **[3] Initialize HDMI**: Configures ADV7513 via I2C at 720p.
 - **[4] Generate Color Bar**: Writes a test pattern into DDR3 frame buffer.
 - **[5] Change RTL Pattern**: Sub-menu for internal RTL pattern generation (Red, Green, Blue, etc.).
-- **[6] Gamma Correction Settings**: **[New]** Nested sub-menu for LUT and Toggle control.
-- **[C] Load Custom Character**: Uploads a 16x16 bitmap for tile rendering.
+- [6] Gamma Correction Settings: Nested sub-menu for LUT and Toggle control.
+- [7] Dithering Settings: **[New]** Nested sub-menu for Hybrid 2-Stage Dither control.
+- [C] Load Custom Character: Uploads a 16x16 bitmap for tile rendering.
 - **[r] Reset RTL**: Returns the pattern generator to default state.
 - **[q] Quit**: Terminates the application.
 
@@ -31,6 +32,16 @@ Accessible via option `[6]`, this menu manages hardware Look-Up Table (LUT) sett
 - **[2] Load Gamma 2.2**: Standard Power-law LUT for typical displays.
 - **[3] Load sRGB Gamma**: Piecewise linear/power function for improved dark tone detail.
 - **[4] Load Inverse Gamma 2.2**: Specialized LUT for linear panels to prevent "washed-out" blacks.
+- **[b] Back**: Returns to the Main Menu.
+
+### 3. Dithering Settings Sub-menu (Nested)
+Accessible via option `[7]`, this menu manages the 2-Stage Hybrid Dithering pipeline.
+
+- **[1] Toggle Enable**: Real-time ON/OFF toggle of the Dither hardware block.
+- **[2] Set Threshold**: Adjusts the quantization threshold (0-255).
+- **[3] Mode: 2-bit Temporal**: Enables Pass 1 only.
+- **[4] Mode: 4-bit Error Diffusion**: Enables Pass 2 only.
+- **[5] Mode: Hybrid 2-Stage**: Enables both passes for optimal quality.
 - **[b] Back**: Returns to the Main Menu.
 
 ## 📝 Menu Sample (Actual Execution Log)

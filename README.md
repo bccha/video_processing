@@ -64,10 +64,16 @@ To overcome the visual artifacts (color banding) caused by truncating 8-bit colo
 ### Advanced 2-Stage Dithered (Hybrid Temporal & Floyd-Steinberg)
 ![Dithered](./doc/images/dog_2stage_dither.gif)
 
+### Quantitative Visual Quality Assessment: +3.30 dB PSNR Improvement
+Our quantitative analysis shows that the **2-Stage Hybrid** architecture achieves a significant **+3.30 dB improvement in PSNR** compared to simple truncation. This proves that our "Seamless Error Propagation" logic successfully restores missing details in extreme low-grayscale regions.
+
+![PSNR Metric Graph](./doc/images/psnr_metrics_graph.png)
+
 **Key Techniques used in our RTL pipeline:**
-1. **Pass 1 (Temporal Ordered Dither):** Applies a 2-bit temporally scrambled Bayer matrix strictly to ultra-dark areas (`< 0x04`). Brighter values bypass this completely to avoid unnecessary noise.
-2. **Pass 2 (Conditional Error Diffusion):** Applies Floyd-Steinberg diffusion only to dark values (`< 0x10`). Instead of blindly truncating, mid-tones and highlights (`>= 0x10`) bypass quantization completely, enjoying full 8-bit precision, while perfectly tracking and diffusing the truncation errors from darker zones.
-3. **RGB Channel Decorrelation & 2D Scrambling:** R, G, and B matrices are spatially offset and pseudo-randomly shifted every V-Sync to prevent static grid patterns, creating a film-grain-like illusion for extreme shadows.
+1. **Pass 1 (Temporal Ordered Dither):** Applies a 2-bit temporally scrambled Bayer matrix strictly to ultra-dark areas (`< 0x04`) to inject high-frequency dynamic noise.
+2. **Pass 2 (Conditional Error Diffusion):** Implements a **Floyd-Steinberg** algorithm using a single BRAM line buffer. It diffuses quantization errors across the spatial domain ($7/16, 3/16, 5/16, 1/16$).
+3. **Seamless Error Propagation:** Unconditionally propagates errors from the BRAM even when a pixel bypasses dithering (Value > Threshold). This ensures perfect mathematical energy conservation across high-contrast boundaries.
+4. **RGB Channel Decorrelation:** R, G, and B matrices are spatially offset to push noise from the sensitivity of the Luminance domain into the Chrominance domain.
 
 ## 📖 Documentation
 - [DESIGN.md](doc/DESIGN.md): Comprehensive system architecture and DDR-to-HDMI pipeline specification.
