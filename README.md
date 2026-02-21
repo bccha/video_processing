@@ -55,9 +55,9 @@ graph LR
 
 To overcome the visual artifacts (color banding) caused by truncating 8-bit color channels to 4-bit, we implemented an Advanced True Ordered Dithering algorithm.
 
-| Original (8-bit) | Advanced Dithered (4-bit) |
-| :---: | :---: |
-| ![Original](./doc/images/korea.png) | ![Dithered](./doc/images/korea_dithered.png) |
+| Original (24-bit) | Hard Clamped (4-bit, No Dither, < 0x10 Black) | Advanced Dithered (4-bit, Temporal Scrambled GIF) |
+| :---: | :---: | :---: |
+| ![Original](./doc/images/dog_original_resized.png) | ![Clamped](./doc/images/dog_clamped.png) | ![Dithered](./doc/images/dog_temporal_dither.gif) |
 
 **Key Techniques used in our RTL pipeline:**
 1. **0x10 Thresholding:** Assuming pixels `< 0x10` emit no light on the 4-bit monitor, dithering is only conditionally mathematically applied to preserve pure blacks while perfectly distributing mid-tones.
