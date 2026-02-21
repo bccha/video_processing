@@ -74,9 +74,14 @@ If you apply the *exact same* Bayer noise value to the Red, Green, and Blue chan
 
 To demonstrate the combined power of these enhancements, we simulated a display that physically cannot display values below `0x10` (they become absolute black `0x00`), and only has 4-bits of color depth per channel.
 
-| Original (24-bit) | Hard Clamped (4-bit, No Dither, < 0x10 Black) | Advanced Dithered (4-bit, Temporal Scrambled GIF) |
-| :---: | :---: | :---: |
-| ![Original](./images/dog_original_resized.png) | ![Clamped](./images/dog_clamped.png) | ![Dithered](./images/dog_temporal_dither.gif) |
+### Original (24-bit)
+![Original](./images/dog_original_resized.png)
+
+### Hard Clamped (4-bit, No Dither, < 0x10 Black)
+![Clamped](./images/dog_clamped.png)
+
+### Advanced Dithered (4-bit, Temporal Scrambled GIF)
+![Dithered](./images/dog_temporal_dither.gif)
 
 Notice how in the **Hard Clamped** image, the shadows are completely crushed into black, and the background has harsh, distinct color bands. 
 In the **Advanced Dithered** image, the background gradient is perceptually smooth, and the details in the dark fur are recovered because the dithering noise conditionally pushes those sub-`0x10` values into the visible range, integrating perfectly over time!
