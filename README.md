@@ -13,6 +13,7 @@ By utilizing the **FPGA-to-HPS AXI Bridge**, we bypass the common preloader/brid
 - **Advanced HDMI Control**: Implemented sophisticated gamma correction (sRGB, Inverse Gamma 2.2) and custom character tile-rendering.
 - **Real-time Image Filtering**: Integrated a modular filter pipeline (Blur, Edge, Emboss, Sharpen) achieving 60fps at 540p.
 - **Advanced Dithering System**: Implemented True Ordered Dithering with 2D Temporal Scrambling and RGB Channel Decorrelation to eliminate 4-bit color banding.
+- **3×3 Gamut Transfer Matrix**: Added a runtime-configurable 3×3 color matrix in Q2.10 fixed-point, enabling sRGB gamut mapping, saturation control, and display calibration. Combined with the dithering stage, it enables **perceptually accurate color reproduction even on LED panels where low-luminance emission is non-linear**.
 - **RTL Verification Framework**: Established a `cocotb` + `pytest` environment for cycle-accurate simulation with real image data.
 - **Stable Address Mapping**: Fixed Avalon-MM byte-to-word addressing issues, ensuring reliable register control.
 
@@ -25,6 +26,10 @@ graph LR
         ASE["Address Span Extender"]
         HCP["HDMI Sync Gen"]
         FLT["Image Filter (Modular)"]
+        DG["De-Gamma LUT"]
+        CM["3×3 Gamut Matrix\n(Q2.10, runtime)"] 
+        DTH["Bayer+Temporal Dither"]
+        ERR["Floyd-Steinberg\nError Diffusion"]
     end
 
     subgraph HPS
@@ -34,11 +39,11 @@ graph LR
 
     Nios --> ASE
     Nios --> HCP
+    Nios --> CM
     BM --> ASE
     ASE --> AXI
     AXI --> DDR
-    HCP --> FLT
-    FLT --> Output[HDMI TX]
+    HCP --> FLT --> DG --> CM --> DTH --> ERR --> Output[HDMI TX]
 ```
 
 ## Performance Summary
@@ -74,6 +79,16 @@ Our quantitative analysis shows that the **2-Stage Hybrid** architecture achieve
 2. **Pass 2 (Conditional Error Diffusion):** Implements a **Floyd-Steinberg** algorithm using a single BRAM line buffer. It diffuses quantization errors across the spatial domain ($7/16, 3/16, 5/16, 1/16$).
 3. **Seamless Error Propagation:** Unconditionally propagates errors from the BRAM even when a pixel bypasses dithering (Value > Threshold). This ensures perfect mathematical energy conservation across high-contrast boundaries.
 4. **RGB Channel Decorrelation:** R, G, and B matrices are spatially offset to push noise from the sensitivity of the Luminance domain into the Chrominance domain.
+
+> [!IMPORTANT]
+> **Gamut Transfer × Dithering Synergy for LED Displays**
+>
+> LED display panels often have non-linear emission in the low-luminance range — the backlight or individual LEDs may not emit below a certain threshold, causing crushed blacks and color inaccuracies. Simply applying a 3×3 gamut matrix is insufficient because the mapped colors may still fall into non-emissive regions.
+>
+> The key insight is the **pipeline order**:
+> **De-Gamma → 3×3 Gamut Matrix → Bayer/Temporal Dither → Error Diffusion**
+>
+> The dithering stage operates *after* the color matrix, on the already-corrected pixel values. This means that even if the target color value is below the LED emission threshold, the dithering injects energy into neighboring pixels and frames that *are* above the threshold. The Floyd-Steinberg error diffusion then redistributes the residual quantization error spatially. The net result is **perceptually accurate color even in regions where the LED hardware cannot directly render the desired luminance level** — effectively "borrowing" emission from nearby pixels and time steps.
 
 ## 📖 Documentation
 - [DESIGN.md](doc/DESIGN.md): Comprehensive system architecture and DDR-to-HDMI pipeline specification.

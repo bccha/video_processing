@@ -13,10 +13,8 @@ module image_filter #(
     // 4: Edge (Gray), 5: Edge (Color lines on black)
     // 6: Emboss (Gray), 7: Sharpen (Color)
     input  wire  [3:0]           filter_mode, 
-    input  wire                  temporal_en,
-    input  wire                  dither_2bit_en,
+    // temporal_en / dither_2bit_en removed: handled by filter_dither in video_pipeline
 
-    
     // Input Video Stream
     input  wire  [DATA_WIDTH-1:0] din,
     input  wire                  hs_in,
@@ -192,18 +190,8 @@ module image_filter #(
         .sharp_b (sharp_b)
     );
 
-    // Dither computations (Mode 8)
-    wire [23:0] dither_rgb;
-    filter_dither #(.DATA_WIDTH(DATA_WIDTH)) u_dither (
-        .clk        (clk),
-        .reset_n    (reset_n),
-        .temporal_en(temporal_en),
-        .dither_2bit_en(dither_2bit_en),
-        .pixel_in   (rgb11),      // 1-clock delayed input
-        .x_coord    (x_cnt),      // Synchronized coordinates
-        .y_coord    (y_cnt),
-        .pixel_out  (dither_rgb)  // 2-clocks internal delay (Total 3-clocks relative to row start)
-    );
+    // (filter_dither is now a separate pipeline stage in video_pipeline, after color_matrix)
+
 
     // ==========================================
     // 4. Center Pixel Delay Match (2 Clocks)
@@ -236,7 +224,7 @@ module image_filter #(
     wire is_edge = (edge_mag > 8'd40); // Threshold
     wire [23:0] color_edge = is_edge ? center_rgb_st2 : 24'd0;
 
-    assign dout = (safe_filter_mode == 4'd8) ? dither_rgb :                                  // Mode 8: Bayer Dithering
+    assign dout = (safe_filter_mode == 4'd8) ? center_rgb_st2 :                                  // Mode 8: placeholder (dither is post-matrix)
                   (safe_filter_mode == 4'd7) ? {sharp_r, sharp_g, sharp_b} :                 // Mode 7: Color Sharpen
                   (safe_filter_mode == 4'd6) ? {emboss_gray, emboss_gray, emboss_gray} :     // Mode 6: Grayscale Emboss
                   (safe_filter_mode == 4'd5) ? color_edge :                                  // Mode 5: Color Edge

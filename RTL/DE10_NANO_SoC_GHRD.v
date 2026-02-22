@@ -118,6 +118,15 @@ module DE10_NANO_SoC_GHRD(
   wire [31:0] hsg_s_readdata;
   wire        hsg_s_readdatavalid;
 
+  // Color Matrix CSR Interface (Exported from Qsys)
+  wire [3:0]  cm_address;
+  wire        cm_read;
+  wire        cm_write;
+  wire [31:0] cm_writedata;
+  wire [31:0] cm_readdata;
+  reg         cm_readdatavalid_r;  // 1-cycle delayed read → readdatavalid
+  always @(posedge fpga_clk_50) cm_readdatavalid_r <= cm_read;
+
   // HDMI I2C Wires
   wire        hdmi_i2c_sda_in;
   wire        hdmi_i2c_scl_in;
@@ -248,7 +257,19 @@ soc_system u0 (
 	  .hdmi_sync_write                       (hsg_s_write),           //                               .write
 	  .hdmi_sync_read                        (hsg_s_read),            //                               .read
 	  .hdmi_sync_byteenable                  (),                      //                               .byteenable (Not used)
-	  .hdmi_sync_debugaccess                 ()                       //                               .debugaccess (Not used)
+	  .hdmi_sync_debugaccess                 (),                      //                               .debugaccess (Not used)
+
+		// Color Matrix CSR (Master Exported)
+	  .color_matrix_waitrequest              (1'b0),                  //                     Waitrequest: Always ready
+	  .color_matrix_readdata                 (cm_readdata),           //                               .readdata
+	  .color_matrix_readdatavalid            (cm_readdatavalid_r),    //                               .readdatavalid (1-cycle delay)
+	  .color_matrix_burstcount               (),                      //                               .burstcount (Not used)
+	  .color_matrix_writedata                (cm_writedata),          //                               .writedata
+	  .color_matrix_address                  (cm_address),            //                               .address
+	  .color_matrix_write                    (cm_write),              //                               .write
+	  .color_matrix_read                     (cm_read),               //                               .read
+	  .color_matrix_byteenable               (),                      //                               .byteenable (Not used)
+	  .color_matrix_debugaccess              ()                        //                               .debugaccess (Not used)
  );
 
 // HDMI Video Pipeline (DMA + FIFO + Sync Gen)
@@ -272,6 +293,13 @@ video_pipeline u_video_pipeline (
     .s_writedata       (hsg_s_writedata),
     .s_readdata        (hsg_s_readdata),
     .s_readdatavalid   (hsg_s_readdatavalid),
+
+    // Color Matrix Avalon-MM Slave (from Nios II via Qsys)
+    .cm_s_address      (cm_address),
+    .cm_s_read         (cm_read),
+    .cm_s_write        (cm_write),
+    .cm_s_writedata    (cm_writedata),
+    .cm_s_readdata     (cm_readdata),
     
     // HDMI Output
     .hdmi_d            (HDMI_TX_D),

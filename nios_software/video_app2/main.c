@@ -14,9 +14,10 @@ void print_menu() {
   printf(" [4] Initialize 540p Color Bar in DDR3\n");
   printf(" [5] Change RTL Test Pattern (Red, Green, Blue, etc.)\n");
   printf(" [6] Gamma Correction Settings (Table, Toggle, Standard)\n");
-  printf(" [7] Image Filter Control (Bypass, Blur, Edge)\n");
+  printf(" [7] Image Filter Control (Bypass, Blur, Edge, De-Gamma)\n");
   printf(" [8] DMA Video Stream Test (Mode 8)\n");
   printf(" [9] DMA Start/Stop Control Submenu\n");
+  printf(" [G] Color Calibration (De-Gamma + 3x3 Gamut Matrix)\n");
   printf(" [C] Load Custom Character Bitmap\n");
   printf(" [r] Reset RTL Pattern Generator\n");
   printf(" [q] Quit\n");
@@ -66,6 +67,10 @@ void run_interactive_menu() {
       break;
     case '9':
       run_dma_control_submenu();
+      break;
+    case 'G':
+    case 'g':
+      run_color_calibration_submenu();
       break;
     case 'C':
     case 'c':

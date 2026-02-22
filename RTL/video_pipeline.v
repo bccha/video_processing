@@ -22,6 +22,14 @@ module video_pipeline (
     output wire [31:0]  s_readdata,
     output wire         s_readdatavalid,
 
+    // Avalon-MM Slave Interface for Color Matrix (from Nios II / ARM Linux)
+    // Addr 0: Control[0]=matrix_en, Addr 1~9: C00~C22 (12-bit signed, x1024)
+    input  wire [3:0]   cm_s_address,
+    input  wire         cm_s_read,
+    input  wire         cm_s_write,
+    input  wire [31:0]  cm_s_writedata,
+    output wire [31:0]  cm_s_readdata,
+
     // HDMI Physical Output Signals
     output wire [23:0]  hdmi_d,
     output wire         hdmi_de,
@@ -158,10 +166,6 @@ module video_pipeline (
     );
 
     // 5. Image Processing Filter (Blur / Edge)
-    // For now, using filter_mode = 0 (Bypass) by default.
-    // To control this from software, we can use an unused register bit in hdmi_sync_gen,
-    // or just wire it to a constant for testing. Let's wire it to SW switches later.
-    // For now, let's tie it to reg_mode[7:4] (bits 4, 5, 6, 7 of the Pattern Mode register).
     wire [3:0] current_filter_mode = reg_mode[7:4]; 
 
     wire [23:0] img_filter_dout;
@@ -176,9 +180,7 @@ module video_pipeline (
         .clk         (clk_hdmi),       // Filter runs on Pixel Clock!
         .reset_n     (reset_n),
         .filter_mode (current_filter_mode),
-        .temporal_en (reg_mode[8]),
-        .dither_2bit_en (reg_mode[9]),
-
+        // temporal_en / dither_2bit_en now handled by filter_dither post color_matrix
         
         // Pixel Input from Sync Gen
         .din         (raw_hdmi_d),
@@ -193,8 +195,117 @@ module video_pipeline (
         .de_out      (img_filter_de)
     );
 
-    // 6. Floyd-Steinberg Error Diffusion Filter
+    // 6. De-Gamma (sRGB -> Linear, ideal gamma 2.2 inverse LUT)
+    // reg_filter_config[1]: degamma_en
+    wire degamma_en = reg_filter_config[1] | cm_matrix_en; // auto-enable when matrix is on
+
+    wire [35:0] degamma_dout;
+    wire        degamma_hs, degamma_vs, degamma_de;
+
+    filter_degamma u_degamma (
+        .clk        (clk_hdmi),
+        .reset_n    (reset_n),
+        .degamma_en (degamma_en),
+        .din        (img_filter_dout),
+        .hs_in      (img_filter_hs),
+        .vs_in      (img_filter_vs),
+        .de_in      (img_filter_de),
+        .dout       (degamma_dout),
+        .hs_out     (degamma_hs),
+        .vs_out     (degamma_vs),
+        .de_out     (degamma_de)
+    );
+
+    // 7. 3x3 Color Gamut Matrix
+    wire [35:0] cm_dout;
+    wire        cm_hs, cm_vs, cm_de;
+    wire        cm_matrix_en; // exposed from filter_color_matrix (pixel clock domain)
+
+    filter_color_matrix u_color_matrix (
+        .clk         (clk_hdmi),
+        .clk_csr     (clk_50),
+        .reset_n     (reset_n),
+        // Avalon-MM Slave
+        .s_address   (cm_s_address),
+        .s_write     (cm_s_write),
+        .s_writedata (cm_s_writedata),
+        .s_read      (cm_s_read),
+        .s_readdata  (cm_s_readdata),
+        // Video In from De-Gamma
+        .din         (degamma_dout),
+        .hs_in       (degamma_hs),
+        .vs_in       (degamma_vs),
+        .de_in       (degamma_de),
+        // Video Out to Gamma
+        .dout        (cm_dout),
+        .hs_out      (cm_hs),
+        .vs_out      (cm_vs),
+        .de_out      (cm_de),
+        .matrix_en_out (cm_matrix_en)
+    );
+
+    // 8. Gamma Re-encoding (Linear -> Display, inverse of degamma)
+    // Correctly placed after the color matrix (which works in linear space)
+    wire gamma_en = reg_filter_config[2] | cm_matrix_en; // auto-enable when matrix is on
+
+    wire [23:0] gamma_dout;
+    wire        gamma_hs, gamma_vs, gamma_de;
+
+    filter_gamma u_gamma (
+        .clk      (clk_hdmi),
+        .reset_n  (reset_n),
+        .gamma_en (gamma_en),
+        .din      (cm_dout),
+        .hs_in    (cm_hs),
+        .vs_in    (cm_vs),
+        .de_in    (cm_de),
+        .dout     (gamma_dout),
+        .hs_out   (gamma_hs),
+        .vs_out   (gamma_vs),
+        .de_out   (gamma_de)
+    );
+
+    // 9. Bayer + Temporal Dither (Post Color-Matrix and Gamma, Pre Error-Diffusion)
+    // Correct position: after gamut correction, before quantization
+    // Pixel coordinates tracked from cm_de/cm_hs/cm_vs
+    reg [11:0] dith_x_cnt;
+    reg [11:0] dith_y_cnt;
+    reg        dith_de_d;
+    always @(posedge clk_hdmi or negedge reset_n) begin
+        if (!reset_n) begin
+            dith_x_cnt <= 0; dith_y_cnt <= 0; dith_de_d <= 0;
+        end else begin
+            dith_de_d <= gamma_de;
+            if (gamma_de)       dith_x_cnt <= dith_x_cnt + 1;
+            else if (!gamma_hs) dith_x_cnt <= 0;
+            if (!gamma_vs)                                   dith_y_cnt <= 0;
+            else if (dith_de_d && !gamma_de)                 dith_y_cnt <= dith_y_cnt + 1;
+        end
+    end
+
+    wire [23:0] dither_dout;
+    wire        dither_hs, dither_vs, dither_de;
+
+    filter_dither #(.DATA_WIDTH(24)) u_post_matrix_dither (
+        .clk            (clk_hdmi),
+        .reset_n        (reset_n),
+        .temporal_en    (reg_mode[8]),
+        .dither_2bit_en (reg_mode[9]),
+        .pixel_in       (gamma_dout),
+        .x_coord        (dith_x_cnt),
+        .y_coord        (dith_y_cnt),
+        .pixel_out      (dither_dout)
+    );
+    // Delay sync signals to match filter_dither 2-clock pipeline
+    delay_line #(.WIDTH(3), .STAGES(2)) u_dith_sync (
+        .clk(clk_hdmi), .reset_n(reset_n),
+        .din({gamma_vs, gamma_hs, gamma_de}),
+        .dout({dither_vs, dither_hs, dither_de})
+    );
+
+    // 9. Floyd-Steinberg Error Diffusion Filter
     wire error_diffusion_en = reg_filter_config[0];
+    wire dither_en          = reg_filter_config[3]; // bit[3]: Global Dither Enable
     wire [7:0] dither_threshold = reg_filter_config[15:8];
 
     filter_error_diffusion #(
@@ -205,11 +316,11 @@ module video_pipeline (
         .error_diffusion_en (error_diffusion_en),
         .dither_threshold   (dither_threshold),
         
-        // Pixel Input from image_filter
-        .din                (img_filter_dout),
-        .hs_in              (img_filter_hs),
-        .vs_in              (img_filter_vs),
-        .de_in              (img_filter_de),
+        // Mux: Choose between Dithered or Gamma-encoded (direct) pixels
+        .din                (dither_en ? dither_dout : gamma_dout),
+        .hs_in              (dither_en ? dither_hs   : gamma_hs),
+        .vs_in              (dither_en ? dither_vs   : gamma_vs),
+        .de_in              (dither_en ? dither_de   : gamma_de),
         
         // Output to Physical HDMI Pins
         .dout               (hdmi_d),

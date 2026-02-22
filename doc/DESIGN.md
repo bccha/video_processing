@@ -16,21 +16,26 @@ graph LR
         SW_Load --> DDR[DDR3 Memory]
     end
 
-    subgraph "FPGA (Logic)"
+    subgraph "FPGA Pixel Pipeline (37.8 MHz)"
         DDR --> AXI[F2H AXI Bridge]
         AXI --> V_DMA[Video DMA Master]
         V_DMA --> FIFO[Video FIFO]
         FIFO --> SGEN[Custom Sync Gen]
-        SGEN --> FLT[Modular Filter]
+        SGEN --> FLT["Image Filter\n(Blur/Edge/Sharpen)"]
+        FLT --> DG["De-Gamma LUT\n(sRGB → Linear)"]
+        DG --> CM["3×3 Gamut Matrix\n(Q2.10 fixed-point)"]
+        CM --> DTH["Bayer + Temporal Dither\n(post-matrix)"] 
+        DTH --> ERR["Floyd-Steinberg\nError Diffusion"]
     end
 
     subgraph "System Control"
         Nios[Nios II Processor]
         Nios --> I2C[I2C Master]
+        Nios --> CM
         I2C -.-> HDMI_Chip[ADV7513 HDMI TX]
     end
 
-    FLT --> HDMI_Chip
+    ERR --> HDMI_Chip
 ```
 
 <img src="./images/design.png" width="50%" alt="System Architecture Diagram">
@@ -48,21 +53,23 @@ graph LR
 - **Peripheral Configuration**: Initializes the ADV7513 HDMI Transmitter via I2C.
 
 ### FPGA Fabric (High-Speed Data Path)
-- **Image Filter Pipeline**: 
-    - **Line Buffers**: Utilizes dual line buffers to maintain 3 rows of pixel data in on-chip SRAM.
-    - **3x3 Windowing**: Generates a spatial window for convolution operations (Blur, Edge, Sharpen, Emboss).
-    - **Point Processing**: Coordinates-based real-time filters.
-    - **2-Stage Hybrid Spatiotemporal Dithering (Mode 8)**:
-        - **Stage 1 (Pass 1): Temporal Ordered Dither**: Applies a 2-bit Bayer noise seed to the LSBs. If the pixel value is above `0x04`, it is bypassed to maintain high-frequency detail.
-        - **Stage 2 (Pass 2): Conditional Error Diffusion**: Implements Floyd-Steinberg diffusion with a user-configurable threshold. 
-        - **Energy Conservation**: Even when a pixel is bypassed (Value > Threshold), errors from neighboring pixels are accumulated and propagated to ensure seamless transitions.
-        - **Architecture**: Operates entirely on-chip using a single 960-word BRAM line buffer (M10K) to eliminate external frame buffer overhead.
+- **Full-Pipeline Color Processing (5-Stage)**:
+    The FPGA implements a fully pipelined color processing chain at 37.8 MHz:
 
-![Hybrid Dithering Pipeline](file:///C:/Users/morer/.gemini/antigravity/brain/179ebeb8-5d95-4a76-a3c2-062e8f98504a/dither_pipeline_flowchart.png)
+    | Stage | Module | Clocks | Description |
+    |-------|--------|--------|-------------|
+    | 1 | `image_filter` | 3 | 3×3 spatial filters (Blur, Edge, Emboss, Sharpen) + line buffers |
+    | 2 | `filter_degamma` | 1 | sRGB → Linear via 256-entry LUT |
+    | 3 | `filter_color_matrix` | 3 | 3×3 gamut transfer, Q2.10 fixed-point, runtime-configurable |
+    | 4 | `filter_dither` | 2 | **Post-matrix** Bayer + Temporal dithering, per-channel decorrelated |
+    | 5 | `filter_error_diffusion` | — | Floyd-Steinberg, 960-word BRAM line buffer |
 
-    - **Split-Screen Support**: Supports a real-time split-screen mode (x < 480) to compare clean (simple truncation) against processed output.
+    > **Why `filter_dither` must come after the gamut matrix for LED displays:**
+    > LED panels have a minimum emission threshold — pixels below that level produce no light, introducing non-linearity in the low-luminance region where gamut errors are largest. Placing `filter_dither` **after** the gamut matrix means dithering noise is injected into *already-corrected* values. Even if the target color falls below the LED emission floor, dithering borrows energy from neighboring pixels and frames that *are* above threshold. `filter_error_diffusion` then redistributes residual quantization error spatially. The result is **perceptually accurate gamut reproduction even on panels that cannot directly render low-luminance colors.**
 
-    - **Parallel Processing**: Computes all filters (Bypass, Blur, Edge, Emboss, Sharpen, Dither) in parallel, with a perfectly matched 3-clock pipeline delay.
+    - **Split-Screen Support**: Real-time split-screen (x < 480) to compare truncated vs. dithered output.
+    - **Parallel Filter Computation**: Blur, Edge, Emboss, Sharpen computed in parallel with matched 3-clock pipeline.
+
 - **Video DMA Master**: Fetches pixel data from DDR3 via Avalon-MM.
 
 ---

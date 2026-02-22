@@ -297,7 +297,9 @@ void run_image_filter_submenu() {
     int dither_2bit_en = (current_mode >> 9) & 0x01;
     uint32_t filter_cfg = IORD_32DIRECT(HDMI_SYNC_GEN_BASE | CACHE_BYPASS_MASK,
                                         REG_FILTER_CONFIG);
-    int err_diff_en = filter_cfg & 0x01;
+    int err_diff_en = filter_cfg & FILTER_CFG_ERR_DIFF_EN;
+    int degamma_en = (filter_cfg & FILTER_CFG_DEGAMMA_EN) ? 1 : 0;
+    int dither_en = (filter_cfg & FILTER_CFG_DITHER_EN) ? 1 : 0;
     int err_diff_th = (filter_cfg >> 8) & 0xFF;
 
     printf("\n--- Image Filter Control ---\n");
@@ -309,13 +311,15 @@ void run_image_filter_submenu() {
     printf(" [5] Edge (Color)\n");
     printf(" [6] Emboss (Grayscale)\n");
     printf(" [7] Sharpen (Color)\n");
-    printf(" [8] Bayer Dithering (Split Screen)\n");
+    printf(" [8] Toggle Bayer Dithering (Current: %s)\n",
+           dither_en ? "ON (Split)" : "OFF");
     printf(" [9] Toggle Temporal Dithering (Current: %s)\n",
            temporal_en ? "ON" : "OFF");
     printf(" [a] Toggle 2-Bit Dither Mode (Current: %s)\n",
            dither_2bit_en ? "2-Bit" : "4-Bit");
     printf(" [c] Toggle Error Diffusion (Current: %s)\n",
            err_diff_en ? "ON" : "OFF");
+    printf(" [d] Toggle De-Gamma (Current: %s)\n", degamma_en ? "ON" : "OFF");
     printf(" [t] Set Dither Threshold (Current: 0x%02X)\n", err_diff_th);
     printf(" [b] Return to main menu\n");
     printf("Select filter mode: ");
@@ -326,7 +330,7 @@ void run_image_filter_submenu() {
     }
     printf("%c\n", choice);
 
-    if (choice >= '0' && choice <= '8') {
+    if (choice >= '0' && choice <= '7') {
       uint32_t filter_val = choice - '0';
       // Read current mode, clear bits [7:4], set new mode, and write back
       current_mode = IORD_32DIRECT(HDMI_SYNC_GEN_BASE | CACHE_BYPASS_MASK,
@@ -335,6 +339,13 @@ void run_image_filter_submenu() {
       IOWR_32DIRECT(HDMI_SYNC_GEN_BASE | CACHE_BYPASS_MASK, REG_PATTERN_MODE,
                     current_mode);
       printf(">> Filter Mode set to %d\n", filter_val);
+    } else if (choice == '8') {
+      filter_cfg ^= FILTER_CFG_DITHER_EN;
+      IOWR_32DIRECT(HDMI_SYNC_GEN_BASE | CACHE_BYPASS_MASK, REG_FILTER_CONFIG,
+                    filter_cfg);
+      printf(">> Bayer Dithering %s\n", (filter_cfg & FILTER_CFG_DITHER_EN)
+                                            ? "Enabled (Split Screen)"
+                                            : "Disabled");
     } else if (choice == '9') {
       current_mode = IORD_32DIRECT(HDMI_SYNC_GEN_BASE | CACHE_BYPASS_MASK,
                                    REG_PATTERN_MODE);
@@ -352,11 +363,17 @@ void run_image_filter_submenu() {
       printf(">> Dither Mode set to %s\n",
              (current_mode & (1 << 9)) ? "2-Bit" : "4-Bit");
     } else if (choice == 'c' || choice == 'C') {
-      filter_cfg ^= 0x01;
+      filter_cfg ^= FILTER_CFG_ERR_DIFF_EN;
       IOWR_32DIRECT(HDMI_SYNC_GEN_BASE | CACHE_BYPASS_MASK, REG_FILTER_CONFIG,
                     filter_cfg);
       printf(">> Error Diffusion %s\n",
-             (filter_cfg & 0x01) ? "Enabled" : "Disabled");
+             (filter_cfg & FILTER_CFG_ERR_DIFF_EN) ? "Enabled" : "Disabled");
+    } else if (choice == 'd' || choice == 'D') {
+      filter_cfg ^= FILTER_CFG_DEGAMMA_EN;
+      IOWR_32DIRECT(HDMI_SYNC_GEN_BASE | CACHE_BYPASS_MASK, REG_FILTER_CONFIG,
+                    filter_cfg);
+      printf(">> De-Gamma %s\n",
+             (filter_cfg & FILTER_CFG_DEGAMMA_EN) ? "Enabled" : "Disabled");
     } else if (choice == 't' || choice == 'T') {
       printf("Enter threshold (Hex 00-FF): ");
       char c1 = get_char_polled();
@@ -386,6 +403,135 @@ void run_image_filter_submenu() {
       return;
     } else {
       printf(">> Invalid selection.\n");
+    }
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Color Calibration Submenu (3x3 Gamut Matrix + De-Gamma)
+// ---------------------------------------------------------------------------
+void run_color_calibration_submenu() {
+  while (1) {
+    uint32_t cm_ctrl =
+        IORD_32DIRECT(COLOR_MATRIX_BASE | CACHE_BYPASS_MASK, CM_REG_CTRL);
+    uint32_t filter_cfg = IORD_32DIRECT(HDMI_SYNC_GEN_BASE | CACHE_BYPASS_MASK,
+                                        REG_FILTER_CONFIG);
+    int matrix_en = cm_ctrl & 0x01;
+    int degamma_en = (filter_cfg >> 1) & 0x01;
+
+    printf("\n--- Color Calibration (Gamut Matrix) ---\n");
+    printf(" Status: De-Gamma [%s]  Color Matrix [%s]\n",
+           degamma_en ? "ON" : "OFF", matrix_en ? "ON" : "OFF");
+    printf(" [1] Toggle De-Gamma (ideal sRGB inverse, gamma 2.2)\n");
+    printf(" [2] Toggle Color Matrix Enable\n");
+    printf(" [3] Load Identity Matrix (no color shift)\n");
+    printf(" [4] Load CALIBRATION.md Example (Wide Gamut -> sRGB D65)\n");
+    printf(" [5] Narrow Gamut: 50%% Saturation (sRGB half-gamut)\n");
+    printf(" [6] Load Custom Matrix (9 coefficients)\n");
+    printf(" [b] Back to Main Menu\n");
+    printf("Enter choice: ");
+
+    char c = get_char_polled();
+    printf("%c\n", c);
+
+    if (c == 'b' || c == 'B')
+      break;
+
+    if (c == '1') {
+      filter_cfg ^= FILTER_CFG_DEGAMMA_EN;
+      IOWR_32DIRECT(HDMI_SYNC_GEN_BASE | CACHE_BYPASS_MASK, REG_FILTER_CONFIG,
+                    filter_cfg);
+      printf(">> De-Gamma %s\n",
+             (filter_cfg & FILTER_CFG_DEGAMMA_EN) ? "Enabled" : "Disabled");
+
+    } else if (c == '2') {
+      cm_ctrl ^= 0x01;
+      IOWR_32DIRECT(COLOR_MATRIX_BASE | CACHE_BYPASS_MASK, CM_REG_CTRL,
+                    cm_ctrl);
+      printf(">> Color Matrix %s\n", (cm_ctrl & 0x01) ? "Enabled" : "Disabled");
+
+    } else if (c == '3') {
+      // Identity: C00=C11=C22=1024, off-diagonal=0
+      IOWR_32DIRECT(COLOR_MATRIX_BASE | CACHE_BYPASS_MASK, CM_REG_C00, 1024);
+      IOWR_32DIRECT(COLOR_MATRIX_BASE | CACHE_BYPASS_MASK, CM_REG_C01, 0);
+      IOWR_32DIRECT(COLOR_MATRIX_BASE | CACHE_BYPASS_MASK, CM_REG_C02, 0);
+      IOWR_32DIRECT(COLOR_MATRIX_BASE | CACHE_BYPASS_MASK, CM_REG_C10, 0);
+      IOWR_32DIRECT(COLOR_MATRIX_BASE | CACHE_BYPASS_MASK, CM_REG_C11, 1024);
+      IOWR_32DIRECT(COLOR_MATRIX_BASE | CACHE_BYPASS_MASK, CM_REG_C12, 0);
+      IOWR_32DIRECT(COLOR_MATRIX_BASE | CACHE_BYPASS_MASK, CM_REG_C20, 0);
+      IOWR_32DIRECT(COLOR_MATRIX_BASE | CACHE_BYPASS_MASK, CM_REG_C21, 0);
+      IOWR_32DIRECT(COLOR_MATRIX_BASE | CACHE_BYPASS_MASK, CM_REG_C22, 1024);
+      printf(">> Identity Matrix loaded.\n");
+
+    } else if (c == '4') {
+      // CALIBRATION.md example: Wide Gamut Native -> sRGB D65
+      // M = [[923,192,31],[44,970,11],[7,18,706]] / 1024
+      IOWR_32DIRECT(COLOR_MATRIX_BASE | CACHE_BYPASS_MASK, CM_REG_C00, 923);
+      IOWR_32DIRECT(COLOR_MATRIX_BASE | CACHE_BYPASS_MASK, CM_REG_C01, 192);
+      IOWR_32DIRECT(COLOR_MATRIX_BASE | CACHE_BYPASS_MASK, CM_REG_C02, 31);
+      IOWR_32DIRECT(COLOR_MATRIX_BASE | CACHE_BYPASS_MASK, CM_REG_C10, 44);
+      IOWR_32DIRECT(COLOR_MATRIX_BASE | CACHE_BYPASS_MASK, CM_REG_C11, 970);
+      IOWR_32DIRECT(COLOR_MATRIX_BASE | CACHE_BYPASS_MASK, CM_REG_C12, 11);
+      IOWR_32DIRECT(COLOR_MATRIX_BASE | CACHE_BYPASS_MASK, CM_REG_C20, 7);
+      IOWR_32DIRECT(COLOR_MATRIX_BASE | CACHE_BYPASS_MASK, CM_REG_C21, 18);
+      IOWR_32DIRECT(COLOR_MATRIX_BASE | CACHE_BYPASS_MASK, CM_REG_C22, 706);
+      printf(">> Wide Gamut -> sRGB D65 matrix loaded.\n");
+      printf("   (Tip: Enable Color Matrix [2] to apply)\n");
+
+    } else if (c == '5') {
+      // 50% Saturation: mix 50% identity + 50% BT.709 luma
+      // R_out = 0.6063R + 0.3576G + 0.0361B  (rows sum to 1024, white
+      // preserved) G_out = 0.1063R + 0.8576G + 0.0361B B_out = 0.1063R +
+      // 0.3576G + 0.5361B
+      IOWR_32DIRECT(COLOR_MATRIX_BASE | CACHE_BYPASS_MASK, CM_REG_C00, 621);
+      IOWR_32DIRECT(COLOR_MATRIX_BASE | CACHE_BYPASS_MASK, CM_REG_C01, 366);
+      IOWR_32DIRECT(COLOR_MATRIX_BASE | CACHE_BYPASS_MASK, CM_REG_C02, 37);
+      IOWR_32DIRECT(COLOR_MATRIX_BASE | CACHE_BYPASS_MASK, CM_REG_C10, 109);
+      IOWR_32DIRECT(COLOR_MATRIX_BASE | CACHE_BYPASS_MASK, CM_REG_C11, 878);
+      IOWR_32DIRECT(COLOR_MATRIX_BASE | CACHE_BYPASS_MASK, CM_REG_C12, 37);
+      IOWR_32DIRECT(COLOR_MATRIX_BASE | CACHE_BYPASS_MASK, CM_REG_C20, 109);
+      IOWR_32DIRECT(COLOR_MATRIX_BASE | CACHE_BYPASS_MASK, CM_REG_C21, 366);
+      IOWR_32DIRECT(COLOR_MATRIX_BASE | CACHE_BYPASS_MASK, CM_REG_C22, 549);
+      printf(">> 50%% Saturation (half sRGB gamut) loaded. Colors look washed "
+             "out.\n");
+      printf("   (Tip: Enable Color Matrix [2] to apply)\n");
+
+    } else if (c == '6') {
+      // Custom 9 coefficients (12-bit signed, x1024)
+      // e.g. C00=1024 means multiply R_in by 1.0
+      int coeff[9];
+      const char *names[] = {"C00", "C01", "C02", "C10", "C11",
+                             "C12", "C20", "C21", "C22"};
+      for (int i = 0; i < 9; i++) {
+        printf("  %s (signed int, x1024, e.g. 1024=1.0): ", names[i]);
+        // Simple decimal input via polled chars
+        char buf[8];
+        int neg = 0, val = 0, idx = 0;
+        char ch;
+        while (1) {
+          ch = get_char_polled();
+          if (ch == '-' && idx == 0) {
+            neg = 1;
+            printf("-");
+          } else if (ch >= '0' && ch <= '9' && idx < 6) {
+            buf[idx++] = ch;
+            printf("%c", ch);
+            val = val * 10 + (ch - '0');
+          } else if (ch == '\r' || ch == '\n') {
+            break;
+          }
+        }
+        printf("\n");
+        coeff[i] = neg ? -val : val;
+      }
+      uint32_t cm_addrs[] = {CM_REG_C00, CM_REG_C01, CM_REG_C02,
+                             CM_REG_C10, CM_REG_C11, CM_REG_C12,
+                             CM_REG_C20, CM_REG_C21, CM_REG_C22};
+      for (int i = 0; i < 9; i++) {
+        IOWR_32DIRECT(COLOR_MATRIX_BASE | CACHE_BYPASS_MASK, cm_addrs[i],
+                      (uint32_t)(coeff[i] & 0xFFF));
+      }
+      printf(">> Custom matrix written.\n");
     }
   }
 }

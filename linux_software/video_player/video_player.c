@@ -82,6 +82,22 @@ int kbhit() {
 #define REG_PATTERN_MODE 0
 #define REG_GLOBAL_CTRL (1 * 4)
 #define REG_FRAME_PTR (6 * 4)
+#define REG_FILTER_CONFIG (7 * 4)
+
+// filter_config bit fields (match FILTER_CFG_* in hdmi_control.h)
+#define FILTER_CFG_ERR_DIFF_EN (1 << 0)
+#define FILTER_CFG_DEGAMMA_EN (1 << 1)
+#define FILTER_CFG_DITHER_EN (1 << 3)
+
+// Color Matrix slave offset in the CSR region
+// system.h: COLOR_MATRIX_BASE=0x20200, LW bridge offset = 0x20200 - 0x10000 =
+// 0x10200
+#define COLOR_MATRIX_OFFSET 0x00010200
+// Color Matrix register offsets
+#define CM_REG_CTRL (0 * 4)
+#define CM_REG_C00 (1 * 4)
+#define CM_REG_C11 (5 * 4)
+#define CM_REG_C22 (9 * 4)
 
 void *map_physical_memory(off_t base, size_t span) {
   int fd = open("/dev/mem", O_RDWR | O_SYNC);
@@ -101,23 +117,45 @@ void *map_physical_memory(off_t base, size_t span) {
 }
 
 int handle_keyboard_input(volatile uint32_t *hdmi_csr,
-                          uint32_t *current_reg_mode, int *is_paused,
-                          int target_fps, struct timespec *start_play_time) {
+                          volatile uint32_t *cm_csr, uint32_t *current_reg_mode,
+                          int *is_paused, int target_fps,
+                          struct timespec *start_play_time) {
   // Handle Keyboard Input via Non-blocking Read on /dev/tty
   char c = 0;
   if (kbhit() && read(tty_fd, &c, 1) == 1) {
-    if (c >= '0' && c <= '8') {
+    if (c >= '0' && c <= '7') {
       uint32_t filter_val = c - '0';
       // Clear bits [7:4] (4 bits) and set new filter mode
       *current_reg_mode = (*current_reg_mode & ~(0xF << 4)) | (filter_val << 4);
       *(hdmi_csr + (REG_PATTERN_MODE / 4)) = *current_reg_mode;
       printf("\r[FILTER] Mode changed to %d                     \n",
              filter_val);
+    } else if (c == '8') {
+      // Toggle Dither (reg_filter_config bit[3])
+      uint32_t fcfg = *(hdmi_csr + (REG_FILTER_CONFIG / 4));
+      fcfg ^= FILTER_CFG_DITHER_EN;
+      *(hdmi_csr + (REG_FILTER_CONFIG / 4)) = fcfg;
+      printf("\r[FILTER] Bayer Dithering %s                  \n",
+             (fcfg & FILTER_CFG_DITHER_EN) ? "Enabled (Split)" : "Disabled");
     } else if (c == '9') {
       *current_reg_mode ^= (1 << 8); // Toggle temporal dither enable
       *(hdmi_csr + (REG_PATTERN_MODE / 4)) = *current_reg_mode;
       printf("\r[FILTER] Temporal Dithering %s                 \n",
              (*current_reg_mode & (1 << 8)) ? "Enabled" : "Disabled");
+    } else if (c == 'd' || c == 'D') {
+      // Toggle De-Gamma (reg_filter_config bit[1])
+      uint32_t fcfg = *(hdmi_csr + (REG_FILTER_CONFIG / 4));
+      fcfg ^= FILTER_CFG_DEGAMMA_EN;
+      *(hdmi_csr + (REG_FILTER_CONFIG / 4)) = fcfg;
+      printf("\r[CAL] De-Gamma %s                              \n",
+             (fcfg & FILTER_CFG_DEGAMMA_EN) ? "Enabled" : "Disabled");
+    } else if (c == 'm' || c == 'M') {
+      // Toggle Color Matrix enable (cm_csr addr 0 bit[0])
+      uint32_t cm_ctrl = *(cm_csr + (CM_REG_CTRL / 4));
+      cm_ctrl ^= 0x01;
+      *(cm_csr + (CM_REG_CTRL / 4)) = cm_ctrl;
+      printf("\r[CAL] Color Matrix %s                          \n",
+             (cm_ctrl & 0x01) ? "Enabled" : "Disabled");
     } else if (c == 's' || c == 'S') {
       *is_paused = !*is_paused;
       if (*is_paused) {
@@ -176,6 +214,8 @@ int main(int argc, char **argv) {
   void *csr_base = map_physical_memory(CSR_BASE_PHY, CSR_SPAN);
   volatile uint32_t *hdmi_csr =
       (volatile uint32_t *)((uint8_t *)csr_base + HDMI_SYNC_GEN_OFFSET);
+  volatile uint32_t *cm_csr =
+      (volatile uint32_t *)((uint8_t *)csr_base + COLOR_MATRIX_OFFSET);
 
   // 3. Load Phase
   printf(">>> START LOADING (Please Wait) <<<\n");
@@ -248,13 +288,15 @@ int main(int argc, char **argv) {
   printf("  [5] Edge (Color)\n");
   printf("  [6] Emboss (Grayscale)\n");
   printf("  [7] Sharpen (Color)\n");
-  printf("  [8] Bayer Dithering (Split Screen)\n");
+  printf("  [8] Toggle Bayer Dithering (Split Screen)\n");
   printf("  [9] Toggle Temporal Dithering\n");
+  printf("  [d] Toggle De-Gamma (sRGB inverse)\n");
+  printf("  [m] Toggle Color Matrix\n");
 
   uint32_t current_reg_mode = 8; // DMA Stream is 8 in lower nibble
 
   while (1) {
-    if (handle_keyboard_input(hdmi_csr, &current_reg_mode, &is_paused,
+    if (handle_keyboard_input(hdmi_csr, cm_csr, &current_reg_mode, &is_paused,
                               target_fps, &start_play_time)) {
       break;
     }
