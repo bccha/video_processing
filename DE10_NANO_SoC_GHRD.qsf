@@ -473,6 +473,11 @@ set_global_assignment -name USE_DLL_FREQUENCY_FOR_DQS_DELAY_CHAIN ON
 set_global_assignment -name UNIPHY_SEQUENCER_DQS_CONFIG_ENABLE ON
 set_global_assignment -name OPTIMIZE_MULTI_CORNER_TIMING ON
 set_global_assignment -name ECO_REGENERATE_REPORT ON
+set_global_assignment -name HEX_FILE RTL/gamma_lut.hex
+set_global_assignment -name HEX_FILE RTL/degamma_lut.hex
+set_global_assignment -name VERILOG_FILE RTL/filter_gamma.v
+set_global_assignment -name VERILOG_FILE RTL/filter_degamma.v
+set_global_assignment -name VERILOG_FILE RTL/filter_color_matrix.v
 set_global_assignment -name VERILOG_FILE RTL/filter_dither.v
 set_global_assignment -name VERILOG_FILE RTL/filter_error_diffusion.v
 set_global_assignment -name VERILOG_FILE RTL/filter_sharpen.v
