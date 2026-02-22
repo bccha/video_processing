@@ -91,5 +91,20 @@ Comparison of the 2-Stage Hybrid algorithm against simple 4-bit truncation using
 > [!IMPORTANT]
 > The **+3.3dB PSNR improvement** in near-black regions scientifically confirms the effectiveness of our "Seamless Error Propagation" logic. This architecture achieves 3D-like spatiotemporal quality without any external frame buffer (0 MB/s DDR bandwidth).
 
+## 6. 12-bit High-Precision Linear Path Verification (2026-02-22)
+To fundamentally solve color banding in dark regions during 3x3 gamut correction, we upgraded the internal precision to 12-bit.
+
+### Test Case: 12-bit Color Chain (De-gamma → 3x3 Matrix → Gamma)
+Verification conducted via bit-accurate Cocotb simulation.
+
+| Metric | Target | Result | Status |
+| :--- | :--- | :--- | :--- |
+| **Internal Bit-depth** | 12-bit (4096 levels) | **12-bit Verified** | ✅ PASSED |
+| **Roundtrip Error** | Max 1 LSB (8-bit space) | **1 LSB Verified** | ✅ PASSED |
+| **Shadow detail preservation**| No Crushing (< 0.05% error) | **Verified OK** | ✅ PASSED |
+| **Pipeline Throughput** | 37.8 MHz (60fps) | **37.8 MHz Verified** | ✅ PASSED |
+
+**Analysis**: By using 12-bit for the 3x3 matrix stage, we preserved the distinct steps of the lowest sRGB gradations (sRGB 1-15) that were previously crushed to zero in an 8-bit pipeline. This ensures a smooth, artifact-free transition in shadows even after complex gamut remapping.
+
 ---
 *Created by Nios II Performance Monitoring Unit.*

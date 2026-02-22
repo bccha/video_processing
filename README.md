@@ -11,6 +11,7 @@ By utilizing the **FPGA-to-HPS AXI Bridge**, we bypass the common preloader/brid
 - **Stable Coherency**: Implemented proper cache management (`alt_dcache_flush_all`) for reliable data shared between Nios II and hardware masters.
 
 - **Advanced HDMI Control**: Implemented sophisticated gamma correction (sRGB, Inverse Gamma 2.2) and custom character tile-rendering.
+- **12-bit High-Precision Pipeline**: Upgraded internal bit-depth of De-gamma, 3×3 Matrix, and Gamma stages to **12-bit (4096 levels)**. This prevents "Dark Crushing" and banding artifacts by preserving subtle shadow details that are typically lost in 8-bit linear space.
 - **Real-time Image Filtering**: Integrated a modular filter pipeline (Blur, Edge, Emboss, Sharpen) achieving 60fps at 540p.
 - **Advanced Dithering System**: Implemented True Ordered Dithering with 2D Temporal Scrambling and RGB Channel Decorrelation to eliminate 4-bit color banding.
 - **3×3 Gamut Transfer Matrix**: Added a runtime-configurable 3×3 color matrix in Q2.10 fixed-point, enabling sRGB gamut mapping, saturation control, and display calibration. Combined with the dithering stage, it enables **perceptually accurate color reproduction even on LED panels where low-luminance emission is non-linear**.
@@ -26,8 +27,9 @@ graph LR
         ASE["Address Span Extender"]
         HCP["HDMI Sync Gen"]
         FLT["Image Filter (Modular)"]
-        DG["De-Gamma LUT"]
-        CM["3×3 Gamut Matrix\n(Q2.10, runtime)"] 
+        DG["De-Gamma LUT\n(8→12 bit)"]
+        CM["3×3 Gamut Matrix\n(12-bit, runtime)"] 
+        GMA["Gamma Re-encode\n(12→8 bit)"]
         DTH["Bayer+Temporal Dither"]
         ERR["Floyd-Steinberg\nError Diffusion"]
     end

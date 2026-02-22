@@ -58,17 +58,23 @@ graph LR
 
     | Stage | Module | Clocks | Description |
     |-------|--------|--------|-------------|
-    | 1 | `image_filter` | 3 | 3×3 spatial filters (Blur, Edge, Emboss, Sharpen) + line buffers |
-    | 2 | `filter_degamma` | 1 | sRGB → Linear via 256-entry LUT |
-    | 3 | `filter_color_matrix` | 3 | 3×3 gamut transfer, Q2.10 fixed-point, runtime-configurable |
-    | 4 | `filter_dither` | 2 | **Post-matrix** Bayer + Temporal dithering, per-channel decorrelated |
-    | 5 | `filter_error_diffusion` | — | Floyd-Steinberg, 960-word BRAM line buffer |
+    | 1 | `image_filter` | 3 | 3×3 spatial filters (8-bit I/O) |
+    | 2 | `filter_degamma` | 1 | **[8-to-12 bit]** sRGB → Linear via 256×12-bit LUT |
+    | 3 | `filter_color_matrix` | 3 | **[12-bit I/O]** 3×3 gamut transfer, Q2.10, high-precision |
+    | 4 | `filter_gamma` | 1 | **[12-to-8 bit]** Linear → Display via 4096×8-bit LUT |
+    | 5 | `filter_dither` | 2 | **Post-matrix** Bayer + Temporal dithering (8-bit) |
+    | 6 | `filter_error_diffusion` | — | Floyd-Steinberg, 960-word BRAM line buffer |
 
     > **Why `filter_dither` must come after the gamut matrix for LED displays:**
     > LED panels have a minimum emission threshold — pixels below that level produce no light, introducing non-linearity in the low-luminance region where gamut errors are largest. Placing `filter_dither` **after** the gamut matrix means dithering noise is injected into *already-corrected* values. Even if the target color falls below the LED emission floor, dithering borrows energy from neighboring pixels and frames that *are* above threshold. `filter_error_diffusion` then redistributes residual quantization error spatially. The result is **perceptually accurate gamut reproduction even on panels that cannot directly render low-luminance colors.**
 
     - **Split-Screen Support**: Real-time split-screen (x < 480) to compare truncated vs. dithered output.
     - **Parallel Filter Computation**: Blur, Edge, Emboss, Sharpen computed in parallel with matched 3-clock pipeline.
+
+- **High-Precision 12-bit Internal Path**:
+    To prevent **Low-Gray Banding (Crushing Black)**, the pipeline uses 12-bit precision for linear-space operations.
+    - **Why 12-bit?**: In the sRGB de-gamma process, many dark colors (e.g., 0-15) map to nearly zero in 8-bit linear space ($15/255^{2.2} \approx 0.002 \rightarrow 0/255$), losing details before the matrix stage. 
+    - **12-bit Benefit**: By expanding to 4096 levels, we preserve the distinct steps of the lowest sRGB gradations ($15/255^{2.2} \times 4095 \approx 8$), ensuring that the 3x3 color matrix can process subtle shadow details without quantization artifacts.
 
 - **Video DMA Master**: Fetches pixel data from DDR3 via Avalon-MM.
 
