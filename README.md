@@ -82,6 +82,7 @@ Our quantitative analysis shows that the **2-Stage Hybrid** architecture achieve
 - [BURST_DMA.md](doc/BURST_DMA.md): Detailed debugging history, performance benchmarks, and memory protection strategies.
 - [STUDY.md](doc/STUDY.md): Technical study notes on HDMI timing, ADV7513, and video processing.
 - [RESULT.md](doc/RESULT.md): Official performance benchmark results and hardware status logs.
+- [CALIBRATION.md](doc/CALIBRATION.md) / [CAL_eng.md](doc/CAL_eng.md): Theory and methodology for 3x3 Gamut adjustment and Display calibration.
 - [TODO.md](doc/TODO.md): Project roadmap and remaining tasks.
 - [soc_system.qsys](./soc_system.qsys): Platform Designer (Qsys) hardware configuration.
 - [nios_software/](./nios_software/): Nios II benchmark and verification source code.
