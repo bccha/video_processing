@@ -448,13 +448,14 @@ While the logic computationally demands outputting Green at a magnitude of '5', 
 * **Turn-on Delay and Parasitic Capacitance:** When a PWM signal triggers high, intrinsic electrical resistance and capacitive traits dictating the PCB layout stipulate a measurable chronometric delay preceding actual photon emission from the LED diode.
 * **Ignition Failure:** Assume the driver IC demands a Minimum On-Time equivalent to a data parameter of '10'. The matrix-calculated Green '5' and Blue '2' micro-pulses brutally fail to overcome the physical hardware delay; the commands are entirely ignored, failing to achieve diode ignition. The painstakingly aligned target color coordinate violently collapses, and delicate low-light shadows are irreversibly destroyed—manifesting as a malignant systemic **Black Crush**.
 
-### 🛡️ 3. The Display Savior: Bit-Split Dithering
-Precisely at this juncture, positioned as the terminal guardian of the hardware pipeline, the **'Dithering IP'** intervenes.
-The logical Dithering block consciously intercepts the un-ignitable microscopic Green '5' data and forcefully prevents the system from blindly spamming futile micro-pulses destined for physical failure.
+### 🛡️ 3. The Display Savior: Low-Gray Energy Accumulator
+At this crucial juncture, at the terminal end of the pipeline, the **'Dithering IP'** intervenes. This logic reinvents classic error diffusion for the specific physical characteristics of display hardware.
 
-1. **Energy Accumulation and Rollover (Noise Injection):** The Dither construct mathematically sequesters the stranded fractional energy ('5') incapable of driving the hardware. It systematically transfers and accumulates this energy spatially across neighboring pixels or temporally into successive visual frames.
-2. **Executing Viable Pulses:** Once the algorithmically accumulated energy transcends the physical actuation threshold of the specific IC (e.g., reaching '16', universally standardized as 1 LSB within an 8-bit pipeline), the logic decisively fires a singular, robust PWM pulse successfully triggering an undeniable LED flash.
-3. **Optical Cortex Illusion (Optical Integration):** Functioning flawlessly, the human optical-neural pathway spatially and temporally integrates the rhythmic macro-flashing, ultimately and perfectly hallucinating the sensation: **"A continuous, microscopically faint Green light (5) is actively burning."**
+1. **Energy Accumulation:** If the sum of the input pixel and incoming error fails to reach the Threshold (`0x10`), the logic refuses to fire a futile micro-pulse and forces the output to `0`. Instead, the entirety of that microscopic energy (`sum`) is preserved and propagated to neighboring pixels.
+2. **Ignition (Firing):** As this energy "rolls" across the screen, accumulating like a snowball, it eventually breaches the `0x10` limit. At this precise moment, the hardware fires a robust, valid PWM pulse (**Output = Sum**) that the driver can successfully ignite. Since all accumulated energy is successfully "spent" as light, the outgoing error is reset to `0`.
+3. **The Result:** The human visual system integrates these sparse, seemingly irregular flashes over space and time, correctly perceiving **"smooth, deep low-light gradations"** that would otherwise be lost.
+
+This strategy acts as an **Intelligent Image Engine**: it halts error propagation in bright regions to maintain 100% original sharpness, while using 'Energy Concentration' in dark regions to surgically eliminate black crush.
 
 ### 💡 Conclusion: Culmination of Perfect Causality
 1. The **3x3 Matrix** executes mathematically infallible, high-precision (16-bit) color transposition arrays.

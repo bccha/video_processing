@@ -77,10 +77,12 @@ To achieve the best possible quality while respecting hardware limits (zero exte
 1. **Pass 1 (Temporal Ordered Dither)**: 
    - Applies a 2-bit temporally scrambled Bayer matrix strictly to ultra-dark areas (`< 0x04`). 
    - This injects high-frequency dynamic noise (film grain) that breaks up static spatial structures.
-2. **Pass 2 (Conditional Error Diffusion)**: 
-   - Implements a **Floyd-Steinberg** algorithm using a single BRAM line buffer.
-   - It calculates the exact mathematical quantization error and diffuses it to neighboring pixels ($7/16, 3/16, 5/16, 1/16$).
-   - **Seamless Error Propagation**: Even when a pixel is bypassed (Value > Threshold), errors from neighboring pixels are still accumulated and propagated, ensuring perfect energy conservation across boundaries.
+2. **Pass 2 (Low-Gray Energy Accumulator)**: 
+   - Historically known as Error Diffusion, but refined for physical hardware constraints. 
+   - Instead of the classic Floyd-Steinberg approach which adds noise everywhere, this operates as a **conditional energy harvester**.
+   - **Step 1: Energy Accumulation**: When `(Input + Incoming Error) < Hardware_Threshold`, the output is suppressed to `0x00`. The entire energy value is "harvested" and propagated to neighbors.
+   - **Step 2: Ignition (Firing)**: When the accumulated energy hits the threshold (e.g., `0x10`), it "fires" a valid PWM pulse by outputting the accumulated value. The error is then reset to `0`, preventing unnecessary noise in brighter regions.
+   - **The Result**: A perfectly clean output in bright areas combined with a "Milky Way" of tiny, bright dots in the ultra-dark regions that the human eye integrates as smooth, deep gradients.
 
 ### Visual Comparison
 

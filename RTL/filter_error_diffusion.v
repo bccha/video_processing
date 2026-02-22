@@ -172,41 +172,34 @@ module filter_error_diffusion #(
                 new_err_r = 0; new_err_g = 0; new_err_b = 0;
             end else begin
                 // Right Screen: Full Conditional Error Diffusion
-                // R Channel
-                if (p_d2[23:16] >= dither_threshold) begin
-                     out_r = p_d2[23:16]; // Bypass Original
-                end else if (val_r[9]) begin // Negative
-                     out_r = 8'd0;
-                end else if (val_r > 255) begin
-                     out_r = 8'd240;
+                // R Channel - Energy Accumulator Mode
+                if (val_r >= $signed({2'b0, dither_threshold})) begin
+                    // Case 1: Threshold reached - Fire LED
+                    out_r = (val_r > 10'sd255) ? 8'd255 : val_r[7:0]; 
+                    new_err_r = 0; // Energy spent, reset error
                 end else begin
-                     out_r = val_r[7:0] & 8'hF0; // Dithered & Truncated
+                    // Case 2: Below Threshold (Dead Zone) - Accumulate Energy
+                    out_r = 8'd0;
+                    new_err_r = val_r[8:0]; // Propagate full energy to next pixel
                 end
-                new_err_r = val_r - $signed({2'b0, out_r});
 
                 // G Channel
-                if (p_d2[15:8] >= dither_threshold) begin
-                     out_g = p_d2[15:8]; // Bypass Original
-                end else if (val_g[9]) begin
-                     out_g = 8'd0;
-                end else if (val_g > 255) begin
-                     out_g = 8'd240;
+                if (val_g >= $signed({2'b0, dither_threshold})) begin
+                    out_g = (val_g > 10'sd255) ? 8'd255 : val_g[7:0];
+                    new_err_g = 0;
                 end else begin
-                     out_g = val_g[7:0] & 8'hF0;
+                    out_g = 8'd0;
+                    new_err_g = val_g[8:0];
                 end
-                new_err_g = val_g - $signed({2'b0, out_g});
 
                 // B Channel
-                if (p_d2[7:0] >= dither_threshold) begin
-                     out_b = p_d2[7:0]; // Bypass Original
-                end else if (val_b[9]) begin
-                     out_b = 8'd0;
-                end else if (val_b > 255) begin
-                     out_b = 8'd240;
+                if (val_b >= $signed({2'b0, dither_threshold})) begin
+                    out_b = (val_b > 10'sd255) ? 8'd255 : val_b[7:0];
+                    new_err_b = 0;
                 end else begin
-                     out_b = val_b[7:0] & 8'hF0;
+                    out_b = 8'd0;
+                    new_err_b = val_b[8:0];
                 end
-                new_err_b = val_b - $signed({2'b0, out_b});
             end
             
             // If we are not in active video, zero out the errors to prevent bleeding
