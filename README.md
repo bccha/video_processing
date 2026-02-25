@@ -8,6 +8,9 @@ A hardware-accelerated video processing system on the DE10-Nano (Cyclone V SoC),
 
 This project streams video from HPS DDR3 memory through an FPGA pixel pipeline to an HDMI display at **960×540p @ 60fps with zero tearing**. The FPGA handles all real-time quality processing: spatial filtering, color space conversion, gamut calibration, and advanced dithering — entirely in RTL.
 
+**🚀 [NEW] SMPTE ST 2110 Hybrid Receiver Integration**
+The system has been expanded to support professional **SMPTE ST 2110-20 Video over IP** reception. It features a unique hybrid architecture where the ARM HPS handles network decap (via `AF_PACKET` raw sockets and `mmap` zero-copy directly to DDR), while the FPGA fabric handles high-speed header stripping and video streaming.
+
 **Key Results at a Glance**
 
 | Data Path | Method | Throughput | Speedup |
@@ -23,12 +26,15 @@ This project streams video from HPS DDR3 memory through an FPGA pixel pipeline t
 ## 🏗 System Architecture
 
 ```
+PC Transmitter (st2110_tx.py)
+      │
+      ▼  (RNDIS USB / GbE network)
 ARM (Linux/HPS)                     FPGA Pixel Pipeline (37.8 MHz)
 ────────────────                    ──────────────────────────────────────────────────
-FFmpeg decode         mmap          F2H AXI     Burst    Video    Sync
-raw frames      ──────────────►    Bridge  ──► Master ──► FIFO ──► Gen
+Raw ST 2110           mmap          F2H AXI     Burst    Video    Sync
+AF_PACKET Socket ─────────────►    Bridge  ──► Master ──► FIFO ──► Gen
 into DDR3 @                                                          │
-0x20000000                                                           ▼
+0x30000000 (Ring Buffer)                                             ▼
                                                               Image Filter
                                                           (Blur/Edge/Emboss/Sharpen)
                                                                      │
