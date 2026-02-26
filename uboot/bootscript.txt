@@ -1,0 +1,10 @@
+if test -e mmc 0:1 sdr.rbf; then
+  echo "Found sdr.rbf"
+  mw 0xFFC25080 0x0
+  fatload mmc 0:1 0x3000000 sdr.rbf
+  fpga load 0 0x3000000 0x700000
+  mw 0xFFC2505C 0xA
+  mw 0xFFC25080 0xFFFF
+else
+  echo "sdr.rbf not found, doing nothing"
+fi;
