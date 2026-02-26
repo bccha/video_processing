@@ -1,7 +1,8 @@
 #ifndef HDMI_CONTROL_H_
 #define HDMI_CONTROL_H_
 
-#define HDMI_SYNC_GEN_BASE 0x20020
+#include "system.h"                       // Needed for HDMI_SYNC_BASE
+#define HDMI_SYNC_GEN_BASE HDMI_SYNC_BASE // 0x2080 from system.h
 #define REG_PATTERN_MODE (0 * 4)
 #define REG_GLOBAL_CTRL (1 * 4)
 #define REG_LUT_ADDR (2 * 4)
@@ -20,7 +21,7 @@
 // Base address from system.h (generated 2026-02-22): COLOR_MATRIX_BASE =
 // 0x20200 Addr 0: control [0]=matrix_en, Addr 1-9: C00~C22 (12-bit signed,
 // x1024)
-#define COLOR_MATRIX_BASE 0x20200
+#define COLOR_MATRIX_BASE 0x2000
 #define CM_REG_CTRL (0 * 4)
 #define CM_REG_C00 (1 * 4)
 #define CM_REG_C01 (2 * 4)

@@ -35,6 +35,8 @@ module st2110_header_stripper #(
     input  wire [7:0]  asi_data,
     input  wire        asi_valid,
     output wire        asi_ready,
+    input  wire        asi_startofpacket,
+    input  wire        asi_endofpacket,
 
     // Avalon-ST Source (to Video Pipeline / VDMA)
     output wire [7:0]  aso_data,
@@ -89,27 +91,39 @@ module st2110_header_stripper #(
             srd_offset  <= 16'd0;
         end else begin
             if (transfer_in) begin
-                if (state == STATE_HEADER) begin
+                // Synchronize to packet boundaries precisely (Robustness against dropped bytes/starts)
+                if (state == STATE_HEADER || asi_startofpacket) begin
+                    // If asi_startofpacket asserts, treat this as byte 0 regardless of previous state
+                    if (asi_startofpacket) begin
+                        byte_count <= 11'd0;
+                    end
+                    
                     // Snoop necessary fields while dropping the header
-                    if (byte_count == 11'd43) begin
+                    if ((asi_startofpacket ? 11'd0 : byte_count) == 11'd43) begin
                         rtp_marker <= asi_data[7]; // M bit inside RTP header
                     end
-                    else if (byte_count == 11'd58) srd_line[15:8] <= asi_data;
-                    else if (byte_count == 11'd59) srd_line[7:0]  <= asi_data;
-                    else if (byte_count == 11'd60) srd_offset[15:8] <= asi_data;
-                    else if (byte_count == 11'd61) srd_offset[7:0]  <= asi_data;
+                    else if ((asi_startofpacket ? 11'd0 : byte_count) == 11'd58) srd_line[15:8] <= asi_data;
+                    else if ((asi_startofpacket ? 11'd0 : byte_count) == 11'd59) srd_line[7:0]  <= asi_data;
+                    else if ((asi_startofpacket ? 11'd0 : byte_count) == 11'd60) srd_offset[15:8] <= asi_data;
+                    else if ((asi_startofpacket ? 11'd0 : byte_count) == 11'd61) srd_offset[7:0]  <= asi_data;
 
                     // Transition to PAYLOAD
-                    if (byte_count == HEADER_BYTES - 1) begin
+                    if ((asi_startofpacket ? 11'd0 : byte_count) == HEADER_BYTES - 1) begin
                         state      <= STATE_PAYLOAD;
                         byte_count <= 11'd0;
                     end else begin
-                        byte_count <= byte_count + 11'd1;
+                        state      <= STATE_HEADER; // Ensure we are in header state
+                        byte_count <= (asi_startofpacket ? 11'd0 : byte_count) + 11'd1;
                     end
                 end 
                 else if (state == STATE_PAYLOAD) begin
-                    // Transition back to HEADER for the next packet
-                    if (byte_count == PAYLOAD_BYTES - 1) begin
+                    // Quick abort if we unexpectedly get a new packet start during payload
+                    if (asi_startofpacket) begin
+                        state      <= STATE_HEADER;
+                        byte_count <= 11'd1; // Just processed byte 0
+                    end 
+                    // Normal transition back to HEADER
+                    else if (byte_count == PAYLOAD_BYTES - 1) begin
                         state      <= STATE_HEADER;
                         byte_count <= 11'd0;
                     end else begin

@@ -2,8 +2,8 @@
 <sch:Settings xmlns:sch="http://www.altera.com/embeddedsw/bsp/schema">
         <BspType>hal</BspType>
         <BspVersion>default</BspVersion>
-        <BspGeneratedTimeStamp>Feb 21, 2026 9:52:02 AM</BspGeneratedTimeStamp>
-        <BspGeneratedUnixTimeStamp>1771685522993</BspGeneratedUnixTimeStamp>
+        <BspGeneratedTimeStamp>Feb 25, 2026 11:54:07 PM</BspGeneratedTimeStamp>
+        <BspGeneratedUnixTimeStamp>1772081647208</BspGeneratedUnixTimeStamp>
         <BspGeneratedLocation>C:\Workspace\quartus\video_processing\nios_software\nios_ddr3_test_bsp</BspGeneratedLocation>
         <BspSettingsFile>settings.bsp</BspSettingsFile>
         <SopcDesignFile>..\..\soc_system.sopcinfo</SopcDesignFile>
@@ -899,10 +899,82 @@
                 <Group xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
         </Setting>
         <MemoryMap>
-                <slaveDescriptor>onchip_memory2_0</slaveDescriptor>
-                <addressRange>0x00000000 - 0x0001869F</addressRange>
-                <addressSpan>100000</addressSpan>
-                <attributes>memory</attributes>
+                <slaveDescriptor>pll_reconfig</slaveDescriptor>
+                <addressRange>0x00000100 - 0x000001FF</addressRange>
+                <addressSpan>256</addressSpan>
+                <attributes/>
+        </MemoryMap>
+        <MemoryMap>
+                <slaveDescriptor>timer_0</slaveDescriptor>
+                <addressRange>0x00000200 - 0x0000021F</addressRange>
+                <addressSpan>32</addressSpan>
+                <attributes>timer</attributes>
+        </MemoryMap>
+        <MemoryMap>
+                <slaveDescriptor>burst_master_0</slaveDescriptor>
+                <addressRange>0x00000220 - 0x0000023F</addressRange>
+                <addressSpan>32</addressSpan>
+                <attributes/>
+        </MemoryMap>
+        <MemoryMap>
+                <slaveDescriptor>burst_master_4_0</slaveDescriptor>
+                <addressRange>0x00000240 - 0x0000025F</addressRange>
+                <addressSpan>32</addressSpan>
+                <attributes/>
+        </MemoryMap>
+        <MemoryMap>
+                <slaveDescriptor>pll_locked</slaveDescriptor>
+                <addressRange>0x00000260 - 0x0000026F</addressRange>
+                <addressSpan>16</addressSpan>
+                <attributes/>
+        </MemoryMap>
+        <MemoryMap>
+                <slaveDescriptor>address_span_extender_0_cntl</slaveDescriptor>
+                <addressRange>0x00000270 - 0x00000277</addressRange>
+                <addressSpan>8</addressSpan>
+                <attributes/>
+        </MemoryMap>
+        <MemoryMap>
+                <slaveDescriptor>color_matrix</slaveDescriptor>
+                <addressRange>0x00002000 - 0x0000203F</addressRange>
+                <addressSpan>64</addressSpan>
+                <attributes/>
+        </MemoryMap>
+        <MemoryMap>
+                <slaveDescriptor>rx_dma_write_csr</slaveDescriptor>
+                <addressRange>0x00002040 - 0x0000205F</addressRange>
+                <addressSpan>32</addressSpan>
+                <attributes/>
+        </MemoryMap>
+        <MemoryMap>
+                <slaveDescriptor>rx_dma_read_csr</slaveDescriptor>
+                <addressRange>0x00002060 - 0x0000207F</addressRange>
+                <addressSpan>32</addressSpan>
+                <attributes/>
+        </MemoryMap>
+        <MemoryMap>
+                <slaveDescriptor>hdmi_sync</slaveDescriptor>
+                <addressRange>0x00002080 - 0x0000209F</addressRange>
+                <addressSpan>32</addressSpan>
+                <attributes/>
+        </MemoryMap>
+        <MemoryMap>
+                <slaveDescriptor>rx_dma_write_descriptor_slave</slaveDescriptor>
+                <addressRange>0x000020A0 - 0x000020AF</addressRange>
+                <addressSpan>16</addressSpan>
+                <attributes/>
+        </MemoryMap>
+        <MemoryMap>
+                <slaveDescriptor>rx_dma_read_descriptor_slave</slaveDescriptor>
+                <addressRange>0x000020B0 - 0x000020BF</addressRange>
+                <addressSpan>16</addressSpan>
+                <attributes/>
+        </MemoryMap>
+        <MemoryMap>
+                <slaveDescriptor>i2c_hdmi</slaveDescriptor>
+                <addressRange>0x000020C0 - 0x000020FF</addressRange>
+                <addressSpan>64</addressSpan>
+                <attributes/>
         </MemoryMap>
         <MemoryMap>
                 <slaveDescriptor>jtag_uart</slaveDescriptor>
@@ -911,52 +983,10 @@
                 <attributes>printable</attributes>
         </MemoryMap>
         <MemoryMap>
-                <slaveDescriptor>address_span_extender_0_cntl</slaveDescriptor>
-                <addressRange>0x00020008 - 0x0002000F</addressRange>
-                <addressSpan>8</addressSpan>
-                <attributes/>
-        </MemoryMap>
-        <MemoryMap>
-                <slaveDescriptor>pll_locked</slaveDescriptor>
-                <addressRange>0x00020010 - 0x0002001F</addressRange>
-                <addressSpan>16</addressSpan>
-                <attributes/>
-        </MemoryMap>
-        <MemoryMap>
-                <slaveDescriptor>hdmi_sync</slaveDescriptor>
-                <addressRange>0x00020020 - 0x0002003F</addressRange>
-                <addressSpan>32</addressSpan>
-                <attributes/>
-        </MemoryMap>
-        <MemoryMap>
-                <slaveDescriptor>i2c_hdmi</slaveDescriptor>
-                <addressRange>0x00020040 - 0x0002007F</addressRange>
-                <addressSpan>64</addressSpan>
-                <attributes/>
-        </MemoryMap>
-        <MemoryMap>
-                <slaveDescriptor>timer_0</slaveDescriptor>
-                <addressRange>0x00020080 - 0x0002009F</addressRange>
-                <addressSpan>32</addressSpan>
-                <attributes>timer</attributes>
-        </MemoryMap>
-        <MemoryMap>
-                <slaveDescriptor>burst_master_0</slaveDescriptor>
-                <addressRange>0x000200A0 - 0x000200BF</addressRange>
-                <addressSpan>32</addressSpan>
-                <attributes/>
-        </MemoryMap>
-        <MemoryMap>
-                <slaveDescriptor>burst_master_4_0</slaveDescriptor>
-                <addressRange>0x000200C0 - 0x000200DF</addressRange>
-                <addressSpan>32</addressSpan>
-                <attributes/>
-        </MemoryMap>
-        <MemoryMap>
-                <slaveDescriptor>pll_reconfig</slaveDescriptor>
-                <addressRange>0x00020100 - 0x000201FF</addressRange>
-                <addressSpan>256</addressSpan>
-                <attributes/>
+                <slaveDescriptor>onchip_memory2_0</slaveDescriptor>
+                <addressRange>0x00100000 - 0x0011869F</addressRange>
+                <addressSpan>100000</addressSpan>
+                <attributes>memory</attributes>
         </MemoryMap>
         <MemoryMap>
                 <slaveDescriptor>address_span_extender_0_windowed_slave</slaveDescriptor>

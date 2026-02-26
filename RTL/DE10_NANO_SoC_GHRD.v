@@ -127,6 +127,33 @@ module DE10_NANO_SoC_GHRD(
   reg         cm_readdatavalid_r;  // 1-cycle delayed read → readdatavalid
   always @(posedge fpga_clk_50) cm_readdatavalid_r <= cm_read;
 
+  // ST2110 DMA Integration Wires
+  wire [7:0]  rx_dma_read_data;     // 8-bit from Qsys Adapter
+  wire        rx_dma_read_valid;
+  wire        rx_dma_read_ready;
+  wire        rx_dma_read_startofpacket;
+  wire        rx_dma_read_endofpacket;
+  // rx_dma_read_empty is removed by the adapter since it outputs 8-bit
+
+  wire [31:0] rx_dma_write_data;    // 32-bit to DMA Write
+  wire        rx_dma_write_valid;
+  wire        rx_dma_write_ready;
+  wire        rx_dma_write_startofpacket;
+  wire        rx_dma_write_endofpacket;
+  wire [1:0]  rx_dma_write_empty;
+
+  wire [7:0]  stripper_asi_data;
+  wire        stripper_asi_valid;
+  wire        stripper_asi_ready;
+  wire        stripper_asi_startofpacket;
+  wire        stripper_asi_endofpacket;
+
+  wire [7:0]  aligner_asi_data;
+  wire        aligner_asi_valid;
+  wire        aligner_asi_ready;
+  wire        aligner_asi_startofpacket;
+  wire        aligner_asi_endofpacket;
+
   // HDMI I2C Wires
   wire        hdmi_i2c_sda_in;
   wire        hdmi_i2c_scl_in;
@@ -269,8 +296,61 @@ soc_system u0 (
 	  .color_matrix_write                    (cm_write),              //                               .write
 	  .color_matrix_read                     (cm_read),               //                               .read
 	  .color_matrix_byteenable               (),                      //                               .byteenable (Not used)
-	  .color_matrix_debugaccess              ()                        //                               .debugaccess (Not used)
+	  .color_matrix_debugaccess              (),                       //                               .debugaccess (Not used)
+                                              
+      // MSGDMA RX (ST2110 Stream from PC via 8-bit Adapter)
+      .rx_dma_read_data                      (rx_dma_read_data),
+      .rx_dma_read_valid                     (rx_dma_read_valid),
+      .rx_dma_read_ready                     (rx_dma_read_ready),
+      .rx_dma_read_startofpacket             (rx_dma_read_startofpacket),
+      .rx_dma_read_endofpacket               (rx_dma_read_endofpacket),
+      // rx_dma_read_empty is absorbed by Qsys adapter
+      
+      // MSGDMA RX (Processed video back to PC memory)
+      .rx_dma_write_data                     (rx_dma_write_data),
+      .rx_dma_write_valid                    (rx_dma_write_valid),
+      .rx_dma_write_ready                    (rx_dma_write_ready),
+      .rx_dma_write_startofpacket            (rx_dma_write_startofpacket),
+      .rx_dma_write_endofpacket              (rx_dma_write_endofpacket),
+      .rx_dma_write_empty                    (rx_dma_write_empty)
  );
+
+// ST2110 Pipeline: DMA Read -> (Qsys Adapter) -> Header Stripper -> Alignment Wrapper -> DMA Write
+st2110_header_stripper u_header_stripper (
+    .clk               (fpga_clk_50),
+    .reset_n           (hps_fpga_reset_n),
+    // from Qsys Adapter (8-bit)
+    .asi_data          (rx_dma_read_data),
+    .asi_valid         (rx_dma_read_valid),
+    .asi_ready         (rx_dma_read_ready),
+    .asi_startofpacket (rx_dma_read_startofpacket),
+    .asi_endofpacket   (rx_dma_read_endofpacket),
+    // to aligner
+    .aso_data          (aligner_asi_data),
+    .aso_valid         (aligner_asi_valid),
+    .aso_ready         (aligner_asi_ready),
+    .aso_startofpacket (aligner_asi_startofpacket),
+    .aso_endofpacket   (aligner_asi_endofpacket)
+);
+
+st2110_alignment_wrapper u_alignment_wrapper (
+    .clk               (fpga_clk_50),
+    .reset_n           (hps_fpga_reset_n),
+    // from stripper
+    .asi_data          (aligner_asi_data),
+    .asi_valid         (aligner_asi_valid),
+    .asi_ready         (aligner_asi_ready),
+    .asi_startofpacket (aligner_asi_startofpacket),
+    .asi_endofpacket   (aligner_asi_endofpacket),
+    // to DMA write
+    .aso_data          (rx_dma_write_data),
+    .aso_valid         (rx_dma_write_valid),
+    .aso_ready         (rx_dma_write_ready),
+    .aso_startofpacket (rx_dma_write_startofpacket),
+    .aso_endofpacket   (rx_dma_write_endofpacket)
+);
+// Hardcode valid DMA write empty signal (EOP falls on exactly 32-bit boundary for mapped RGB)
+assign rx_dma_write_empty = 2'd0;
 
 // HDMI Video Pipeline (DMA + FIFO + Sync Gen)
 video_pipeline u_video_pipeline (

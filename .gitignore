@@ -48,3 +48,7 @@ linux_software/video_player/video_qhd.bin
 linux_software/video_player/*.ts
 linux_software/video_player/*.mp4
 linux_software/video_player/*.xz
+
+
+# Manual
+manual/

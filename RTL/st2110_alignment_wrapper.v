@@ -50,6 +50,9 @@ module st2110_alignment_wrapper (
     reg        out_valid;
     reg        out_sop;
     reg        out_eop;
+    
+    // Register to delay SOP until a full 32-bit pixel is assembled
+    reg        is_sop_pending;
 
     // We only accept new bytes when the downstream is ready OR our output register is empty
     wire sink_ready = aso_ready || !out_valid;
@@ -83,16 +86,17 @@ module st2110_alignment_wrapper (
 
             // 2. Handle incoming 8-bit bytes
             if (transfer_in) begin
-                // Reset byte alignment if we see a new SOP (error recovery)
+                // Capture SOP
                 if (asi_startofpacket) begin
                     byte_cnt <= 2'd0;
-                    shift_reg[31:24] <= 8'd0; // Dummy / Alpha channel
-                    shift_reg[23:16] <= asi_data; // First byte (R)
+                    shift_reg[31:24] <= 8'd0;
+                    shift_reg[23:16] <= asi_data; // R
                     byte_cnt <= 2'd1;
+                    is_sop_pending <= 1'b1;       // Remember SOP for the upcoming valid pixel
                 end else begin
                     case (byte_cnt)
                         2'd0: begin
-                            shift_reg[31:24] <= 8'd0;         // Dummy
+                            shift_reg[31:24] <= 8'd0;         
                             shift_reg[23:16] <= asi_data;     // R
                             byte_cnt <= 2'd1;
                         end
@@ -105,25 +109,18 @@ module st2110_alignment_wrapper (
                             byte_cnt <= 2'd0;
                             
                             // We have accumulated a full 3-byte pixel.
-                            // Push it to the output register.
+                            // The output is 32-bit: {8'd0, R, G, B}
                             out_data  <= {8'd0, shift_reg[23:8], asi_data};
                             out_valid <= 1'b1;
                             
-                            // Pass along SOP / EOP matching this pixel
-                            // (If this was the last byte of the packet, assert EOP mapping)
-                            out_eop   <= asi_endofpacket;
+                            // Emit SOP if this pixel was the first in the packet
+                            out_sop   <= is_sop_pending;
+                            is_sop_pending <= 1'b0;
                             
-                            // If this pixel started with SOP, assert SOP on this 32-bit word
-                            // Actually, asi_startofpacket is high on byte 0, but we wait until byte 2 to output.
-                            // We need a separate flag if we want perfectly aligned SOP.
-                            // For simplicity, if we reset on SOP, this is the 1st pixel.
+                            // Emit EOP if this byte is the last in the packet
+                            out_eop   <= asi_endofpacket;
                         end
                     endcase
-                end
-
-                // SOP specific handling
-                if (asi_startofpacket) begin
-                    out_sop <= 1'b1; // Mark the next complete 32-bit word as SOP
                 end
             end
         end

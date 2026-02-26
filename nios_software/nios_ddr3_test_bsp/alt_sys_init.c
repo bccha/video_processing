@@ -4,7 +4,7 @@
  * Machine generated for CPU 'nios2_gen2_0' in SOPC Builder design 'soc_system'
  * SOPC Builder design path: ../../soc_system.sopcinfo
  *
- * Generated: Thu Feb 12 01:26:38 EST 2026
+ * Generated: Wed Feb 25 21:53:34 EST 2026
  */
 
 /*
@@ -62,6 +62,7 @@
 #include "altera_avalon_i2c.h"
 #include "altera_avalon_jtag_uart.h"
 #include "altera_avalon_timer.h"
+#include "altera_msgdma.h"
 
 /*
  * Allocate the device storage
@@ -71,6 +72,8 @@ ALTERA_NIOS2_GEN2_IRQ_INSTANCE ( NIOS2_GEN2_0, nios2_gen2_0);
 ALTERA_AVALON_I2C_INSTANCE ( I2C_HDMI, i2c_hdmi);
 ALTERA_AVALON_JTAG_UART_INSTANCE ( JTAG_UART, jtag_uart);
 ALTERA_AVALON_TIMER_INSTANCE ( TIMER_0, timer_0);
+ALTERA_MSGDMA_CSR_DESCRIPTOR_SLAVE_INSTANCE ( RX_DMA_READ, RX_DMA_READ_CSR, RX_DMA_READ_DESCRIPTOR_SLAVE, rx_dma_read);
+ALTERA_MSGDMA_CSR_DESCRIPTOR_SLAVE_INSTANCE ( RX_DMA_WRITE, RX_DMA_WRITE_CSR, RX_DMA_WRITE_DESCRIPTOR_SLAVE, rx_dma_write);
 
 /*
  * Initialize the interrupt controller devices
@@ -96,4 +99,6 @@ void alt_sys_init( void )
     ALTERA_AVALON_TIMER_INIT ( TIMER_0, timer_0);
     ALTERA_AVALON_I2C_INIT ( I2C_HDMI, i2c_hdmi);
     ALTERA_AVALON_JTAG_UART_INIT ( JTAG_UART, jtag_uart);
+    ALTERA_MSGDMA_INIT ( RX_DMA_READ, rx_dma_read);
+    ALTERA_MSGDMA_INIT ( RX_DMA_WRITE, rx_dma_write);
 }

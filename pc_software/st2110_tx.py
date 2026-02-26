@@ -3,6 +3,8 @@ import struct
 import time
 import argparse
 import sys
+import os
+from PIL import Image
 
 # ==============================================================================
 # PC Transmitter for Hybrid ST 2110 Receiver (Phase 1)
@@ -63,37 +65,20 @@ def create_srd_header(line_number, offset, length):
     header = struct.pack('!HHHH', ext_seq_num, length, line_number, offset)
     return header
 
-def generate_color_bar_line(line_number, frame_count):
+def generate_static_image_chunk(img_data, y, offset):
     """
-    Generates a 2880-byte payload representing one line of a moving color bar.
-    24-bit RGB pixels. We'll simulate a simple moving pattern.
+    Reads a 1440-byte chunk of RGB pixels from the loaded image array.
+    img_data is a flat bytearray of size 960 * 540 * 3.
     """
-    payload = bytearray(BYTES_PER_LINE)
+    # Calculate the linear start index in the flat array
+    pixel_byte_start = (y * WIDTH * 3) + offset
     
-    # Simple moving vertical bars
-    shift = (frame_count * 4) % WIDTH
+    # Extract the chunk
+    payload = img_data[pixel_byte_start : pixel_byte_start + PACKET_PAYLOAD_SIZE]
     
-    for x in range(WIDTH):
-        # Determine bar color based on x position
-        bar_idx = ((x + shift) // 120) % 8
-        
-        # 24-bit color values (RGB 888) for 8 bars
-        colors = [
-            (0xFF, 0xFF, 0xFF), # White
-            (0xFF, 0xFF, 0x00), # Yellow
-            (0x00, 0xFF, 0xFF), # Cyan
-            (0x00, 0xFF, 0x00), # Green
-            (0xFF, 0x00, 0xFF), # Magenta
-            (0xFF, 0x00, 0x00), # Red
-            (0x00, 0x00, 0xFF), # Blue
-            (0x00, 0x00, 0x00)  # Black
-        ]
-        r, g, b = colors[bar_idx]
-        
-        # Write 3 bytes per pixel (RGB)
-        payload[x*3]     = r
-        payload[x*3 + 1] = g
-        payload[x*3 + 2] = b
+    # Just in case the image was short
+    if len(payload) < PACKET_PAYLOAD_SIZE:
+        payload = payload + bytearray(PACKET_PAYLOAD_SIZE - len(payload))
         
     return payload
 
@@ -101,6 +86,16 @@ def send_video_stream(target_ip, target_port, fps=60):
     """
     Main loop to send the simulated ST 2110 stream.
     """
+    img_path = r"C:\Workspace\quartus\video_processing\linux_software\image_converter\Beautiful-Nature-Wallpaper-1280x720-56498.jpg"
+    print(f"Loading image for transmission: {img_path}")
+    try:
+        img = Image.open(img_path).convert('RGB')
+        img = img.resize((WIDTH, HEIGHT))
+        img_data = bytearray(img.tobytes())
+        print(f"Image loaded and resized to {WIDTH}x{HEIGHT}.")
+    except Exception as e:
+        print(f"Error loading image: {e}")
+        return
     print(f"Targeting: {target_ip}:{target_port}")
     print(f"Resolution: {WIDTH}x{HEIGHT}, {fps} FPS")
     print(f"Payload per packet: {PACKET_PAYLOAD_SIZE} bytes (Standard MTU support)")
@@ -123,9 +118,6 @@ def send_video_stream(target_ip, target_port, fps=60):
             
             # Send one complete frame (540 lines)
             for line_number in range(HEIGHT):
-                # 2. Build Full Line Payload
-                full_line_payload = generate_color_bar_line(line_number, frame_count)
-                
                 # Split the 2880-byte line into two 1440-byte packets
                 for offset in (0, 1440):
                     # Is this the last packet of the frame?
@@ -135,8 +127,8 @@ def send_video_stream(target_ip, target_port, fps=60):
                     rtp_hdr = create_rtp_header(seq_num, timestamp, marker)
                     srd_hdr = create_srd_header(line_number, offset, PACKET_PAYLOAD_SIZE)
                     
-                    # Extract the chunk for this packet
-                    packet_payload = full_line_payload[offset:offset + PACKET_PAYLOAD_SIZE]
+                    # 2. Extract the chunk for this packet from the image
+                    packet_payload = generate_static_image_chunk(img_data, line_number, offset)
                     
                     # 3. Assemble Packet: RTP (12) + SRD (8) + Payload (1440) = 1460 bytes
                     packet = rtp_hdr + srd_hdr + packet_payload
