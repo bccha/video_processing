@@ -2,8 +2,8 @@
 #include "common.h"
 #include "hdmi_config.h"
 #include "hdmi_control.h"
+#include "mem_verify.h"
 #include "nios2.h"
-#include <io.h>
 #include <stdio.h>
 
 void print_menu() {
@@ -20,9 +20,29 @@ void print_menu() {
   printf(" [G] Color Calibration (De-Gamma + 3x3 Gamut Matrix)\n");
   printf(" [C] Load Custom Character Bitmap\n");
   printf(" [r] Reset RTL Pattern Generator\n");
-  printf(" [q] Quit\n");
+  printf(" [q] Test DDR Memory (TMEM_Verify)\n");
   printf("--------------------------------------------------\n");
   printf("Select an option: ");
+}
+
+void test_ddr_memory() {
+  printf("\nHello from Nios II!\n");
+  bool bPass;
+  printf("HPS DDR3 Memory test code\n");
+
+  int *p = ADDRESS_SPAN_EXTENDER_0_WINDOWED_SLAVE_BASE;
+  *p = 0x00;
+  printf("before %x\n", p);
+  *p = 0xDEADBEEF;
+    printf("after %x\n", p);
+  // Qsys에서 이미 설정된 span을 이용하여 검증 (Cache Bypass 적용)
+  bPass = TMEM_Verify(ADDRESS_SPAN_EXTENDER_0_WINDOWED_SLAVE_BASE |
+                          CACHE_BYPASS_MASK,
+                      ADDRESS_SPAN_EXTENDER_0_WINDOWED_SLAVE_SPAN, 0x01, 1);
+  if (bPass)
+    printf("HPS DDR3 test success\n");
+  else
+    printf("HPS DDR3 test failed\n");
 }
 
 void run_interactive_menu() {
@@ -82,8 +102,8 @@ void run_interactive_menu() {
       printf("RTL Pattern Reset to 0 (Red)\n");
       break;
     case 'q':
-      printf("Exiting... Goodbye!\n");
-      return;
+      test_ddr_memory();
+      break;
     default:
       printf("Invalid option! Please try again.\n");
       break;
@@ -92,7 +112,7 @@ void run_interactive_menu() {
 }
 
 int main() {
-  printf("\nDE10-Nano Video/DMA Test Environment Initialized\n");
+  printf("\nDE10-Nano Video/DMA/ST2110 Test Environment Initialized\n");
 
   NIOS2_WRITE_STATUS(1);
   IOWR_ALTERA_AVALON_TIMER_CONTROL(TIMER_0_BASE,
@@ -110,14 +130,6 @@ int main() {
   } else {
     printf("Timer STUCK! (Val=%u)\n", (unsigned int)start_time);
   }
-
-#ifdef ADDRESS_SPAN_EXTENDER_0_CNTL_BASE
-  unsigned int ddr_phys_base = 0x20000000;
-  printf("Initializing Span Extender to 0x%08X... ", ddr_phys_base);
-  IOWR_32DIRECT(ADDRESS_SPAN_EXTENDER_0_CNTL_BASE, 0, ddr_phys_base);
-  IOWR_32DIRECT(ADDRESS_SPAN_EXTENDER_0_CNTL_BASE, 4, 0);
-  printf("Done.\n");
-#endif
 
   run_interactive_menu();
   return 0;

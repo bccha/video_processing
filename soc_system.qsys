@@ -16,6 +16,11 @@
          value = "8";
          type = "int";
       }
+      datum sopceditor_expanded
+      {
+         value = "1";
+         type = "boolean";
+      }
    }
    element address_span_extender_0.cntl
    {
@@ -40,6 +45,11 @@
          value = "12";
          type = "int";
       }
+      datum sopceditor_expanded
+      {
+         value = "1";
+         type = "boolean";
+      }
    }
    element burst_master_0.csr_slave
    {
@@ -55,6 +65,11 @@
       {
          value = "13";
          type = "int";
+      }
+      datum sopceditor_expanded
+      {
+         value = "1";
+         type = "boolean";
       }
    }
    element burst_master_4_0.cs_slave
@@ -111,6 +126,11 @@
          value = "19";
          type = "int";
       }
+      datum sopceditor_expanded
+      {
+         value = "1";
+         type = "boolean";
+      }
    }
    element color_matrix
    {
@@ -118,6 +138,11 @@
       {
          value = "21";
          type = "int";
+      }
+      datum sopceditor_expanded
+      {
+         value = "1";
+         type = "boolean";
       }
    }
    element color_matrix.s0
@@ -134,6 +159,11 @@
       {
          value = "24";
          type = "int";
+      }
+      datum sopceditor_expanded
+      {
+         value = "1";
+         type = "boolean";
       }
    }
    element dipsw_pio
@@ -176,6 +206,11 @@
       {
          value = "20";
          type = "int";
+      }
+      datum sopceditor_expanded
+      {
+         value = "1";
+         type = "boolean";
       }
    }
    element hdmi_sync.s0
@@ -221,6 +256,11 @@
       {
          value = "18";
          type = "int";
+      }
+      datum sopceditor_expanded
+      {
+         value = "1";
+         type = "boolean";
       }
    }
    element i2c_hdmi.csr
@@ -290,6 +330,11 @@
          value = "2";
          type = "int";
       }
+      datum sopceditor_expanded
+      {
+         value = "1";
+         type = "boolean";
+      }
    }
    element mm_bridge_0.s0
    {
@@ -305,6 +350,11 @@
       {
          value = "7";
          type = "int";
+      }
+      datum sopceditor_expanded
+      {
+         value = "1";
+         type = "boolean";
       }
    }
    element nios2_gen2_0.debug_mem_slave
@@ -348,6 +398,11 @@
          value = "14";
          type = "int";
       }
+      datum sopceditor_expanded
+      {
+         value = "1";
+         type = "boolean";
+      }
    }
    element pll_locked
    {
@@ -355,6 +410,11 @@
       {
          value = "15";
          type = "int";
+      }
+      datum sopceditor_expanded
+      {
+         value = "1";
+         type = "boolean";
       }
    }
    element pll_locked.s1
@@ -372,6 +432,11 @@
          value = "16";
          type = "int";
       }
+      datum sopceditor_expanded
+      {
+         value = "1";
+         type = "boolean";
+      }
    }
    element pll_reconfig.mgmt_avalon_slave
    {
@@ -387,6 +452,11 @@
       {
          value = "22";
          type = "int";
+      }
+      datum sopceditor_expanded
+      {
+         value = "1";
+         type = "boolean";
       }
    }
    element rx_dma_read.csr
@@ -411,6 +481,11 @@
       {
          value = "23";
          type = "int";
+      }
+      datum sopceditor_expanded
+      {
+         value = "1";
+         type = "boolean";
       }
    }
    element rx_dma_write.csr
@@ -470,6 +545,11 @@
          value = "11";
          type = "int";
       }
+      datum sopceditor_expanded
+      {
+         value = "1";
+         type = "boolean";
+      }
    }
    element timer_0.s1
    {
@@ -485,6 +565,11 @@
       {
          value = "17";
          type = "int";
+      }
+      datum sopceditor_expanded
+      {
+         value = "1";
+         type = "boolean";
       }
    }
 }
@@ -585,12 +670,12 @@
    kind="altera_address_span_extender"
    version="20.1"
    enabled="1">
-  <parameter name="BURSTCOUNT_WIDTH" value="1" />
+  <parameter name="BURSTCOUNT_WIDTH" value="3" />
   <parameter name="DATA_WIDTH" value="32" />
   <parameter name="ENABLE_SLAVE_PORT" value="true" />
   <parameter name="MASTER_ADDRESS_DEF" value="536870912" />
   <parameter name="MASTER_ADDRESS_WIDTH" value="32" />
-  <parameter name="MAX_PENDING_READS" value="1" />
+  <parameter name="MAX_PENDING_READS" value="16" />
   <parameter name="SLAVE_ADDRESS_WIDTH" value="25" />
   <parameter name="SUB_WINDOW_COUNT" value="1" />
  </module>
@@ -807,7 +892,7 @@
   <parameter name="EXTRA_SETTINGS" value="" />
   <parameter name="F2H_AXI_CLOCK_FREQ" value="50000000" />
   <parameter name="F2H_SDRAM0_CLOCK_FREQ" value="50000000" />
-  <parameter name="F2H_SDRAM1_CLOCK_FREQ" value="50000000" />
+  <parameter name="F2H_SDRAM1_CLOCK_FREQ" value="100" />
   <parameter name="F2H_SDRAM2_CLOCK_FREQ" value="100" />
   <parameter name="F2H_SDRAM3_CLOCK_FREQ" value="100" />
   <parameter name="F2H_SDRAM4_CLOCK_FREQ" value="100" />
@@ -819,8 +904,8 @@
   <parameter name="F2SCLK_SDRAMCLK_Enable" value="false" />
   <parameter name="F2SCLK_SDRAMCLK_FREQ" value="0" />
   <parameter name="F2SCLK_WARMRST_Enable" value="true" />
-  <parameter name="F2SDRAM_Type">Avalon-MM Bidirectional,Avalon-MM Bidirectional</parameter>
-  <parameter name="F2SDRAM_Width" value="32,32" />
+  <parameter name="F2SDRAM_Type">Avalon-MM Bidirectional</parameter>
+  <parameter name="F2SDRAM_Width" value="32" />
   <parameter name="F2SINTERRUPT_Enable" value="true" />
   <parameter name="F2S_Width" value="2" />
   <parameter name="FIX_READ_LATENCY" value="8" />
@@ -2016,7 +2101,7 @@
    kind="avalon"
    version="20.1"
    start="address_span_extender_0.expanded_master"
-   end="hps_0.f2h_sdram1_data">
+   end="hps_0.f2h_sdram0_data">
   <parameter name="arbitrationPriority" value="1" />
   <parameter name="baseAddress" value="0x0000" />
   <parameter name="defaultConnection" value="false" />
@@ -2214,7 +2299,6 @@
  <connection kind="clock" version="20.1" start="clk_0.clk" end="sysid_qsys.clk" />
  <connection kind="clock" version="20.1" start="clk_0.clk" end="led_pio.clk" />
  <connection kind="clock" version="20.1" start="clk_0.clk" end="dipsw_pio.clk" />
- <connection kind="clock" version="20.1" start="clk_0.clk" end="button_pio.clk" />
  <connection kind="clock" version="20.1" start="clk_0.clk" end="jtag_uart.clk" />
  <connection kind="clock" version="20.1" start="clk_0.clk" end="mm_bridge_0.clk" />
  <connection kind="clock" version="20.1" start="clk_0.clk" end="nios2_gen2_0.clk" />
@@ -2228,6 +2312,7 @@
    version="20.1"
    start="clk_0.clk"
    end="data_format_adapter_0.clk" />
+ <connection kind="clock" version="20.1" start="clk_0.clk" end="button_pio.clk" />
  <connection
    kind="clock"
    version="20.1"
@@ -2265,11 +2350,6 @@
    version="20.1"
    start="clk_0.clk"
    end="hps_0.f2h_sdram0_clock" />
- <connection
-   kind="clock"
-   version="20.1"
-   start="clk_0.clk"
-   end="hps_0.f2h_sdram1_clock" />
  <connection
    kind="clock"
    version="20.1"
