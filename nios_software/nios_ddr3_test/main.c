@@ -20,6 +20,12 @@ int main()
 {
 
   printf("Hello from Nios II!\n");
+
+  int *p = ADDRESS_SPAN_EXTENDER_0_WINDOWED_SLAVE_BASE;
+  *p = 0x00;
+  printf("before %x : %x\n", p, *p);
+  *p = 0xDEADBEEF;
+  printf("after %x : %x\n", p, *p);
   bool  bPass;
   printf("HPS DDR3 Memory test code\n");
   bPass=TMEM_Verify(ADDRESS_SPAN_EXTENDER_0_WINDOWED_SLAVE_BASE, ADDRESS_SPAN_EXTENDER_0_WINDOWED_SLAVE_SPAN, 0x01, TRUE);

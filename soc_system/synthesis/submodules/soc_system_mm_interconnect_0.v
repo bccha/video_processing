@@ -52,7 +52,6 @@ module soc_system_mm_interconnect_0 (
 		input  wire [3:0]  nios2_gen2_0_data_master_byteenable,                              //                                                           .byteenable
 		input  wire        nios2_gen2_0_data_master_read,                                    //                                                           .read
 		output wire [31:0] nios2_gen2_0_data_master_readdata,                                //                                                           .readdata
-		output wire        nios2_gen2_0_data_master_readdatavalid,                           //                                                           .readdatavalid
 		input  wire        nios2_gen2_0_data_master_write,                                   //                                                           .write
 		input  wire [31:0] nios2_gen2_0_data_master_writedata,                               //                                                           .writedata
 		input  wire        nios2_gen2_0_data_master_debugaccess,                             //                                                           .debugaccess
@@ -60,7 +59,6 @@ module soc_system_mm_interconnect_0 (
 		output wire        nios2_gen2_0_instruction_master_waitrequest,                      //                                                           .waitrequest
 		input  wire        nios2_gen2_0_instruction_master_read,                             //                                                           .read
 		output wire [31:0] nios2_gen2_0_instruction_master_readdata,                         //                                                           .readdata
-		output wire        nios2_gen2_0_instruction_master_readdatavalid,                    //                                                           .readdatavalid
 		output wire        address_span_extender_0_cntl_write,                               //                               address_span_extender_0_cntl.write
 		output wire        address_span_extender_0_cntl_read,                                //                                                           .read
 		input  wire [63:0] address_span_extender_0_cntl_readdata,                            //                                                           .readdata
@@ -115,6 +113,12 @@ module soc_system_mm_interconnect_0 (
 	wire          nios2_gen2_0_data_master_translator_avalon_universal_master_0_write;                          // nios2_gen2_0_data_master_translator:uav_write -> nios2_gen2_0_data_master_agent:av_write
 	wire   [31:0] nios2_gen2_0_data_master_translator_avalon_universal_master_0_writedata;                      // nios2_gen2_0_data_master_translator:uav_writedata -> nios2_gen2_0_data_master_agent:av_writedata
 	wire    [2:0] nios2_gen2_0_data_master_translator_avalon_universal_master_0_burstcount;                     // nios2_gen2_0_data_master_translator:uav_burstcount -> nios2_gen2_0_data_master_agent:av_burstcount
+	wire          rsp_mux_src_valid;                                                                            // rsp_mux:src_valid -> nios2_gen2_0_data_master_agent:rp_valid
+	wire  [126:0] rsp_mux_src_data;                                                                             // rsp_mux:src_data -> nios2_gen2_0_data_master_agent:rp_data
+	wire          rsp_mux_src_ready;                                                                            // nios2_gen2_0_data_master_agent:rp_ready -> rsp_mux:src_ready
+	wire    [5:0] rsp_mux_src_channel;                                                                          // rsp_mux:src_channel -> nios2_gen2_0_data_master_agent:rp_channel
+	wire          rsp_mux_src_startofpacket;                                                                    // rsp_mux:src_startofpacket -> nios2_gen2_0_data_master_agent:rp_startofpacket
+	wire          rsp_mux_src_endofpacket;                                                                      // rsp_mux:src_endofpacket -> nios2_gen2_0_data_master_agent:rp_endofpacket
 	wire          rsp_mux_001_src_valid;                                                                        // rsp_mux_001:src_valid -> hps_0_h2f_axi_master_agent:write_rp_valid
 	wire  [162:0] rsp_mux_001_src_data;                                                                         // rsp_mux_001:src_data -> hps_0_h2f_axi_master_agent:write_rp_data
 	wire          rsp_mux_001_src_ready;                                                                        // hps_0_h2f_axi_master_agent:write_rp_ready -> rsp_mux_001:src_ready
@@ -138,6 +142,12 @@ module soc_system_mm_interconnect_0 (
 	wire          nios2_gen2_0_instruction_master_translator_avalon_universal_master_0_write;                   // nios2_gen2_0_instruction_master_translator:uav_write -> nios2_gen2_0_instruction_master_agent:av_write
 	wire   [31:0] nios2_gen2_0_instruction_master_translator_avalon_universal_master_0_writedata;               // nios2_gen2_0_instruction_master_translator:uav_writedata -> nios2_gen2_0_instruction_master_agent:av_writedata
 	wire    [2:0] nios2_gen2_0_instruction_master_translator_avalon_universal_master_0_burstcount;              // nios2_gen2_0_instruction_master_translator:uav_burstcount -> nios2_gen2_0_instruction_master_agent:av_burstcount
+	wire          rsp_mux_003_src_valid;                                                                        // rsp_mux_003:src_valid -> nios2_gen2_0_instruction_master_agent:rp_valid
+	wire  [126:0] rsp_mux_003_src_data;                                                                         // rsp_mux_003:src_data -> nios2_gen2_0_instruction_master_agent:rp_data
+	wire          rsp_mux_003_src_ready;                                                                        // nios2_gen2_0_instruction_master_agent:rp_ready -> rsp_mux_003:src_ready
+	wire    [5:0] rsp_mux_003_src_channel;                                                                      // rsp_mux_003:src_channel -> nios2_gen2_0_instruction_master_agent:rp_channel
+	wire          rsp_mux_003_src_startofpacket;                                                                // rsp_mux_003:src_startofpacket -> nios2_gen2_0_instruction_master_agent:rp_startofpacket
+	wire          rsp_mux_003_src_endofpacket;                                                                  // rsp_mux_003:src_endofpacket -> nios2_gen2_0_instruction_master_agent:rp_endofpacket
 	wire   [31:0] jtag_uart_avalon_jtag_slave_agent_m0_readdata;                                                // jtag_uart_avalon_jtag_slave_translator:uav_readdata -> jtag_uart_avalon_jtag_slave_agent:m0_readdata
 	wire          jtag_uart_avalon_jtag_slave_agent_m0_waitrequest;                                             // jtag_uart_avalon_jtag_slave_translator:uav_waitrequest -> jtag_uart_avalon_jtag_slave_agent:m0_waitrequest
 	wire          jtag_uart_avalon_jtag_slave_agent_m0_debugaccess;                                             // jtag_uart_avalon_jtag_slave_agent:m0_debugaccess -> jtag_uart_avalon_jtag_slave_translator:uav_debugaccess
@@ -311,6 +321,12 @@ module soc_system_mm_interconnect_0 (
 	wire          nios2_gen2_0_data_master_agent_cp_ready;                                                      // router:sink_ready -> nios2_gen2_0_data_master_agent:cp_ready
 	wire          nios2_gen2_0_data_master_agent_cp_startofpacket;                                              // nios2_gen2_0_data_master_agent:cp_startofpacket -> router:sink_startofpacket
 	wire          nios2_gen2_0_data_master_agent_cp_endofpacket;                                                // nios2_gen2_0_data_master_agent:cp_endofpacket -> router:sink_endofpacket
+	wire          router_src_valid;                                                                             // router:src_valid -> cmd_demux:sink_valid
+	wire  [126:0] router_src_data;                                                                              // router:src_data -> cmd_demux:sink_data
+	wire          router_src_ready;                                                                             // cmd_demux:sink_ready -> router:src_ready
+	wire    [5:0] router_src_channel;                                                                           // router:src_channel -> cmd_demux:sink_channel
+	wire          router_src_startofpacket;                                                                     // router:src_startofpacket -> cmd_demux:sink_startofpacket
+	wire          router_src_endofpacket;                                                                       // router:src_endofpacket -> cmd_demux:sink_endofpacket
 	wire          hps_0_h2f_axi_master_agent_write_cp_valid;                                                    // hps_0_h2f_axi_master_agent:write_cp_valid -> router_001:sink_valid
 	wire  [162:0] hps_0_h2f_axi_master_agent_write_cp_data;                                                     // hps_0_h2f_axi_master_agent:write_cp_data -> router_001:sink_data
 	wire          hps_0_h2f_axi_master_agent_write_cp_ready;                                                    // router_001:sink_ready -> hps_0_h2f_axi_master_agent:write_cp_ready
@@ -338,6 +354,12 @@ module soc_system_mm_interconnect_0 (
 	wire          nios2_gen2_0_instruction_master_agent_cp_ready;                                               // router_003:sink_ready -> nios2_gen2_0_instruction_master_agent:cp_ready
 	wire          nios2_gen2_0_instruction_master_agent_cp_startofpacket;                                       // nios2_gen2_0_instruction_master_agent:cp_startofpacket -> router_003:sink_startofpacket
 	wire          nios2_gen2_0_instruction_master_agent_cp_endofpacket;                                         // nios2_gen2_0_instruction_master_agent:cp_endofpacket -> router_003:sink_endofpacket
+	wire          router_003_src_valid;                                                                         // router_003:src_valid -> cmd_demux_003:sink_valid
+	wire  [126:0] router_003_src_data;                                                                          // router_003:src_data -> cmd_demux_003:sink_data
+	wire          router_003_src_ready;                                                                         // cmd_demux_003:sink_ready -> router_003:src_ready
+	wire    [5:0] router_003_src_channel;                                                                       // router_003:src_channel -> cmd_demux_003:sink_channel
+	wire          router_003_src_startofpacket;                                                                 // router_003:src_startofpacket -> cmd_demux_003:sink_startofpacket
+	wire          router_003_src_endofpacket;                                                                   // router_003:src_endofpacket -> cmd_demux_003:sink_endofpacket
 	wire          jtag_uart_avalon_jtag_slave_agent_rp_valid;                                                   // jtag_uart_avalon_jtag_slave_agent:rp_valid -> router_004:sink_valid
 	wire  [126:0] jtag_uart_avalon_jtag_slave_agent_rp_data;                                                    // jtag_uart_avalon_jtag_slave_agent:rp_data -> router_004:sink_data
 	wire          jtag_uart_avalon_jtag_slave_agent_rp_ready;                                                   // router_004:sink_ready -> jtag_uart_avalon_jtag_slave_agent:rp_ready
@@ -404,52 +426,6 @@ module soc_system_mm_interconnect_0 (
 	wire    [5:0] router_009_src_channel;                                                                       // router_009:src_channel -> rsp_demux_005:sink_channel
 	wire          router_009_src_startofpacket;                                                                 // router_009:src_startofpacket -> rsp_demux_005:sink_startofpacket
 	wire          router_009_src_endofpacket;                                                                   // router_009:src_endofpacket -> rsp_demux_005:sink_endofpacket
-	wire          router_src_valid;                                                                             // router:src_valid -> nios2_gen2_0_data_master_limiter:cmd_sink_valid
-	wire  [126:0] router_src_data;                                                                              // router:src_data -> nios2_gen2_0_data_master_limiter:cmd_sink_data
-	wire          router_src_ready;                                                                             // nios2_gen2_0_data_master_limiter:cmd_sink_ready -> router:src_ready
-	wire    [5:0] router_src_channel;                                                                           // router:src_channel -> nios2_gen2_0_data_master_limiter:cmd_sink_channel
-	wire          router_src_startofpacket;                                                                     // router:src_startofpacket -> nios2_gen2_0_data_master_limiter:cmd_sink_startofpacket
-	wire          router_src_endofpacket;                                                                       // router:src_endofpacket -> nios2_gen2_0_data_master_limiter:cmd_sink_endofpacket
-	wire  [126:0] nios2_gen2_0_data_master_limiter_cmd_src_data;                                                // nios2_gen2_0_data_master_limiter:cmd_src_data -> cmd_demux:sink_data
-	wire          nios2_gen2_0_data_master_limiter_cmd_src_ready;                                               // cmd_demux:sink_ready -> nios2_gen2_0_data_master_limiter:cmd_src_ready
-	wire    [5:0] nios2_gen2_0_data_master_limiter_cmd_src_channel;                                             // nios2_gen2_0_data_master_limiter:cmd_src_channel -> cmd_demux:sink_channel
-	wire          nios2_gen2_0_data_master_limiter_cmd_src_startofpacket;                                       // nios2_gen2_0_data_master_limiter:cmd_src_startofpacket -> cmd_demux:sink_startofpacket
-	wire          nios2_gen2_0_data_master_limiter_cmd_src_endofpacket;                                         // nios2_gen2_0_data_master_limiter:cmd_src_endofpacket -> cmd_demux:sink_endofpacket
-	wire          rsp_mux_src_valid;                                                                            // rsp_mux:src_valid -> nios2_gen2_0_data_master_limiter:rsp_sink_valid
-	wire  [126:0] rsp_mux_src_data;                                                                             // rsp_mux:src_data -> nios2_gen2_0_data_master_limiter:rsp_sink_data
-	wire          rsp_mux_src_ready;                                                                            // nios2_gen2_0_data_master_limiter:rsp_sink_ready -> rsp_mux:src_ready
-	wire    [5:0] rsp_mux_src_channel;                                                                          // rsp_mux:src_channel -> nios2_gen2_0_data_master_limiter:rsp_sink_channel
-	wire          rsp_mux_src_startofpacket;                                                                    // rsp_mux:src_startofpacket -> nios2_gen2_0_data_master_limiter:rsp_sink_startofpacket
-	wire          rsp_mux_src_endofpacket;                                                                      // rsp_mux:src_endofpacket -> nios2_gen2_0_data_master_limiter:rsp_sink_endofpacket
-	wire          nios2_gen2_0_data_master_limiter_rsp_src_valid;                                               // nios2_gen2_0_data_master_limiter:rsp_src_valid -> nios2_gen2_0_data_master_agent:rp_valid
-	wire  [126:0] nios2_gen2_0_data_master_limiter_rsp_src_data;                                                // nios2_gen2_0_data_master_limiter:rsp_src_data -> nios2_gen2_0_data_master_agent:rp_data
-	wire          nios2_gen2_0_data_master_limiter_rsp_src_ready;                                               // nios2_gen2_0_data_master_agent:rp_ready -> nios2_gen2_0_data_master_limiter:rsp_src_ready
-	wire    [5:0] nios2_gen2_0_data_master_limiter_rsp_src_channel;                                             // nios2_gen2_0_data_master_limiter:rsp_src_channel -> nios2_gen2_0_data_master_agent:rp_channel
-	wire          nios2_gen2_0_data_master_limiter_rsp_src_startofpacket;                                       // nios2_gen2_0_data_master_limiter:rsp_src_startofpacket -> nios2_gen2_0_data_master_agent:rp_startofpacket
-	wire          nios2_gen2_0_data_master_limiter_rsp_src_endofpacket;                                         // nios2_gen2_0_data_master_limiter:rsp_src_endofpacket -> nios2_gen2_0_data_master_agent:rp_endofpacket
-	wire          router_003_src_valid;                                                                         // router_003:src_valid -> nios2_gen2_0_instruction_master_limiter:cmd_sink_valid
-	wire  [126:0] router_003_src_data;                                                                          // router_003:src_data -> nios2_gen2_0_instruction_master_limiter:cmd_sink_data
-	wire          router_003_src_ready;                                                                         // nios2_gen2_0_instruction_master_limiter:cmd_sink_ready -> router_003:src_ready
-	wire    [5:0] router_003_src_channel;                                                                       // router_003:src_channel -> nios2_gen2_0_instruction_master_limiter:cmd_sink_channel
-	wire          router_003_src_startofpacket;                                                                 // router_003:src_startofpacket -> nios2_gen2_0_instruction_master_limiter:cmd_sink_startofpacket
-	wire          router_003_src_endofpacket;                                                                   // router_003:src_endofpacket -> nios2_gen2_0_instruction_master_limiter:cmd_sink_endofpacket
-	wire  [126:0] nios2_gen2_0_instruction_master_limiter_cmd_src_data;                                         // nios2_gen2_0_instruction_master_limiter:cmd_src_data -> cmd_demux_003:sink_data
-	wire          nios2_gen2_0_instruction_master_limiter_cmd_src_ready;                                        // cmd_demux_003:sink_ready -> nios2_gen2_0_instruction_master_limiter:cmd_src_ready
-	wire    [5:0] nios2_gen2_0_instruction_master_limiter_cmd_src_channel;                                      // nios2_gen2_0_instruction_master_limiter:cmd_src_channel -> cmd_demux_003:sink_channel
-	wire          nios2_gen2_0_instruction_master_limiter_cmd_src_startofpacket;                                // nios2_gen2_0_instruction_master_limiter:cmd_src_startofpacket -> cmd_demux_003:sink_startofpacket
-	wire          nios2_gen2_0_instruction_master_limiter_cmd_src_endofpacket;                                  // nios2_gen2_0_instruction_master_limiter:cmd_src_endofpacket -> cmd_demux_003:sink_endofpacket
-	wire          rsp_mux_003_src_valid;                                                                        // rsp_mux_003:src_valid -> nios2_gen2_0_instruction_master_limiter:rsp_sink_valid
-	wire  [126:0] rsp_mux_003_src_data;                                                                         // rsp_mux_003:src_data -> nios2_gen2_0_instruction_master_limiter:rsp_sink_data
-	wire          rsp_mux_003_src_ready;                                                                        // nios2_gen2_0_instruction_master_limiter:rsp_sink_ready -> rsp_mux_003:src_ready
-	wire    [5:0] rsp_mux_003_src_channel;                                                                      // rsp_mux_003:src_channel -> nios2_gen2_0_instruction_master_limiter:rsp_sink_channel
-	wire          rsp_mux_003_src_startofpacket;                                                                // rsp_mux_003:src_startofpacket -> nios2_gen2_0_instruction_master_limiter:rsp_sink_startofpacket
-	wire          rsp_mux_003_src_endofpacket;                                                                  // rsp_mux_003:src_endofpacket -> nios2_gen2_0_instruction_master_limiter:rsp_sink_endofpacket
-	wire          nios2_gen2_0_instruction_master_limiter_rsp_src_valid;                                        // nios2_gen2_0_instruction_master_limiter:rsp_src_valid -> nios2_gen2_0_instruction_master_agent:rp_valid
-	wire  [126:0] nios2_gen2_0_instruction_master_limiter_rsp_src_data;                                         // nios2_gen2_0_instruction_master_limiter:rsp_src_data -> nios2_gen2_0_instruction_master_agent:rp_data
-	wire          nios2_gen2_0_instruction_master_limiter_rsp_src_ready;                                        // nios2_gen2_0_instruction_master_agent:rp_ready -> nios2_gen2_0_instruction_master_limiter:rsp_src_ready
-	wire    [5:0] nios2_gen2_0_instruction_master_limiter_rsp_src_channel;                                      // nios2_gen2_0_instruction_master_limiter:rsp_src_channel -> nios2_gen2_0_instruction_master_agent:rp_channel
-	wire          nios2_gen2_0_instruction_master_limiter_rsp_src_startofpacket;                                // nios2_gen2_0_instruction_master_limiter:rsp_src_startofpacket -> nios2_gen2_0_instruction_master_agent:rp_startofpacket
-	wire          nios2_gen2_0_instruction_master_limiter_rsp_src_endofpacket;                                  // nios2_gen2_0_instruction_master_limiter:rsp_src_endofpacket -> nios2_gen2_0_instruction_master_agent:rp_endofpacket
 	wire          cmd_mux_001_src_valid;                                                                        // cmd_mux_001:src_valid -> address_span_extender_0_cntl_burst_adapter:sink0_valid
 	wire  [162:0] cmd_mux_001_src_data;                                                                         // cmd_mux_001:src_data -> address_span_extender_0_cntl_burst_adapter:sink0_data
 	wire          cmd_mux_001_src_ready;                                                                        // address_span_extender_0_cntl_burst_adapter:sink0_ready -> cmd_mux_001:src_ready
@@ -630,8 +606,6 @@ module soc_system_mm_interconnect_0 (
 	wire    [5:0] onchip_memory2_0_s1_to_nios2_gen2_0_instruction_master_rsp_width_adapter_src_channel;         // onchip_memory2_0_s1_to_nios2_gen2_0_instruction_master_rsp_width_adapter:out_channel -> rsp_mux_003:sink1_channel
 	wire          onchip_memory2_0_s1_to_nios2_gen2_0_instruction_master_rsp_width_adapter_src_startofpacket;   // onchip_memory2_0_s1_to_nios2_gen2_0_instruction_master_rsp_width_adapter:out_startofpacket -> rsp_mux_003:sink1_startofpacket
 	wire          onchip_memory2_0_s1_to_nios2_gen2_0_instruction_master_rsp_width_adapter_src_endofpacket;     // onchip_memory2_0_s1_to_nios2_gen2_0_instruction_master_rsp_width_adapter:out_endofpacket -> rsp_mux_003:sink1_endofpacket
-	wire    [5:0] nios2_gen2_0_data_master_limiter_cmd_valid_data;                                              // nios2_gen2_0_data_master_limiter:cmd_src_valid -> cmd_demux:sink_valid
-	wire    [5:0] nios2_gen2_0_instruction_master_limiter_cmd_valid_data;                                       // nios2_gen2_0_instruction_master_limiter:cmd_src_valid -> cmd_demux_003:sink_valid
 	wire          jtag_uart_avalon_jtag_slave_agent_rdata_fifo_out_valid;                                       // jtag_uart_avalon_jtag_slave_agent_rdata_fifo:out_valid -> avalon_st_adapter:in_0_valid
 	wire   [33:0] jtag_uart_avalon_jtag_slave_agent_rdata_fifo_out_data;                                        // jtag_uart_avalon_jtag_slave_agent_rdata_fifo:out_data -> avalon_st_adapter:in_0_data
 	wire          jtag_uart_avalon_jtag_slave_agent_rdata_fifo_out_ready;                                       // avalon_st_adapter:in_0_ready -> jtag_uart_avalon_jtag_slave_agent_rdata_fifo:out_ready
@@ -688,7 +662,7 @@ module soc_system_mm_interconnect_0 (
 		.USE_BEGINTRANSFER           (0),
 		.USE_CHIPSELECT              (0),
 		.USE_BURSTCOUNT              (0),
-		.USE_READDATAVALID           (1),
+		.USE_READDATAVALID           (0),
 		.USE_WAITREQUEST             (1),
 		.USE_READRESPONSE            (0),
 		.USE_WRITERESPONSE           (0),
@@ -698,7 +672,7 @@ module soc_system_mm_interconnect_0 (
 		.AV_CONSTANT_BURST_BEHAVIOR  (0),
 		.UAV_CONSTANT_BURST_BEHAVIOR (0),
 		.AV_LINEWRAPBURSTS           (0),
-		.AV_REGISTERINCOMINGSIGNALS  (0)
+		.AV_REGISTERINCOMINGSIGNALS  (1)
 	) nios2_gen2_0_data_master_translator (
 		.clk                    (clk_0_clk_clk),                                                               //                       clk.clk
 		.reset                  (nios2_gen2_0_reset_reset_bridge_in_reset_reset),                              //                     reset.reset
@@ -718,7 +692,6 @@ module soc_system_mm_interconnect_0 (
 		.av_byteenable          (nios2_gen2_0_data_master_byteenable),                                         //                          .byteenable
 		.av_read                (nios2_gen2_0_data_master_read),                                               //                          .read
 		.av_readdata            (nios2_gen2_0_data_master_readdata),                                           //                          .readdata
-		.av_readdatavalid       (nios2_gen2_0_data_master_readdatavalid),                                      //                          .readdatavalid
 		.av_write               (nios2_gen2_0_data_master_write),                                              //                          .write
 		.av_writedata           (nios2_gen2_0_data_master_writedata),                                          //                          .writedata
 		.av_debugaccess         (nios2_gen2_0_data_master_debugaccess),                                        //                          .debugaccess
@@ -726,6 +699,7 @@ module soc_system_mm_interconnect_0 (
 		.av_beginbursttransfer  (1'b0),                                                                        //               (terminated)
 		.av_begintransfer       (1'b0),                                                                        //               (terminated)
 		.av_chipselect          (1'b0),                                                                        //               (terminated)
+		.av_readdatavalid       (),                                                                            //               (terminated)
 		.av_lock                (1'b0),                                                                        //               (terminated)
 		.uav_clken              (),                                                                            //               (terminated)
 		.av_clken               (1'b1),                                                                        //               (terminated)
@@ -748,7 +722,7 @@ module soc_system_mm_interconnect_0 (
 		.USE_BEGINTRANSFER           (0),
 		.USE_CHIPSELECT              (0),
 		.USE_BURSTCOUNT              (0),
-		.USE_READDATAVALID           (1),
+		.USE_READDATAVALID           (0),
 		.USE_WAITREQUEST             (1),
 		.USE_READRESPONSE            (0),
 		.USE_WRITERESPONSE           (0),
@@ -777,12 +751,12 @@ module soc_system_mm_interconnect_0 (
 		.av_waitrequest         (nios2_gen2_0_instruction_master_waitrequest),                                        //                          .waitrequest
 		.av_read                (nios2_gen2_0_instruction_master_read),                                               //                          .read
 		.av_readdata            (nios2_gen2_0_instruction_master_readdata),                                           //                          .readdata
-		.av_readdatavalid       (nios2_gen2_0_instruction_master_readdatavalid),                                      //                          .readdatavalid
 		.av_burstcount          (1'b1),                                                                               //               (terminated)
 		.av_byteenable          (4'b1111),                                                                            //               (terminated)
 		.av_beginbursttransfer  (1'b0),                                                                               //               (terminated)
 		.av_begintransfer       (1'b0),                                                                               //               (terminated)
 		.av_chipselect          (1'b0),                                                                               //               (terminated)
+		.av_readdatavalid       (),                                                                                   //               (terminated)
 		.av_write               (1'b0),                                                                               //               (terminated)
 		.av_writedata           (32'b00000000000000000000000000000000),                                               //               (terminated)
 		.av_lock                (1'b0),                                                                               //               (terminated)
@@ -1250,12 +1224,12 @@ module soc_system_mm_interconnect_0 (
 		.cp_startofpacket      (nios2_gen2_0_data_master_agent_cp_startofpacket),                             //          .startofpacket
 		.cp_endofpacket        (nios2_gen2_0_data_master_agent_cp_endofpacket),                               //          .endofpacket
 		.cp_ready              (nios2_gen2_0_data_master_agent_cp_ready),                                     //          .ready
-		.rp_valid              (nios2_gen2_0_data_master_limiter_rsp_src_valid),                              //        rp.valid
-		.rp_data               (nios2_gen2_0_data_master_limiter_rsp_src_data),                               //          .data
-		.rp_channel            (nios2_gen2_0_data_master_limiter_rsp_src_channel),                            //          .channel
-		.rp_startofpacket      (nios2_gen2_0_data_master_limiter_rsp_src_startofpacket),                      //          .startofpacket
-		.rp_endofpacket        (nios2_gen2_0_data_master_limiter_rsp_src_endofpacket),                        //          .endofpacket
-		.rp_ready              (nios2_gen2_0_data_master_limiter_rsp_src_ready),                              //          .ready
+		.rp_valid              (rsp_mux_src_valid),                                                           //        rp.valid
+		.rp_data               (rsp_mux_src_data),                                                            //          .data
+		.rp_channel            (rsp_mux_src_channel),                                                         //          .channel
+		.rp_startofpacket      (rsp_mux_src_startofpacket),                                                   //          .startofpacket
+		.rp_endofpacket        (rsp_mux_src_endofpacket),                                                     //          .endofpacket
+		.rp_ready              (rsp_mux_src_ready),                                                           //          .ready
 		.av_response           (),                                                                            // (terminated)
 		.av_writeresponsevalid ()                                                                             // (terminated)
 	);
@@ -1459,12 +1433,12 @@ module soc_system_mm_interconnect_0 (
 		.cp_startofpacket      (nios2_gen2_0_instruction_master_agent_cp_startofpacket),                             //          .startofpacket
 		.cp_endofpacket        (nios2_gen2_0_instruction_master_agent_cp_endofpacket),                               //          .endofpacket
 		.cp_ready              (nios2_gen2_0_instruction_master_agent_cp_ready),                                     //          .ready
-		.rp_valid              (nios2_gen2_0_instruction_master_limiter_rsp_src_valid),                              //        rp.valid
-		.rp_data               (nios2_gen2_0_instruction_master_limiter_rsp_src_data),                               //          .data
-		.rp_channel            (nios2_gen2_0_instruction_master_limiter_rsp_src_channel),                            //          .channel
-		.rp_startofpacket      (nios2_gen2_0_instruction_master_limiter_rsp_src_startofpacket),                      //          .startofpacket
-		.rp_endofpacket        (nios2_gen2_0_instruction_master_limiter_rsp_src_endofpacket),                        //          .endofpacket
-		.rp_ready              (nios2_gen2_0_instruction_master_limiter_rsp_src_ready),                              //          .ready
+		.rp_valid              (rsp_mux_003_src_valid),                                                              //        rp.valid
+		.rp_data               (rsp_mux_003_src_data),                                                               //          .data
+		.rp_channel            (rsp_mux_003_src_channel),                                                            //          .channel
+		.rp_startofpacket      (rsp_mux_003_src_startofpacket),                                                      //          .startofpacket
+		.rp_endofpacket        (rsp_mux_003_src_endofpacket),                                                        //          .endofpacket
+		.rp_ready              (rsp_mux_003_src_ready),                                                              //          .ready
 		.av_response           (),                                                                                   // (terminated)
 		.av_writeresponsevalid ()                                                                                    // (terminated)
 	);
@@ -2625,106 +2599,6 @@ module soc_system_mm_interconnect_0 (
 		.src_endofpacket    (router_009_src_endofpacket)                                     //          .endofpacket
 	);
 
-	altera_merlin_traffic_limiter #(
-		.PKT_DEST_ID_H             (102),
-		.PKT_DEST_ID_L             (100),
-		.PKT_SRC_ID_H              (99),
-		.PKT_SRC_ID_L              (97),
-		.PKT_BYTE_CNT_H            (79),
-		.PKT_BYTE_CNT_L            (72),
-		.PKT_BYTEEN_H              (35),
-		.PKT_BYTEEN_L              (32),
-		.PKT_TRANS_POSTED          (67),
-		.PKT_TRANS_WRITE           (68),
-		.MAX_OUTSTANDING_RESPONSES (3),
-		.PIPELINED                 (0),
-		.ST_DATA_W                 (127),
-		.ST_CHANNEL_W              (6),
-		.VALID_WIDTH               (6),
-		.ENFORCE_ORDER             (1),
-		.PREVENT_HAZARDS           (0),
-		.SUPPORTS_POSTED_WRITES    (1),
-		.SUPPORTS_NONPOSTED_WRITES (0),
-		.REORDER                   (0)
-	) nios2_gen2_0_data_master_limiter (
-		.clk                    (clk_0_clk_clk),                                          //       clk.clk
-		.reset                  (nios2_gen2_0_reset_reset_bridge_in_reset_reset),         // clk_reset.reset
-		.cmd_sink_ready         (router_src_ready),                                       //  cmd_sink.ready
-		.cmd_sink_valid         (router_src_valid),                                       //          .valid
-		.cmd_sink_data          (router_src_data),                                        //          .data
-		.cmd_sink_channel       (router_src_channel),                                     //          .channel
-		.cmd_sink_startofpacket (router_src_startofpacket),                               //          .startofpacket
-		.cmd_sink_endofpacket   (router_src_endofpacket),                                 //          .endofpacket
-		.cmd_src_ready          (nios2_gen2_0_data_master_limiter_cmd_src_ready),         //   cmd_src.ready
-		.cmd_src_data           (nios2_gen2_0_data_master_limiter_cmd_src_data),          //          .data
-		.cmd_src_channel        (nios2_gen2_0_data_master_limiter_cmd_src_channel),       //          .channel
-		.cmd_src_startofpacket  (nios2_gen2_0_data_master_limiter_cmd_src_startofpacket), //          .startofpacket
-		.cmd_src_endofpacket    (nios2_gen2_0_data_master_limiter_cmd_src_endofpacket),   //          .endofpacket
-		.rsp_sink_ready         (rsp_mux_src_ready),                                      //  rsp_sink.ready
-		.rsp_sink_valid         (rsp_mux_src_valid),                                      //          .valid
-		.rsp_sink_channel       (rsp_mux_src_channel),                                    //          .channel
-		.rsp_sink_data          (rsp_mux_src_data),                                       //          .data
-		.rsp_sink_startofpacket (rsp_mux_src_startofpacket),                              //          .startofpacket
-		.rsp_sink_endofpacket   (rsp_mux_src_endofpacket),                                //          .endofpacket
-		.rsp_src_ready          (nios2_gen2_0_data_master_limiter_rsp_src_ready),         //   rsp_src.ready
-		.rsp_src_valid          (nios2_gen2_0_data_master_limiter_rsp_src_valid),         //          .valid
-		.rsp_src_data           (nios2_gen2_0_data_master_limiter_rsp_src_data),          //          .data
-		.rsp_src_channel        (nios2_gen2_0_data_master_limiter_rsp_src_channel),       //          .channel
-		.rsp_src_startofpacket  (nios2_gen2_0_data_master_limiter_rsp_src_startofpacket), //          .startofpacket
-		.rsp_src_endofpacket    (nios2_gen2_0_data_master_limiter_rsp_src_endofpacket),   //          .endofpacket
-		.cmd_src_valid          (nios2_gen2_0_data_master_limiter_cmd_valid_data)         // cmd_valid.data
-	);
-
-	altera_merlin_traffic_limiter #(
-		.PKT_DEST_ID_H             (102),
-		.PKT_DEST_ID_L             (100),
-		.PKT_SRC_ID_H              (99),
-		.PKT_SRC_ID_L              (97),
-		.PKT_BYTE_CNT_H            (79),
-		.PKT_BYTE_CNT_L            (72),
-		.PKT_BYTEEN_H              (35),
-		.PKT_BYTEEN_L              (32),
-		.PKT_TRANS_POSTED          (67),
-		.PKT_TRANS_WRITE           (68),
-		.MAX_OUTSTANDING_RESPONSES (3),
-		.PIPELINED                 (0),
-		.ST_DATA_W                 (127),
-		.ST_CHANNEL_W              (6),
-		.VALID_WIDTH               (6),
-		.ENFORCE_ORDER             (1),
-		.PREVENT_HAZARDS           (0),
-		.SUPPORTS_POSTED_WRITES    (1),
-		.SUPPORTS_NONPOSTED_WRITES (0),
-		.REORDER                   (0)
-	) nios2_gen2_0_instruction_master_limiter (
-		.clk                    (clk_0_clk_clk),                                                 //       clk.clk
-		.reset                  (nios2_gen2_0_reset_reset_bridge_in_reset_reset),                // clk_reset.reset
-		.cmd_sink_ready         (router_003_src_ready),                                          //  cmd_sink.ready
-		.cmd_sink_valid         (router_003_src_valid),                                          //          .valid
-		.cmd_sink_data          (router_003_src_data),                                           //          .data
-		.cmd_sink_channel       (router_003_src_channel),                                        //          .channel
-		.cmd_sink_startofpacket (router_003_src_startofpacket),                                  //          .startofpacket
-		.cmd_sink_endofpacket   (router_003_src_endofpacket),                                    //          .endofpacket
-		.cmd_src_ready          (nios2_gen2_0_instruction_master_limiter_cmd_src_ready),         //   cmd_src.ready
-		.cmd_src_data           (nios2_gen2_0_instruction_master_limiter_cmd_src_data),          //          .data
-		.cmd_src_channel        (nios2_gen2_0_instruction_master_limiter_cmd_src_channel),       //          .channel
-		.cmd_src_startofpacket  (nios2_gen2_0_instruction_master_limiter_cmd_src_startofpacket), //          .startofpacket
-		.cmd_src_endofpacket    (nios2_gen2_0_instruction_master_limiter_cmd_src_endofpacket),   //          .endofpacket
-		.rsp_sink_ready         (rsp_mux_003_src_ready),                                         //  rsp_sink.ready
-		.rsp_sink_valid         (rsp_mux_003_src_valid),                                         //          .valid
-		.rsp_sink_channel       (rsp_mux_003_src_channel),                                       //          .channel
-		.rsp_sink_data          (rsp_mux_003_src_data),                                          //          .data
-		.rsp_sink_startofpacket (rsp_mux_003_src_startofpacket),                                 //          .startofpacket
-		.rsp_sink_endofpacket   (rsp_mux_003_src_endofpacket),                                   //          .endofpacket
-		.rsp_src_ready          (nios2_gen2_0_instruction_master_limiter_rsp_src_ready),         //   rsp_src.ready
-		.rsp_src_valid          (nios2_gen2_0_instruction_master_limiter_rsp_src_valid),         //          .valid
-		.rsp_src_data           (nios2_gen2_0_instruction_master_limiter_rsp_src_data),          //          .data
-		.rsp_src_channel        (nios2_gen2_0_instruction_master_limiter_rsp_src_channel),       //          .channel
-		.rsp_src_startofpacket  (nios2_gen2_0_instruction_master_limiter_rsp_src_startofpacket), //          .startofpacket
-		.rsp_src_endofpacket    (nios2_gen2_0_instruction_master_limiter_rsp_src_endofpacket),   //          .endofpacket
-		.cmd_src_valid          (nios2_gen2_0_instruction_master_limiter_cmd_valid_data)         // cmd_valid.data
-	);
-
 	altera_merlin_burst_adapter #(
 		.PKT_ADDR_H                (101),
 		.PKT_ADDR_L                (72),
@@ -2826,50 +2700,50 @@ module soc_system_mm_interconnect_0 (
 	);
 
 	soc_system_mm_interconnect_0_cmd_demux cmd_demux (
-		.clk                (clk_0_clk_clk),                                          //        clk.clk
-		.reset              (nios2_gen2_0_reset_reset_bridge_in_reset_reset),         //  clk_reset.reset
-		.sink_ready         (nios2_gen2_0_data_master_limiter_cmd_src_ready),         //       sink.ready
-		.sink_channel       (nios2_gen2_0_data_master_limiter_cmd_src_channel),       //           .channel
-		.sink_data          (nios2_gen2_0_data_master_limiter_cmd_src_data),          //           .data
-		.sink_startofpacket (nios2_gen2_0_data_master_limiter_cmd_src_startofpacket), //           .startofpacket
-		.sink_endofpacket   (nios2_gen2_0_data_master_limiter_cmd_src_endofpacket),   //           .endofpacket
-		.sink_valid         (nios2_gen2_0_data_master_limiter_cmd_valid_data),        // sink_valid.data
-		.src0_ready         (cmd_demux_src0_ready),                                   //       src0.ready
-		.src0_valid         (cmd_demux_src0_valid),                                   //           .valid
-		.src0_data          (cmd_demux_src0_data),                                    //           .data
-		.src0_channel       (cmd_demux_src0_channel),                                 //           .channel
-		.src0_startofpacket (cmd_demux_src0_startofpacket),                           //           .startofpacket
-		.src0_endofpacket   (cmd_demux_src0_endofpacket),                             //           .endofpacket
-		.src1_ready         (cmd_demux_src1_ready),                                   //       src1.ready
-		.src1_valid         (cmd_demux_src1_valid),                                   //           .valid
-		.src1_data          (cmd_demux_src1_data),                                    //           .data
-		.src1_channel       (cmd_demux_src1_channel),                                 //           .channel
-		.src1_startofpacket (cmd_demux_src1_startofpacket),                           //           .startofpacket
-		.src1_endofpacket   (cmd_demux_src1_endofpacket),                             //           .endofpacket
-		.src2_ready         (cmd_demux_src2_ready),                                   //       src2.ready
-		.src2_valid         (cmd_demux_src2_valid),                                   //           .valid
-		.src2_data          (cmd_demux_src2_data),                                    //           .data
-		.src2_channel       (cmd_demux_src2_channel),                                 //           .channel
-		.src2_startofpacket (cmd_demux_src2_startofpacket),                           //           .startofpacket
-		.src2_endofpacket   (cmd_demux_src2_endofpacket),                             //           .endofpacket
-		.src3_ready         (cmd_demux_src3_ready),                                   //       src3.ready
-		.src3_valid         (cmd_demux_src3_valid),                                   //           .valid
-		.src3_data          (cmd_demux_src3_data),                                    //           .data
-		.src3_channel       (cmd_demux_src3_channel),                                 //           .channel
-		.src3_startofpacket (cmd_demux_src3_startofpacket),                           //           .startofpacket
-		.src3_endofpacket   (cmd_demux_src3_endofpacket),                             //           .endofpacket
-		.src4_ready         (cmd_demux_src4_ready),                                   //       src4.ready
-		.src4_valid         (cmd_demux_src4_valid),                                   //           .valid
-		.src4_data          (cmd_demux_src4_data),                                    //           .data
-		.src4_channel       (cmd_demux_src4_channel),                                 //           .channel
-		.src4_startofpacket (cmd_demux_src4_startofpacket),                           //           .startofpacket
-		.src4_endofpacket   (cmd_demux_src4_endofpacket),                             //           .endofpacket
-		.src5_ready         (cmd_demux_src5_ready),                                   //       src5.ready
-		.src5_valid         (cmd_demux_src5_valid),                                   //           .valid
-		.src5_data          (cmd_demux_src5_data),                                    //           .data
-		.src5_channel       (cmd_demux_src5_channel),                                 //           .channel
-		.src5_startofpacket (cmd_demux_src5_startofpacket),                           //           .startofpacket
-		.src5_endofpacket   (cmd_demux_src5_endofpacket)                              //           .endofpacket
+		.clk                (clk_0_clk_clk),                                  //       clk.clk
+		.reset              (nios2_gen2_0_reset_reset_bridge_in_reset_reset), // clk_reset.reset
+		.sink_ready         (router_src_ready),                               //      sink.ready
+		.sink_channel       (router_src_channel),                             //          .channel
+		.sink_data          (router_src_data),                                //          .data
+		.sink_startofpacket (router_src_startofpacket),                       //          .startofpacket
+		.sink_endofpacket   (router_src_endofpacket),                         //          .endofpacket
+		.sink_valid         (router_src_valid),                               //          .valid
+		.src0_ready         (cmd_demux_src0_ready),                           //      src0.ready
+		.src0_valid         (cmd_demux_src0_valid),                           //          .valid
+		.src0_data          (cmd_demux_src0_data),                            //          .data
+		.src0_channel       (cmd_demux_src0_channel),                         //          .channel
+		.src0_startofpacket (cmd_demux_src0_startofpacket),                   //          .startofpacket
+		.src0_endofpacket   (cmd_demux_src0_endofpacket),                     //          .endofpacket
+		.src1_ready         (cmd_demux_src1_ready),                           //      src1.ready
+		.src1_valid         (cmd_demux_src1_valid),                           //          .valid
+		.src1_data          (cmd_demux_src1_data),                            //          .data
+		.src1_channel       (cmd_demux_src1_channel),                         //          .channel
+		.src1_startofpacket (cmd_demux_src1_startofpacket),                   //          .startofpacket
+		.src1_endofpacket   (cmd_demux_src1_endofpacket),                     //          .endofpacket
+		.src2_ready         (cmd_demux_src2_ready),                           //      src2.ready
+		.src2_valid         (cmd_demux_src2_valid),                           //          .valid
+		.src2_data          (cmd_demux_src2_data),                            //          .data
+		.src2_channel       (cmd_demux_src2_channel),                         //          .channel
+		.src2_startofpacket (cmd_demux_src2_startofpacket),                   //          .startofpacket
+		.src2_endofpacket   (cmd_demux_src2_endofpacket),                     //          .endofpacket
+		.src3_ready         (cmd_demux_src3_ready),                           //      src3.ready
+		.src3_valid         (cmd_demux_src3_valid),                           //          .valid
+		.src3_data          (cmd_demux_src3_data),                            //          .data
+		.src3_channel       (cmd_demux_src3_channel),                         //          .channel
+		.src3_startofpacket (cmd_demux_src3_startofpacket),                   //          .startofpacket
+		.src3_endofpacket   (cmd_demux_src3_endofpacket),                     //          .endofpacket
+		.src4_ready         (cmd_demux_src4_ready),                           //      src4.ready
+		.src4_valid         (cmd_demux_src4_valid),                           //          .valid
+		.src4_data          (cmd_demux_src4_data),                            //          .data
+		.src4_channel       (cmd_demux_src4_channel),                         //          .channel
+		.src4_startofpacket (cmd_demux_src4_startofpacket),                   //          .startofpacket
+		.src4_endofpacket   (cmd_demux_src4_endofpacket),                     //          .endofpacket
+		.src5_ready         (cmd_demux_src5_ready),                           //      src5.ready
+		.src5_valid         (cmd_demux_src5_valid),                           //          .valid
+		.src5_data          (cmd_demux_src5_data),                            //          .data
+		.src5_channel       (cmd_demux_src5_channel),                         //          .channel
+		.src5_startofpacket (cmd_demux_src5_startofpacket),                   //          .startofpacket
+		.src5_endofpacket   (cmd_demux_src5_endofpacket)                      //          .endofpacket
 	);
 
 	soc_system_mm_interconnect_0_cmd_demux_001 cmd_demux_001 (
@@ -2907,26 +2781,26 @@ module soc_system_mm_interconnect_0 (
 	);
 
 	soc_system_mm_interconnect_0_cmd_demux_003 cmd_demux_003 (
-		.clk                (clk_0_clk_clk),                                                 //        clk.clk
-		.reset              (nios2_gen2_0_reset_reset_bridge_in_reset_reset),                //  clk_reset.reset
-		.sink_ready         (nios2_gen2_0_instruction_master_limiter_cmd_src_ready),         //       sink.ready
-		.sink_channel       (nios2_gen2_0_instruction_master_limiter_cmd_src_channel),       //           .channel
-		.sink_data          (nios2_gen2_0_instruction_master_limiter_cmd_src_data),          //           .data
-		.sink_startofpacket (nios2_gen2_0_instruction_master_limiter_cmd_src_startofpacket), //           .startofpacket
-		.sink_endofpacket   (nios2_gen2_0_instruction_master_limiter_cmd_src_endofpacket),   //           .endofpacket
-		.sink_valid         (nios2_gen2_0_instruction_master_limiter_cmd_valid_data),        // sink_valid.data
-		.src0_ready         (cmd_demux_003_src0_ready),                                      //       src0.ready
-		.src0_valid         (cmd_demux_003_src0_valid),                                      //           .valid
-		.src0_data          (cmd_demux_003_src0_data),                                       //           .data
-		.src0_channel       (cmd_demux_003_src0_channel),                                    //           .channel
-		.src0_startofpacket (cmd_demux_003_src0_startofpacket),                              //           .startofpacket
-		.src0_endofpacket   (cmd_demux_003_src0_endofpacket),                                //           .endofpacket
-		.src1_ready         (cmd_demux_003_src1_ready),                                      //       src1.ready
-		.src1_valid         (cmd_demux_003_src1_valid),                                      //           .valid
-		.src1_data          (cmd_demux_003_src1_data),                                       //           .data
-		.src1_channel       (cmd_demux_003_src1_channel),                                    //           .channel
-		.src1_startofpacket (cmd_demux_003_src1_startofpacket),                              //           .startofpacket
-		.src1_endofpacket   (cmd_demux_003_src1_endofpacket)                                 //           .endofpacket
+		.clk                (clk_0_clk_clk),                                  //       clk.clk
+		.reset              (nios2_gen2_0_reset_reset_bridge_in_reset_reset), // clk_reset.reset
+		.sink_ready         (router_003_src_ready),                           //      sink.ready
+		.sink_channel       (router_003_src_channel),                         //          .channel
+		.sink_data          (router_003_src_data),                            //          .data
+		.sink_startofpacket (router_003_src_startofpacket),                   //          .startofpacket
+		.sink_endofpacket   (router_003_src_endofpacket),                     //          .endofpacket
+		.sink_valid         (router_003_src_valid),                           //          .valid
+		.src0_ready         (cmd_demux_003_src0_ready),                       //      src0.ready
+		.src0_valid         (cmd_demux_003_src0_valid),                       //          .valid
+		.src0_data          (cmd_demux_003_src0_data),                        //          .data
+		.src0_channel       (cmd_demux_003_src0_channel),                     //          .channel
+		.src0_startofpacket (cmd_demux_003_src0_startofpacket),               //          .startofpacket
+		.src0_endofpacket   (cmd_demux_003_src0_endofpacket),                 //          .endofpacket
+		.src1_ready         (cmd_demux_003_src1_ready),                       //      src1.ready
+		.src1_valid         (cmd_demux_003_src1_valid),                       //          .valid
+		.src1_data          (cmd_demux_003_src1_data),                        //          .data
+		.src1_channel       (cmd_demux_003_src1_channel),                     //          .channel
+		.src1_startofpacket (cmd_demux_003_src1_startofpacket),               //          .startofpacket
+		.src1_endofpacket   (cmd_demux_003_src1_endofpacket)                  //          .endofpacket
 	);
 
 	soc_system_mm_interconnect_0_cmd_mux cmd_mux (
@@ -3089,7 +2963,7 @@ module soc_system_mm_interconnect_0 (
 		.src0_endofpacket   (rsp_demux_001_src0_endofpacket)               //          .endofpacket
 	);
 
-	soc_system_mm_interconnect_0_rsp_demux_002 rsp_demux_002 (
+	soc_system_mm_interconnect_0_cmd_demux_003 rsp_demux_002 (
 		.clk                (clk_0_clk_clk),                                  //       clk.clk
 		.reset              (nios2_gen2_0_reset_reset_bridge_in_reset_reset), // clk_reset.reset
 		.sink_ready         (router_006_src_ready),                           //      sink.ready

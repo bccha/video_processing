@@ -1,0 +1,53 @@
+# Quartus II
+db/
+incremental_db/
+output_files/
+simulation/
+greybox_tmp/
+hc_output/
+.qsys_edit/
+*.rpt
+*.summary
+*.smsg
+*.jdi
+*.pin
+*.qws
+*.sld
+*.bak
+*.qarlog
+*.done
+*.chg
+*.qmsg
+*.log
+*.sof
+*.pof
+*.jam
+*.jbc
+
+# Qsys / Platform Designer
+soc_system/synthesis/
+soc_system/testbench/
+soc_system.sopcinfo
+soc_system.html
+soc_system.cmp
+*soc_system_generation_previous.rpt
+*.sopcinfo
+*.html
+*.cmp
+
+# Nios II Software
+nios_software/*/obj/
+nios_software/*/bin/
+nios_software/*/*.elf
+nios_software/*/*.map
+nios_software/*/*.objdump
+nios_software/*_bsp/obj/
+nios_software/*_bsp/*.a
+nios_software/*_bsp/.force_rebuild_all
+
+# Demo batch / temp files
+demo_batch/*.txt
+demo_batch/*.log
+
+# User rules
+# .settings/

@@ -1,5 +1,5 @@
 Flow report for DE10_NANO_SoC_GHRD
-Thu Feb 26 16:21:40 2026
+Fri Feb 27 16:21:33 2026
 Quartus Prime Version 20.1.1 Build 720 11/11/2020 SJ Lite Edition
 
 
@@ -38,24 +38,29 @@ https://fpgasoftware.intel.com/eula.
 
 
 
-+---------------------------------------------------------------------------+
-; Flow Summary                                                              ;
-+-----------------------------+---------------------------------------------+
-; Flow Status                 ; Successful - Thu Feb 26 16:21:40 2026       ;
-; Quartus Prime Version       ; 20.1.1 Build 720 11/11/2020 SJ Lite Edition ;
-; Revision Name               ; DE10_NANO_SoC_GHRD                          ;
-; Top-level Entity Name       ; DE10_NANO_SoC_GHRD                          ;
-; Family                      ; Cyclone V                                   ;
-; Device                      ; 5CSEBA6U23I7                                ;
-; Timing Models               ; Final                                       ;
-; Logic utilization (in ALMs) ; N/A until Partition Merge                   ;
-; Total registers             ; N/A until Partition Merge                   ;
-; Total pins                  ; N/A until Partition Merge                   ;
-; Total virtual pins          ; N/A until Partition Merge                   ;
-; Total block memory bits     ; N/A until Partition Merge                   ;
-; Total PLLs                  ; N/A until Partition Merge                   ;
-; Total DLLs                  ; N/A until Partition Merge                   ;
-+-----------------------------+---------------------------------------------+
++-------------------------------------------------------------------------------+
+; Flow Summary                                                                  ;
++---------------------------------+---------------------------------------------+
+; Flow Status                     ; Successful - Fri Feb 27 16:20:47 2026       ;
+; Quartus Prime Version           ; 20.1.1 Build 720 11/11/2020 SJ Lite Edition ;
+; Revision Name                   ; DE10_NANO_SoC_GHRD                          ;
+; Top-level Entity Name           ; DE10_NANO_SoC_GHRD                          ;
+; Family                          ; Cyclone V                                   ;
+; Device                          ; 5CSEBA6U23I7                                ;
+; Timing Models                   ; Final                                       ;
+; Logic utilization (in ALMs)     ; 1,728 / 41,910 ( 4 % )                      ;
+; Total registers                 ; 2630                                        ;
+; Total pins                      ; 172 / 314 ( 55 % )                          ;
+; Total virtual pins              ; 0                                           ;
+; Total block memory bits         ; 811,464 / 5,662,720 ( 14 % )                ;
+; Total DSP Blocks                ; 0 / 112 ( 0 % )                             ;
+; Total HSSI RX PCSs              ; 0                                           ;
+; Total HSSI PMA RX Deserializers ; 0                                           ;
+; Total HSSI TX PCSs              ; 0                                           ;
+; Total HSSI PMA TX Serializers   ; 0                                           ;
+; Total PLLs                      ; 0 / 6 ( 0 % )                               ;
+; Total DLLs                      ; 1 / 4 ( 25 % )                              ;
++---------------------------------+---------------------------------------------+
 
 
 +-----------------------------------------+
@@ -63,7 +68,7 @@ https://fpgasoftware.intel.com/eula.
 +-------------------+---------------------+
 ; Option            ; Setting             ;
 +-------------------+---------------------+
-; Start date & time ; 02/26/2026 16:19:19 ;
+; Start date & time ; 02/27/2026 16:12:45 ;
 ; Main task         ; Compilation         ;
 ; Revision Name     ; DE10_NANO_SoC_GHRD  ;
 +-------------------+---------------------+
@@ -74,7 +79,7 @@ https://fpgasoftware.intel.com/eula.
 +---------------------------------------+--------------------------------------------------------------------------+---------------+--------------------------------+------------+
 ; Assignment Name                       ; Value                                                                    ; Default Value ; Entity Name                    ; Section Id ;
 +---------------------------------------+--------------------------------------------------------------------------+---------------+--------------------------------+------------+
-; COMPILER_SIGNATURE_ID                 ; 963354577195.177214075824444                                             ; --            ; --                             ; --         ;
+; COMPILER_SIGNATURE_ID                 ; 963354577195.177222676104528                                             ; --            ; --                             ; --         ;
 ; ECO_REGENERATE_REPORT                 ; On                                                                       ; Off           ; --                             ; --         ;
 ; HPS_ISW_FILE                          ; soc_system/synthesis/submodules/sequencer/alt_types.pre.h                ; --            ; soc_system_hps_0_hps_io_border ; --         ;
 ; HPS_ISW_FILE                          ; soc_system/synthesis/submodules/sequencer/emif.pre.xml                   ; --            ; soc_system_hps_0_hps_io_border ; --         ;
@@ -94,7 +99,7 @@ https://fpgasoftware.intel.com/eula.
 ; MIN_CORE_JUNCTION_TEMP                ; -40                                                                      ; --            ; --                             ; --         ;
 ; MISC_FILE                             ; ip/altsource_probe/hps_reset_bb.v                                        ; --            ; --                             ; --         ;
 ; MISC_FILE                             ; soc_system/synthesis/../soc_system.cmp                                   ; --            ; --                             ; --         ;
-; MISC_FILE                             ; soc_system/synthesis/../../E                                             ; --            ; --                             ; --         ;
+; MISC_FILE                             ; soc_system/synthesis/../../C                                             ; --            ; --                             ; --         ;
 ; MISC_FILE                             ; soc_system/synthesis/soc_system_hps_0_hps.svd                            ; --            ; --                             ; --         ;
 ; MISC_FILE                             ; soc_system/synthesis/../../soc_system.qsys                               ; --            ; --                             ; --         ;
 ; MISC_FILE                             ; soc_system/synthesis/submodules/sequencer/alt_types.pre.h                ; --            ; --                             ; --         ;
@@ -118,36 +123,45 @@ https://fpgasoftware.intel.com/eula.
 ; PROJECT_OUTPUT_DIRECTORY              ; output_files                                                             ; --            ; --                             ; --         ;
 ; SLD_FILE                              ; soc_system/synthesis/soc_system.regmap                                   ; --            ; --                             ; --         ;
 ; SLD_FILE                              ; soc_system/synthesis/soc_system.debuginfo                                ; --            ; --                             ; --         ;
-; SLD_INFO                              ; QSYS_NAME soc_system HAS_SOPCINFO 1 GENERATION_ID 1481597080             ; --            ; soc_system                     ; --         ;
+; SLD_INFO                              ; QSYS_NAME soc_system HAS_SOPCINFO 1 GENERATION_ID 1772226507             ; --            ; soc_system                     ; --         ;
 ; SOPCINFO_FILE                         ; soc_system/synthesis/../../soc_system.sopcinfo                           ; --            ; --                             ; --         ;
 ; SYNTHESIS_ONLY_QIP                    ; On                                                                       ; --            ; --                             ; --         ;
 ; USE_DLL_FREQUENCY_FOR_DQS_DELAY_CHAIN ; On                                                                       ; Off           ; --                             ; --         ;
 +---------------------------------------+--------------------------------------------------------------------------+---------------+--------------------------------+------------+
 
 
-+----------------------------------------------------------------------------------------------------------------------------+
-; Flow Elapsed Time                                                                                                          ;
-+------------------------+--------------+-------------------------+---------------------+------------------------------------+
-; Module Name            ; Elapsed Time ; Average Processors Used ; Peak Virtual Memory ; Total CPU Time (on all processors) ;
-+------------------------+--------------+-------------------------+---------------------+------------------------------------+
-; Analysis & Elaboration ; 00:02:21     ; 1.0                     ; 5275 MB             ; 00:01:56                           ;
-; Total                  ; 00:02:21     ; --                      ; --                  ; 00:01:56                           ;
-+------------------------+--------------+-------------------------+---------------------+------------------------------------+
++--------------------------------------------------------------------------------------------------------------------------+
+; Flow Elapsed Time                                                                                                        ;
++----------------------+--------------+-------------------------+---------------------+------------------------------------+
+; Module Name          ; Elapsed Time ; Average Processors Used ; Peak Virtual Memory ; Total CPU Time (on all processors) ;
++----------------------+--------------+-------------------------+---------------------+------------------------------------+
+; Analysis & Synthesis ; 00:01:44     ; 1.0                     ; 5317 MB             ; 00:01:37                           ;
+; Fitter               ; 00:03:31     ; 1.2                     ; 8145 MB             ; 00:19:37                           ;
+; Assembler            ; 00:00:10     ; 1.0                     ; 4950 MB             ; 00:00:10                           ;
+; Timing Analyzer      ; 00:00:44     ; 1.6                     ; 6095 MB             ; 00:01:03                           ;
+; Total                ; 00:06:09     ; --                      ; --                  ; 00:22:27                           ;
++----------------------+--------------+-------------------------+---------------------+------------------------------------+
 
 
-+--------------------------------------------------------------------------------------+
-; Flow OS Summary                                                                      ;
-+------------------------+------------------+------------+------------+----------------+
-; Module Name            ; Machine Hostname ; OS Name    ; OS Version ; Processor type ;
-+------------------------+------------------+------------+------------+----------------+
-; Analysis & Elaboration ; CHABC_laptop     ; Windows 10 ; 10.0       ; x86_64         ;
-+------------------------+------------------+------------+------------+----------------+
++------------------------------------------------------------------------------------+
+; Flow OS Summary                                                                    ;
++----------------------+------------------+------------+------------+----------------+
+; Module Name          ; Machine Hostname ; OS Name    ; OS Version ; Processor type ;
++----------------------+------------------+------------+------------+----------------+
+; Analysis & Synthesis ; CHABC_laptop     ; Windows 10 ; 10.0       ; x86_64         ;
+; Fitter               ; CHABC_laptop     ; Windows 10 ; 10.0       ; x86_64         ;
+; Assembler            ; CHABC_laptop     ; Windows 10 ; 10.0       ; x86_64         ;
+; Timing Analyzer      ; CHABC_laptop     ; Windows 10 ; 10.0       ; x86_64         ;
++----------------------+------------------+------------+------------+----------------+
 
 
 ------------
 ; Flow Log ;
 ------------
-quartus_map --read_settings_files=on --write_settings_files=off DE10_NANO_SoC_GHRD -c DE10_NANO_SoC_GHRD --analysis_and_elaboration
+quartus_map --read_settings_files=on --write_settings_files=off DE10_NANO_SoC_GHRD -c DE10_NANO_SoC_GHRD
+quartus_fit --read_settings_files=off --write_settings_files=off DE10_NANO_SoC_GHRD -c DE10_NANO_SoC_GHRD
+quartus_asm --read_settings_files=off --write_settings_files=off DE10_NANO_SoC_GHRD -c DE10_NANO_SoC_GHRD
+quartus_sta DE10_NANO_SoC_GHRD -c DE10_NANO_SoC_GHRD
 
 
 
