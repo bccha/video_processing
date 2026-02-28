@@ -49,5 +49,11 @@ nios_software/*_bsp/.force_rebuild_all
 demo_batch/*.txt
 demo_batch/*.log
 
+# Python & Simulation
+__pycache__/
+*.pyc
+sim_build/
+pytest_error_log.txt
+
 # User rules
 # .settings/

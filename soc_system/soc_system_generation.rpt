@@ -53,6 +53,7 @@ Progress: Done reading input file
 Info: soc_system.button_pio: PIO inputs are not hardwired in test bench. Undefined values will be read from PIO inputs during simulation.
 Info: soc_system.dipsw_pio: PIO inputs are not hardwired in test bench. Undefined values will be read from PIO inputs during simulation.
 Warning: soc_system.hps_0: Setting the slave port width of interface f2h_sdram0 to 32 results in bandwidth under-utilization.  Altera recommends you set the interface data width to 64-bit or greater.
+Warning: soc_system.hps_0: Setting the slave port width of interface f2h_sdram1 to 32 results in bandwidth under-utilization.  Altera recommends you set the interface data width to 64-bit or greater.
 Info: soc_system.hps_0: HPS Main PLL counter settings: n = 0  m = 63
 Info: soc_system.hps_0: HPS peripherial PLL counter settings: n = 0  m = 39
 Info: soc_system.jtag_uart: JTAG UART IP input clock need to be at least double (2x) the operating frequency of JTAG TCK on board
@@ -119,6 +120,7 @@ Progress: Done reading input file
 Info: soc_system.button_pio: PIO inputs are not hardwired in test bench. Undefined values will be read from PIO inputs during simulation.
 Info: soc_system.dipsw_pio: PIO inputs are not hardwired in test bench. Undefined values will be read from PIO inputs during simulation.
 Warning: soc_system.hps_0: Setting the slave port width of interface f2h_sdram0 to 32 results in bandwidth under-utilization.  Altera recommends you set the interface data width to 64-bit or greater.
+Warning: soc_system.hps_0: Setting the slave port width of interface f2h_sdram1 to 32 results in bandwidth under-utilization.  Altera recommends you set the interface data width to 64-bit or greater.
 Info: soc_system.hps_0: HPS Main PLL counter settings: n = 0  m = 63
 Info: soc_system.hps_0: HPS peripherial PLL counter settings: n = 0  m = 39
 Info: soc_system.jtag_uart: JTAG UART IP input clock need to be at least double (2x) the operating frequency of JTAG TCK on board
@@ -128,7 +130,12 @@ Info: soc_system.pll_locked: PIO inputs are not hardwired in test bench. Undefin
 Info: soc_system.sysid_qsys: System ID is not assigned automatically. Edit the System ID parameter to provide a unique ID
 Info: soc_system.sysid_qsys: Time stamp will be automatically updated when this component is generated.
 Info: soc_system: Generating soc_system "soc_system" for QUARTUS_SYNTH
+Info: Interconnect is inserted between master address_span_extender_0.expanded_master and slave hps_0.f2h_sdram1_data because the master has address signal 32 bit wide, but the slave is 30 bit wide.
+Info: Interconnect is inserted between master address_span_extender_0.expanded_master and slave hps_0.f2h_sdram1_data because the master has burstcount signal 1 bit wide, but the slave is 8 bit wide.
 Info: Interconnect is inserted between master hps_0.h2f_lw_axi_master and slave mm_bridge_0.s0 because the master is of type axi and the slave is of type avalon.
+Info: Interconnect is inserted between master video_dma.m0 and slave hps_0.f2h_sdram0_data because the master has burstcount signal 9 bit wide, but the slave is 8 bit wide.
+Info: Interconnect is inserted between master video_dma.m0 and slave hps_0.f2h_sdram0_data because the master has address signal 32 bit wide, but the slave is 30 bit wide.
+Info: Interconnect is inserted between master video_dma.m0 and slave hps_0.f2h_sdram0_data because the master has debugaccess signal 1 bit wide, but the slave is 0 bit wide.
 Warning: hps_0.f2h_irq0: Cannot connect clock for irq_mapper.sender
 Warning: hps_0.f2h_irq0: Cannot connect reset for irq_mapper.sender
 Warning: hps_0.f2h_irq1: Cannot connect clock for irq_mapper_001.sender
@@ -138,43 +145,44 @@ Info: burst_master_0: "soc_system" instantiated burst_master "burst_master_0"
 Info: burst_master_4_0: "soc_system" instantiated burst_master_4 "burst_master_4_0"
 Info: Reusing file C:/Workspace/quartus/video_processing/soc_system/synthesis/submodules/simple_fifo.v
 Info: button_pio: Starting RTL generation for module 'soc_system_button_pio'
-Info: button_pio:   Generation command is [exec D:/intelfpga_lite/20.1/quartus/bin64/perl/bin/perl.exe -I D:/intelfpga_lite/20.1/quartus/bin64/perl/lib -I D:/intelfpga_lite/20.1/quartus/sopc_builder/bin/europa -I D:/intelfpga_lite/20.1/quartus/sopc_builder/bin -I D:/intelfpga_lite/20.1/quartus/../ip/altera/sopc_builder_ip/common -I D:/intelfpga_lite/20.1/quartus/../ip/altera/sopc_builder_ip/altera_avalon_pio -- D:/intelfpga_lite/20.1/quartus/../ip/altera/sopc_builder_ip/altera_avalon_pio/generate_rtl.pl --name=soc_system_button_pio --dir=C:/Users/morer/AppData/Local/Temp/alt0512_8943328238900645836.dir/0005_button_pio_gen/ --quartus_dir=D:/intelfpga_lite/20.1/quartus --verilog --config=C:/Users/morer/AppData/Local/Temp/alt0512_8943328238900645836.dir/0005_button_pio_gen//soc_system_button_pio_component_configuration.pl  --do_build_sim=0  ]
+Info: button_pio:   Generation command is [exec D:/intelfpga_lite/20.1/quartus/bin64/perl/bin/perl.exe -I D:/intelfpga_lite/20.1/quartus/bin64/perl/lib -I D:/intelfpga_lite/20.1/quartus/sopc_builder/bin/europa -I D:/intelfpga_lite/20.1/quartus/sopc_builder/bin -I D:/intelfpga_lite/20.1/quartus/../ip/altera/sopc_builder_ip/common -I D:/intelfpga_lite/20.1/quartus/../ip/altera/sopc_builder_ip/altera_avalon_pio -- D:/intelfpga_lite/20.1/quartus/../ip/altera/sopc_builder_ip/altera_avalon_pio/generate_rtl.pl --name=soc_system_button_pio --dir=C:/Users/morer/AppData/Local/Temp/alt0512_5886084277621277787.dir/0005_button_pio_gen/ --quartus_dir=D:/intelfpga_lite/20.1/quartus --verilog --config=C:/Users/morer/AppData/Local/Temp/alt0512_5886084277621277787.dir/0005_button_pio_gen//soc_system_button_pio_component_configuration.pl  --do_build_sim=0  ]
 Info: button_pio: Done RTL generation for module 'soc_system_button_pio'
 Info: button_pio: "soc_system" instantiated altera_avalon_pio "button_pio"
 Info: color_matrix: "soc_system" instantiated altera_avalon_mm_bridge "color_matrix"
 Info: dipsw_pio: Starting RTL generation for module 'soc_system_dipsw_pio'
-Info: dipsw_pio:   Generation command is [exec D:/intelfpga_lite/20.1/quartus/bin64/perl/bin/perl.exe -I D:/intelfpga_lite/20.1/quartus/bin64/perl/lib -I D:/intelfpga_lite/20.1/quartus/sopc_builder/bin/europa -I D:/intelfpga_lite/20.1/quartus/sopc_builder/bin -I D:/intelfpga_lite/20.1/quartus/../ip/altera/sopc_builder_ip/common -I D:/intelfpga_lite/20.1/quartus/../ip/altera/sopc_builder_ip/altera_avalon_pio -- D:/intelfpga_lite/20.1/quartus/../ip/altera/sopc_builder_ip/altera_avalon_pio/generate_rtl.pl --name=soc_system_dipsw_pio --dir=C:/Users/morer/AppData/Local/Temp/alt0512_8943328238900645836.dir/0007_dipsw_pio_gen/ --quartus_dir=D:/intelfpga_lite/20.1/quartus --verilog --config=C:/Users/morer/AppData/Local/Temp/alt0512_8943328238900645836.dir/0007_dipsw_pio_gen//soc_system_dipsw_pio_component_configuration.pl  --do_build_sim=0  ]
+Info: dipsw_pio:   Generation command is [exec D:/intelfpga_lite/20.1/quartus/bin64/perl/bin/perl.exe -I D:/intelfpga_lite/20.1/quartus/bin64/perl/lib -I D:/intelfpga_lite/20.1/quartus/sopc_builder/bin/europa -I D:/intelfpga_lite/20.1/quartus/sopc_builder/bin -I D:/intelfpga_lite/20.1/quartus/../ip/altera/sopc_builder_ip/common -I D:/intelfpga_lite/20.1/quartus/../ip/altera/sopc_builder_ip/altera_avalon_pio -- D:/intelfpga_lite/20.1/quartus/../ip/altera/sopc_builder_ip/altera_avalon_pio/generate_rtl.pl --name=soc_system_dipsw_pio --dir=C:/Users/morer/AppData/Local/Temp/alt0512_5886084277621277787.dir/0007_dipsw_pio_gen/ --quartus_dir=D:/intelfpga_lite/20.1/quartus --verilog --config=C:/Users/morer/AppData/Local/Temp/alt0512_5886084277621277787.dir/0007_dipsw_pio_gen//soc_system_dipsw_pio_component_configuration.pl  --do_build_sim=0  ]
 Info: dipsw_pio: Done RTL generation for module 'soc_system_dipsw_pio'
 Info: dipsw_pio: "soc_system" instantiated altera_avalon_pio "dipsw_pio"
 Info: hps_0: "Running  for module: hps_0"
 Warning: hps_0: Setting the slave port width of interface f2h_sdram0 to 32 results in bandwidth under-utilization.  Altera recommends you set the interface data width to 64-bit or greater.
+Warning: hps_0: Setting the slave port width of interface f2h_sdram1 to 32 results in bandwidth under-utilization.  Altera recommends you set the interface data width to 64-bit or greater.
 Info: hps_0: HPS Main PLL counter settings: n = 0  m = 63
 Info: hps_0: HPS peripherial PLL counter settings: n = 0  m = 39
 Info: hps_0: "soc_system" instantiated altera_hps "hps_0"
 Info: i2c_hdmi: "soc_system" instantiated altera_avalon_i2c "i2c_hdmi"
 Info: jtag_uart: Starting RTL generation for module 'soc_system_jtag_uart'
-Info: jtag_uart:   Generation command is [exec D:/intelfpga_lite/20.1/quartus/bin64/perl/bin/perl.exe -I D:/intelfpga_lite/20.1/quartus/bin64/perl/lib -I D:/intelfpga_lite/20.1/quartus/sopc_builder/bin/europa -I D:/intelfpga_lite/20.1/quartus/sopc_builder/bin -I D:/intelfpga_lite/20.1/quartus/../ip/altera/sopc_builder_ip/common -I D:/intelfpga_lite/20.1/quartus/../ip/altera/sopc_builder_ip/altera_avalon_jtag_uart -- D:/intelfpga_lite/20.1/quartus/../ip/altera/sopc_builder_ip/altera_avalon_jtag_uart/generate_rtl.pl --name=soc_system_jtag_uart --dir=C:/Users/morer/AppData/Local/Temp/alt0512_8943328238900645836.dir/0009_jtag_uart_gen/ --quartus_dir=D:/intelfpga_lite/20.1/quartus --verilog --config=C:/Users/morer/AppData/Local/Temp/alt0512_8943328238900645836.dir/0009_jtag_uart_gen//soc_system_jtag_uart_component_configuration.pl  --do_build_sim=0  ]
+Info: jtag_uart:   Generation command is [exec D:/intelfpga_lite/20.1/quartus/bin64/perl/bin/perl.exe -I D:/intelfpga_lite/20.1/quartus/bin64/perl/lib -I D:/intelfpga_lite/20.1/quartus/sopc_builder/bin/europa -I D:/intelfpga_lite/20.1/quartus/sopc_builder/bin -I D:/intelfpga_lite/20.1/quartus/../ip/altera/sopc_builder_ip/common -I D:/intelfpga_lite/20.1/quartus/../ip/altera/sopc_builder_ip/altera_avalon_jtag_uart -- D:/intelfpga_lite/20.1/quartus/../ip/altera/sopc_builder_ip/altera_avalon_jtag_uart/generate_rtl.pl --name=soc_system_jtag_uart --dir=C:/Users/morer/AppData/Local/Temp/alt0512_5886084277621277787.dir/0009_jtag_uart_gen/ --quartus_dir=D:/intelfpga_lite/20.1/quartus --verilog --config=C:/Users/morer/AppData/Local/Temp/alt0512_5886084277621277787.dir/0009_jtag_uart_gen//soc_system_jtag_uart_component_configuration.pl  --do_build_sim=0  ]
 Info: jtag_uart: Done RTL generation for module 'soc_system_jtag_uart'
 Info: jtag_uart: "soc_system" instantiated altera_avalon_jtag_uart "jtag_uart"
 Info: led_pio: Starting RTL generation for module 'soc_system_led_pio'
-Info: led_pio:   Generation command is [exec D:/intelfpga_lite/20.1/quartus/bin64/perl/bin/perl.exe -I D:/intelfpga_lite/20.1/quartus/bin64/perl/lib -I D:/intelfpga_lite/20.1/quartus/sopc_builder/bin/europa -I D:/intelfpga_lite/20.1/quartus/sopc_builder/bin -I D:/intelfpga_lite/20.1/quartus/../ip/altera/sopc_builder_ip/common -I D:/intelfpga_lite/20.1/quartus/../ip/altera/sopc_builder_ip/altera_avalon_pio -- D:/intelfpga_lite/20.1/quartus/../ip/altera/sopc_builder_ip/altera_avalon_pio/generate_rtl.pl --name=soc_system_led_pio --dir=C:/Users/morer/AppData/Local/Temp/alt0512_8943328238900645836.dir/0010_led_pio_gen/ --quartus_dir=D:/intelfpga_lite/20.1/quartus --verilog --config=C:/Users/morer/AppData/Local/Temp/alt0512_8943328238900645836.dir/0010_led_pio_gen//soc_system_led_pio_component_configuration.pl  --do_build_sim=0  ]
+Info: led_pio:   Generation command is [exec D:/intelfpga_lite/20.1/quartus/bin64/perl/bin/perl.exe -I D:/intelfpga_lite/20.1/quartus/bin64/perl/lib -I D:/intelfpga_lite/20.1/quartus/sopc_builder/bin/europa -I D:/intelfpga_lite/20.1/quartus/sopc_builder/bin -I D:/intelfpga_lite/20.1/quartus/../ip/altera/sopc_builder_ip/common -I D:/intelfpga_lite/20.1/quartus/../ip/altera/sopc_builder_ip/altera_avalon_pio -- D:/intelfpga_lite/20.1/quartus/../ip/altera/sopc_builder_ip/altera_avalon_pio/generate_rtl.pl --name=soc_system_led_pio --dir=C:/Users/morer/AppData/Local/Temp/alt0512_5886084277621277787.dir/0010_led_pio_gen/ --quartus_dir=D:/intelfpga_lite/20.1/quartus --verilog --config=C:/Users/morer/AppData/Local/Temp/alt0512_5886084277621277787.dir/0010_led_pio_gen//soc_system_led_pio_component_configuration.pl  --do_build_sim=0  ]
 Info: led_pio: Done RTL generation for module 'soc_system_led_pio'
 Info: led_pio: "soc_system" instantiated altera_avalon_pio "led_pio"
 Info: nios2_gen2_0: "soc_system" instantiated altera_nios2_gen2 "nios2_gen2_0"
 Info: onchip_memory2_0: Starting RTL generation for module 'soc_system_onchip_memory2_0'
-Info: onchip_memory2_0:   Generation command is [exec D:/intelfpga_lite/20.1/quartus/bin64/perl/bin/perl.exe -I D:/intelfpga_lite/20.1/quartus/bin64/perl/lib -I D:/intelfpga_lite/20.1/quartus/sopc_builder/bin/europa -I D:/intelfpga_lite/20.1/quartus/sopc_builder/bin -I D:/intelfpga_lite/20.1/quartus/../ip/altera/sopc_builder_ip/common -I D:/intelfpga_lite/20.1/quartus/../ip/altera/sopc_builder_ip/altera_avalon_onchip_memory2 -- D:/intelfpga_lite/20.1/quartus/../ip/altera/sopc_builder_ip/altera_avalon_onchip_memory2/generate_rtl.pl --name=soc_system_onchip_memory2_0 --dir=C:/Users/morer/AppData/Local/Temp/alt0512_8943328238900645836.dir/0011_onchip_memory2_0_gen/ --quartus_dir=D:/intelfpga_lite/20.1/quartus --verilog --config=C:/Users/morer/AppData/Local/Temp/alt0512_8943328238900645836.dir/0011_onchip_memory2_0_gen//soc_system_onchip_memory2_0_component_configuration.pl  --do_build_sim=0  ]
+Info: onchip_memory2_0:   Generation command is [exec D:/intelfpga_lite/20.1/quartus/bin64/perl/bin/perl.exe -I D:/intelfpga_lite/20.1/quartus/bin64/perl/lib -I D:/intelfpga_lite/20.1/quartus/sopc_builder/bin/europa -I D:/intelfpga_lite/20.1/quartus/sopc_builder/bin -I D:/intelfpga_lite/20.1/quartus/../ip/altera/sopc_builder_ip/common -I D:/intelfpga_lite/20.1/quartus/../ip/altera/sopc_builder_ip/altera_avalon_onchip_memory2 -- D:/intelfpga_lite/20.1/quartus/../ip/altera/sopc_builder_ip/altera_avalon_onchip_memory2/generate_rtl.pl --name=soc_system_onchip_memory2_0 --dir=C:/Users/morer/AppData/Local/Temp/alt0512_5886084277621277787.dir/0011_onchip_memory2_0_gen/ --quartus_dir=D:/intelfpga_lite/20.1/quartus --verilog --config=C:/Users/morer/AppData/Local/Temp/alt0512_5886084277621277787.dir/0011_onchip_memory2_0_gen//soc_system_onchip_memory2_0_component_configuration.pl  --do_build_sim=0  ]
 Info: onchip_memory2_0: Done RTL generation for module 'soc_system_onchip_memory2_0'
 Info: onchip_memory2_0: "soc_system" instantiated altera_avalon_onchip_memory2 "onchip_memory2_0"
 Info: pll_0: "soc_system" instantiated altera_pll "pll_0"
 Info: pll_locked: Starting RTL generation for module 'soc_system_pll_locked'
-Info: pll_locked:   Generation command is [exec D:/intelfpga_lite/20.1/quartus/bin64/perl/bin/perl.exe -I D:/intelfpga_lite/20.1/quartus/bin64/perl/lib -I D:/intelfpga_lite/20.1/quartus/sopc_builder/bin/europa -I D:/intelfpga_lite/20.1/quartus/sopc_builder/bin -I D:/intelfpga_lite/20.1/quartus/../ip/altera/sopc_builder_ip/common -I D:/intelfpga_lite/20.1/quartus/../ip/altera/sopc_builder_ip/altera_avalon_pio -- D:/intelfpga_lite/20.1/quartus/../ip/altera/sopc_builder_ip/altera_avalon_pio/generate_rtl.pl --name=soc_system_pll_locked --dir=C:/Users/morer/AppData/Local/Temp/alt0512_8943328238900645836.dir/0013_pll_locked_gen/ --quartus_dir=D:/intelfpga_lite/20.1/quartus --verilog --config=C:/Users/morer/AppData/Local/Temp/alt0512_8943328238900645836.dir/0013_pll_locked_gen//soc_system_pll_locked_component_configuration.pl  --do_build_sim=0  ]
+Info: pll_locked:   Generation command is [exec D:/intelfpga_lite/20.1/quartus/bin64/perl/bin/perl.exe -I D:/intelfpga_lite/20.1/quartus/bin64/perl/lib -I D:/intelfpga_lite/20.1/quartus/sopc_builder/bin/europa -I D:/intelfpga_lite/20.1/quartus/sopc_builder/bin -I D:/intelfpga_lite/20.1/quartus/../ip/altera/sopc_builder_ip/common -I D:/intelfpga_lite/20.1/quartus/../ip/altera/sopc_builder_ip/altera_avalon_pio -- D:/intelfpga_lite/20.1/quartus/../ip/altera/sopc_builder_ip/altera_avalon_pio/generate_rtl.pl --name=soc_system_pll_locked --dir=C:/Users/morer/AppData/Local/Temp/alt0512_5886084277621277787.dir/0013_pll_locked_gen/ --quartus_dir=D:/intelfpga_lite/20.1/quartus --verilog --config=C:/Users/morer/AppData/Local/Temp/alt0512_5886084277621277787.dir/0013_pll_locked_gen//soc_system_pll_locked_component_configuration.pl  --do_build_sim=0  ]
 Info: pll_locked: Done RTL generation for module 'soc_system_pll_locked'
 Info: pll_locked: "soc_system" instantiated altera_avalon_pio "pll_locked"
 Warning: quartus_synth: A Duplicate file was overwritten with path: altera_pll_reconfig_top.v
 Info: pll_reconfig_0: "soc_system" instantiated altera_pll_reconfig "pll_reconfig_0"
 Info: sysid_qsys: "soc_system" instantiated altera_avalon_sysid_qsys "sysid_qsys"
 Info: timer_0: Starting RTL generation for module 'soc_system_timer_0'
-Info: timer_0:   Generation command is [exec D:/intelFPGA_lite/20.1/quartus/bin64//perl/bin/perl.exe -I D:/intelFPGA_lite/20.1/quartus/bin64//perl/lib -I D:/intelfpga_lite/20.1/quartus/sopc_builder/bin/europa -I D:/intelfpga_lite/20.1/quartus/sopc_builder/bin -I D:/intelfpga_lite/20.1/quartus/../ip/altera/sopc_builder_ip/common -I D:/intelfpga_lite/20.1/quartus/../ip/altera/sopc_builder_ip/altera_avalon_timer -- D:/intelfpga_lite/20.1/quartus/../ip/altera/sopc_builder_ip/altera_avalon_timer/generate_rtl.pl --name=soc_system_timer_0 --dir=C:/Users/morer/AppData/Local/Temp/alt0512_8943328238900645836.dir/0016_timer_0_gen/ --quartus_dir=D:/intelfpga_lite/20.1/quartus --verilog --config=C:/Users/morer/AppData/Local/Temp/alt0512_8943328238900645836.dir/0016_timer_0_gen//soc_system_timer_0_component_configuration.pl  --do_build_sim=0  ]
+Info: timer_0:   Generation command is [exec D:/intelFPGA_lite/20.1/quartus/bin64//perl/bin/perl.exe -I D:/intelFPGA_lite/20.1/quartus/bin64//perl/lib -I D:/intelfpga_lite/20.1/quartus/sopc_builder/bin/europa -I D:/intelfpga_lite/20.1/quartus/sopc_builder/bin -I D:/intelfpga_lite/20.1/quartus/../ip/altera/sopc_builder_ip/common -I D:/intelfpga_lite/20.1/quartus/../ip/altera/sopc_builder_ip/altera_avalon_timer -- D:/intelfpga_lite/20.1/quartus/../ip/altera/sopc_builder_ip/altera_avalon_timer/generate_rtl.pl --name=soc_system_timer_0 --dir=C:/Users/morer/AppData/Local/Temp/alt0512_5886084277621277787.dir/0016_timer_0_gen/ --quartus_dir=D:/intelfpga_lite/20.1/quartus --verilog --config=C:/Users/morer/AppData/Local/Temp/alt0512_5886084277621277787.dir/0016_timer_0_gen//soc_system_timer_0_component_configuration.pl  --do_build_sim=0  ]
 Info: timer_0: Done RTL generation for module 'soc_system_timer_0'
 Info: timer_0: "soc_system" instantiated altera_avalon_timer "timer_0"
 Info: avalon_st_adapter: Inserting error_adapter: error_adapter_0
@@ -199,7 +207,9 @@ Info: avalon_st_adapter: Inserting error_adapter: error_adapter_0
 Info: mm_interconnect_1: "soc_system" instantiated altera_mm_interconnect "mm_interconnect_1"
 Info: avalon_st_adapter: Inserting error_adapter: error_adapter_0
 Info: mm_interconnect_2: "soc_system" instantiated altera_mm_interconnect "mm_interconnect_2"
+Info: avalon_st_adapter: Inserting error_adapter: error_adapter_0
 Info: mm_interconnect_3: "soc_system" instantiated altera_mm_interconnect "mm_interconnect_3"
+Info: mm_interconnect_4: "soc_system" instantiated altera_mm_interconnect "mm_interconnect_4"
 Info: irq_mapper: "soc_system" instantiated altera_irq_mapper "irq_mapper"
 Info: irq_mapper_001: "soc_system" instantiated altera_irq_mapper "irq_mapper_001"
 Info: irq_mapper_002: "soc_system" instantiated altera_irq_mapper "irq_mapper_002"
@@ -207,13 +217,13 @@ Info: rst_controller: "soc_system" instantiated altera_reset_controller "rst_con
 Info: fpga_interfaces: "hps_0" instantiated altera_interface_generator "fpga_interfaces"
 Info: hps_io: "hps_0" instantiated altera_hps_io "hps_io"
 Info: cpu: Starting RTL generation for module 'soc_system_nios2_gen2_0_cpu'
-Info: cpu:   Generation command is [exec D:/intelFPGA_lite/20.1/quartus/bin64//perl/bin/perl.exe -I D:/intelFPGA_lite/20.1/quartus/bin64//perl/lib -I D:/intelfpga_lite/20.1/quartus/sopc_builder/bin/europa -I D:/intelfpga_lite/20.1/quartus/sopc_builder/bin -I D:/intelfpga_lite/20.1/quartus/../ip/altera/nios2_ip/altera_nios2_gen2/cpu_lib -I D:/intelfpga_lite/20.1/quartus/../ip/altera/nios2_ip/altera_nios2_gen2/nios_lib -I D:/intelfpga_lite/20.1/quartus/../ip/altera/nios2_ip/altera_nios2_gen2 -I D:/intelfpga_lite/20.1/quartus/../ip/altera/nios2_ip/altera_nios2_gen2 -- D:/intelfpga_lite/20.1/quartus/../ip/altera/nios2_ip/altera_nios2_gen2/generate_rtl.pl --name=soc_system_nios2_gen2_0_cpu --dir=C:/Users/morer/AppData/Local/Temp/alt0512_8943328238900645836.dir/0022_cpu_gen/ --quartus_bindir=D:/intelFPGA_lite/20.1/quartus/bin64/ --verilog --config=C:/Users/morer/AppData/Local/Temp/alt0512_8943328238900645836.dir/0022_cpu_gen//soc_system_nios2_gen2_0_cpu_processor_configuration.pl  --do_build_sim=0  ]
-Info: cpu: # 2026.02.27 23:56:27 (*) Starting Nios II generation
-Info: cpu: # 2026.02.27 23:56:28 (*)   Elaborating CPU configuration settings
-Info: cpu: # 2026.02.27 23:56:28 (*)   Creating all objects for CPU
-Info: cpu: # 2026.02.27 23:56:28 (*)   Generating RTL from CPU objects
-Info: cpu: # 2026.02.27 23:56:28 (*)   Creating plain-text RTL
-Info: cpu: # 2026.02.27 23:56:28 (*) Done Nios II generation
+Info: cpu:   Generation command is [exec D:/intelFPGA_lite/20.1/quartus/bin64//perl/bin/perl.exe -I D:/intelFPGA_lite/20.1/quartus/bin64//perl/lib -I D:/intelfpga_lite/20.1/quartus/sopc_builder/bin/europa -I D:/intelfpga_lite/20.1/quartus/sopc_builder/bin -I D:/intelfpga_lite/20.1/quartus/../ip/altera/nios2_ip/altera_nios2_gen2/cpu_lib -I D:/intelfpga_lite/20.1/quartus/../ip/altera/nios2_ip/altera_nios2_gen2/nios_lib -I D:/intelfpga_lite/20.1/quartus/../ip/altera/nios2_ip/altera_nios2_gen2 -I D:/intelfpga_lite/20.1/quartus/../ip/altera/nios2_ip/altera_nios2_gen2 -- D:/intelfpga_lite/20.1/quartus/../ip/altera/nios2_ip/altera_nios2_gen2/generate_rtl.pl --name=soc_system_nios2_gen2_0_cpu --dir=C:/Users/morer/AppData/Local/Temp/alt0512_5886084277621277787.dir/0022_cpu_gen/ --quartus_bindir=D:/intelFPGA_lite/20.1/quartus/bin64/ --verilog --config=C:/Users/morer/AppData/Local/Temp/alt0512_5886084277621277787.dir/0022_cpu_gen//soc_system_nios2_gen2_0_cpu_processor_configuration.pl  --do_build_sim=0  ]
+Info: cpu: # 2026.02.28 02:56:27 (*) Starting Nios II generation
+Info: cpu: # 2026.02.28 02:56:27 (*)   Elaborating CPU configuration settings
+Info: cpu: # 2026.02.28 02:56:27 (*)   Creating all objects for CPU
+Info: cpu: # 2026.02.28 02:56:27 (*)   Generating RTL from CPU objects
+Info: cpu: # 2026.02.28 02:56:27 (*)   Creating plain-text RTL
+Info: cpu: # 2026.02.28 02:56:28 (*) Done Nios II generation
 Info: cpu: Done RTL generation for module 'soc_system_nios2_gen2_0_cpu'
 Info: cpu: "nios2_gen2_0" instantiated altera_nios2_gen2_unit "cpu"
 Info: nios2_gen2_0_data_master_translator: "mm_interconnect_0" instantiated altera_merlin_master_translator "nios2_gen2_0_data_master_translator"
@@ -267,11 +277,10 @@ Info: Reusing file C:/Workspace/quartus/video_processing/soc_system/synthesis/su
 Info: avalon_st_adapter: "mm_interconnect_0" instantiated altera_avalon_st_adapter "avalon_st_adapter"
 Info: avalon_st_adapter_001: "mm_interconnect_0" instantiated altera_avalon_st_adapter "avalon_st_adapter_001"
 Info: router: "mm_interconnect_1" instantiated altera_merlin_router "router"
-Info: router_002: "mm_interconnect_1" instantiated altera_merlin_router "router_002"
+Info: router_001: "mm_interconnect_1" instantiated altera_merlin_router "router_001"
 Info: cmd_demux: "mm_interconnect_1" instantiated altera_merlin_demultiplexer "cmd_demux"
 Info: cmd_mux: "mm_interconnect_1" instantiated altera_merlin_multiplexer "cmd_mux"
 Info: Reusing file C:/Workspace/quartus/video_processing/soc_system/synthesis/submodules/altera_merlin_arbitrator.sv
-Info: rsp_demux: "mm_interconnect_1" instantiated altera_merlin_demultiplexer "rsp_demux"
 Info: rsp_mux: "mm_interconnect_1" instantiated altera_merlin_multiplexer "rsp_mux"
 Info: Reusing file C:/Workspace/quartus/video_processing/soc_system/synthesis/submodules/altera_merlin_arbitrator.sv
 Info: router: "mm_interconnect_2" instantiated altera_merlin_router "router"
@@ -282,21 +291,28 @@ Info: Reusing file C:/Workspace/quartus/video_processing/soc_system/synthesis/su
 Info: rsp_demux: "mm_interconnect_2" instantiated altera_merlin_demultiplexer "rsp_demux"
 Info: rsp_mux: "mm_interconnect_2" instantiated altera_merlin_multiplexer "rsp_mux"
 Info: Reusing file C:/Workspace/quartus/video_processing/soc_system/synthesis/submodules/altera_merlin_arbitrator.sv
-Info: hps_0_f2h_axi_slave_agent: "mm_interconnect_3" instantiated altera_merlin_axi_slave_ni "hps_0_f2h_axi_slave_agent"
-Info: Reusing file C:/Workspace/quartus/video_processing/soc_system/synthesis/submodules/altera_merlin_burst_uncompressor.sv
-Info: Reusing file C:/Workspace/quartus/video_processing/soc_system/synthesis/submodules/altera_avalon_sc_fifo.v
-Info: Reusing file C:/Workspace/quartus/video_processing/soc_system/synthesis/submodules/altera_merlin_address_alignment.sv
 Info: router: "mm_interconnect_3" instantiated altera_merlin_router "router"
-Info: router_003: "mm_interconnect_3" instantiated altera_merlin_router "router_003"
+Info: router_001: "mm_interconnect_3" instantiated altera_merlin_router "router_001"
 Info: cmd_demux: "mm_interconnect_3" instantiated altera_merlin_demultiplexer "cmd_demux"
 Info: cmd_mux: "mm_interconnect_3" instantiated altera_merlin_multiplexer "cmd_mux"
 Info: Reusing file C:/Workspace/quartus/video_processing/soc_system/synthesis/submodules/altera_merlin_arbitrator.sv
-Info: rsp_demux: "mm_interconnect_3" instantiated altera_merlin_demultiplexer "rsp_demux"
 Info: rsp_mux: "mm_interconnect_3" instantiated altera_merlin_multiplexer "rsp_mux"
+Info: Reusing file C:/Workspace/quartus/video_processing/soc_system/synthesis/submodules/altera_merlin_arbitrator.sv
+Info: hps_0_f2h_axi_slave_agent: "mm_interconnect_4" instantiated altera_merlin_axi_slave_ni "hps_0_f2h_axi_slave_agent"
+Info: Reusing file C:/Workspace/quartus/video_processing/soc_system/synthesis/submodules/altera_merlin_burst_uncompressor.sv
+Info: Reusing file C:/Workspace/quartus/video_processing/soc_system/synthesis/submodules/altera_avalon_sc_fifo.v
+Info: Reusing file C:/Workspace/quartus/video_processing/soc_system/synthesis/submodules/altera_merlin_address_alignment.sv
+Info: router: "mm_interconnect_4" instantiated altera_merlin_router "router"
+Info: router_003: "mm_interconnect_4" instantiated altera_merlin_router "router_003"
+Info: cmd_demux: "mm_interconnect_4" instantiated altera_merlin_demultiplexer "cmd_demux"
+Info: cmd_mux: "mm_interconnect_4" instantiated altera_merlin_multiplexer "cmd_mux"
+Info: Reusing file C:/Workspace/quartus/video_processing/soc_system/synthesis/submodules/altera_merlin_arbitrator.sv
+Info: rsp_demux: "mm_interconnect_4" instantiated altera_merlin_demultiplexer "rsp_demux"
+Info: rsp_mux: "mm_interconnect_4" instantiated altera_merlin_multiplexer "rsp_mux"
 Info: Reusing file C:/Workspace/quartus/video_processing/soc_system/synthesis/submodules/altera_merlin_arbitrator.sv
 Info: border: "hps_io" instantiated altera_interface_generator "border"
 Info: error_adapter_0: "avalon_st_adapter" instantiated error_adapter "error_adapter_0"
 Info: error_adapter_0: "avalon_st_adapter_001" instantiated error_adapter "error_adapter_0"
-Info: soc_system: Done "soc_system" with 88 modules, 169 files
+Info: soc_system: Done "soc_system" with 93 modules, 174 files
 Info: qsys-generate succeeded.
 Info: Finished: Create HDL design files for synthesis

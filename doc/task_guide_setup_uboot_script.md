@@ -75,8 +75,9 @@ if test -e mmc 0:1 sdr.rbf; then
   # 4. 설정 적용 (staticcfg 레지스터의 applycfg 비트 활성화)
   mw 0xFFC2505C 0xA
   
-  # 5. fpga2sdram 브릿지 리셋 해제
-  mw 0xFFC25080 0xFFFF
+  # 5. fpga2sdram 브릿지 전체 포트 개방 및 리셋 해제
+  # (0x1FF = 포트 0~5번까지 읽기/쓰기 권한을 모두 오픈)
+  mw 0xFFC25080 0x000001FF
 else
   echo "sdr.rbf not found, doing nothing"
 fi;
@@ -105,9 +106,17 @@ mkimage -C none -A arm -T script -d bootscript.txt u-boot.scr
 
 ---
 
-## 4. (참고사항) Linux User-space 포트 리셋 유틸리티 
+## 4. (참고사항) SDRAM 다중 포트(f2h_sdram1 등) 권한 개방 및 Linux 유틸리티
 
-만약 U-Boot 스크립트 실행 이후에도 통신이 안 되거나, 리눅스 상에서 디버깅 목적으로 브릿지 통신 포트를 강제 활성화해야 할 경우, 물리 메모리(`/dev/mem`)에 직접 접근하여 `FPGAPORTRST` 레지스터 값을 써넣는 C 프로그램(`/linux_software/tests/set_applycfg.c`)을 사용할 수 있습니다.
+기본적으로 HPS SDRAM 컨트롤러는 `f2h_sdram0` 이외의 추가 명령 포트들(예: `f2h_sdram1`, `f2h_sdram2`)에 대한 접근이 마스킹되어 닫혀 있는 경우가 많습니다.
+Qsys에서 다중 포트를 뚫었더라도, 리눅스 상에서 해당 포트를 통해 메모리에 Write/Read를 시도하면 시스템이 멈추거나 동작하지 않습니다.
 
-*   **동작 원리**: mmap을 통해 `0xFFC25080` (`FPGAPORTRST` 레지스터) 주소에 접근하여 `0x3FFF` 등의 값을 기록함으로써 포트 리셋을 해제(Enable)합니다.
-*   **주의사항**: 이 유틸리티는 U-Boot에서 `STATICCFG`의 `APPLYCFG` 로직이 이미 잘 적용되었다는 가정 하에 포트만 껐다 켜는 용도이므로 메인 활성화 수단(필수)은 아닙니다. 보조적인 트러블슈팅 용도로만 사용하는 것을 권장합니다.
+이 문제를 해결하려면 **FPGA 포트 보호 레지스터(`FPGAPORTRST`, 주소: `0xFFC25080`)** 에 `0x000001FF` (모든 포트의 읽기/쓰기 허용 마스크) 값을 명시적으로 써야만 합니다.
+
+### 방법 A: Linux 부팅 스크립트 (`rc.local`) 사용
+Linux 부팅이 끝난 시점에서 루트 권한의 유틸리티를 실행하여 포트를 여는 방법입니다. (임시 우회책)
+*   **적용:** `sudo nano /etc/rc.local`을 열어 `exit 0` 위에 C 프로그램 유틸리티 경로(예: `/home/root/test/apply`)를 적어둡니다. 유틸리티는 내부에 `mmap`을 통해 `0xFFC25080` 번지에 `0x1FF`를 씁니다.
+
+### 방법 B: U-Boot 스크립트 수정 (권장 해결책)
+애초에 커널이 부팅되기 전에 U-Boot 단계에서 `mw` (Memory Write) 명령어로 초기화를 끝내고 넘어가는 것이 가장 깔끔한 방법입니다.
+*   **적용:** 위의 **[3.1. bootscript.txt 소스 작성]** 에 기재된 대로, `mw 0xFFC25080 0x000001FF` 명령줄을 스크립트 하단에 반드시 추가한 후 `mkimage` 로 컴파일하여 사용합니다.
