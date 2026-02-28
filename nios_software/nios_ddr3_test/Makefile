@@ -95,6 +95,10 @@ ASM_SRCS :=
 SRC_DIR_01 := $(call adjust-path,.)
 SDIR_C_SRCS += $(SRC_DIR_01)/main.c
 SDIR_C_SRCS += $(SRC_DIR_01)/mem_verify.c
+SDIR_C_SRCS += $(SRC_DIR_01)/burst_master_test.c
+SDIR_C_SRCS += $(SRC_DIR_01)/hdmi_control.c
+SDIR_C_SRCS += $(SRC_DIR_01)/hdmi_config.c
+SDIR_C_SRCS += $(SRC_DIR_01)/common.c
 SDIR_CXX_SRCS :=
 SDIR_ASM_SRCS :=
 
@@ -118,7 +122,7 @@ CREATE_LINKER_MAP := 1
 # Common arguments for ALT_CFLAGSs
 APP_CFLAGS_DEFINED_SYMBOLS :=
 APP_CFLAGS_UNDEFINED_SYMBOLS :=
-APP_CFLAGS_OPTIMIZATION := -O0
+APP_CFLAGS_OPTIMIZATION := -Os
 APP_CFLAGS_DEBUG_LEVEL := -g
 APP_CFLAGS_WARNINGS := -Wall
 APP_CFLAGS_USER_FLAGS :=

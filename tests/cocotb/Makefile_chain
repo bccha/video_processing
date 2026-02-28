@@ -1,0 +1,21 @@
+# Makefile for tb_degamma_gamma_chain.py
+# DUT: filter_color_matrix (proxy for chain tests)
+# Usage:
+#   make                     # run chain tests
+#   make WAVES=1             # with waveform dump
+#   make clean
+
+SIM       ?= modelsim
+TOPLEVEL  ?= filter_color_matrix
+MODULE    ?= tb_degamma_gamma_chain
+VERILOG_SOURCES := \
+    $(PWD)/../../RTL/filter_color_matrix.v
+
+# Simulator-specific flags
+ifeq ($(SIM), icarus)
+    COMPILE_ARGS += -g2012
+else ifeq ($(SIM), modelsim)
+    VLOG_ARGS += -sv
+endif
+
+include $(shell cocotb-config --makefiles)/Makefile.sim

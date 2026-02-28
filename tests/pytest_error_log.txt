@@ -1,0 +1,110 @@
+============================= test session starts ==============================
+platform linux -- Python 3.10.12, pytest-9.0.2, pluggy-1.6.0 -- /usr/bin/python3
+cachedir: .pytest_cache
+rootdir: /mnt/c/Workspace/quartus/video_processing/tests
+plugins: cocotb-test-0.2.6
+collecting ... collected 1 item
+
+test_color_matrix.py::test_color_matrix FAILED                           [100%]
+
+=================================== FAILURES ===================================
+______________________________ test_color_matrix _______________________________
+
+    def test_color_matrix():
+        tests_dir = os.path.dirname(os.path.abspath(__file__))
+        proj_dir  = os.path.dirname(tests_dir)
+        rtl_dir   = os.path.join(proj_dir, "RTL")
+    
+>       run(
+            verilog_sources=[
+                os.path.join(rtl_dir, "filter_degamma.v"),
+                os.path.join(rtl_dir, "filter_color_matrix.v"),
+            ],
+            toplevel="filter_color_matrix",
+            module="tb_color_matrix",
+            python_search=[os.path.join(tests_dir, "cocotb")],
+            sim="iverilog",
+            force_compile=True
+        )
+E       SystemExit: FAILED 1 tests.
+
+test_color_matrix.py:9: SystemExit
+------------------------------ Captured log call -------------------------------
+INFO     cocotb:simulator.py:295 Running command: iverilog -o /mnt/c/Workspace/quartus/video_processing/tests/sim_build/filter_color_matrix.vvp -D COCOTB_SIM=1 -g2012 -s filter_color_matrix /mnt/c/Workspace/quartus/video_processing/RTL/filter_degamma.v /mnt/c/Workspace/quartus/video_processing/RTL/filter_color_matrix.v
+INFO     cocotb:simulator.py:295 Running command: vvp -M /home/morer/.local/lib/python3.10/site-packages/cocotb/libs -m libcocotbvpi_icarus /mnt/c/Workspace/quartus/video_processing/tests/sim_build/filter_color_matrix.vvp
+INFO     cocotb:simulator.py:266      -.--ns INFO     gpi                                ..mbed/gpi_embed.cpp:93   in _embed_init_python              Using Python 3.10.14 interpreter at /usr/bin/python3
+INFO     cocotb:simulator.py:266      -.--ns INFO     gpi                                ../gpi/GpiCommon.cpp:79   in gpi_print_registered_impl       VPI registered
+INFO     cocotb:simulator.py:266      0.00ns INFO     cocotb                             Running on Icarus Verilog version 11.0 (stable)
+INFO     cocotb:simulator.py:266      0.00ns WARNING  gpi                                vpi_iterate returned NULL for type vpiInstance for object NULL
+INFO     cocotb:simulator.py:266      0.00ns INFO     cocotb                             Seeding Python random module with 1772253165
+INFO     cocotb:simulator.py:266      0.00ns INFO     cocotb                             Initialized cocotb v2.0.1 from /home/morer/.local/lib/python3.10/site-packages/cocotb
+INFO     cocotb:simulator.py:266      0.00ns INFO     cocotb                             Running tests
+INFO     cocotb:simulator.py:266      0.00ns INFO     cocotb.regression                  running tb_color_matrix.test_bypass (1/4)
+INFO     cocotb:simulator.py:266                                                             matrix_en=0: output should equal input after 3-cycle latency
+INFO     cocotb:simulator.py:266      0.00ns WARNING  py.warnings                        /mnt/c/Workspace/quartus/video_processing/tests/cocotb/tb_color_matrix.py:76: DeprecationWarning: The 'units' argument has been renamed to 'unit'.
+INFO     cocotb:simulator.py:266                                                           clock     = Clock(dut.clk,     26, units="ns")   # ~37.8 MHz pixel clk
+INFO     cocotb:simulator.py:266      0.00ns WARNING  py.warnings                        /mnt/c/Workspace/quartus/video_processing/tests/cocotb/tb_color_matrix.py:77: DeprecationWarning: The 'units' argument has been renamed to 'unit'.
+INFO     cocotb:simulator.py:266                                                           clock_csr = Clock(dut.clk_csr, 20, units="ns")   # 50 MHz CSR clk
+INFO     cocotb:simulator.py:266   1326.00ns INFO     cocotb.filter_color_matrix         [Bypass OK] in=(100,150,200) out=(100,150,200)
+INFO     cocotb:simulator.py:266   1326.00ns INFO     cocotb.filter_color_matrix         [Bypass OK] in=(255,0,128) out=(255,0,128)
+INFO     cocotb:simulator.py:266   1326.00ns INFO     cocotb.filter_color_matrix         [Bypass OK] in=(0,255,0) out=(0,255,0)
+INFO     cocotb:simulator.py:266   1326.00ns INFO     cocotb.filter_color_matrix         [Bypass OK] in=(64,64,64) out=(64,64,64)
+INFO     cocotb:simulator.py:266   1326.00ns INFO     cocotb.regression                  tb_color_matrix.test_bypass passed
+INFO     cocotb:simulator.py:266   1326.00ns INFO     cocotb.regression                  running tb_color_matrix.test_identity (2/4)
+INFO     cocotb:simulator.py:266                                                             Identity matrix: output == input
+INFO     cocotb:simulator.py:266   1326.00ns WARNING  py.warnings                        /mnt/c/Workspace/quartus/video_processing/tests/cocotb/tb_color_matrix.py:112: DeprecationWarning: The 'units' argument has been renamed to 'unit'.
+INFO     cocotb:simulator.py:266                                                           clock     = Clock(dut.clk,     26, units="ns")
+INFO     cocotb:simulator.py:266   1326.00ns WARNING  py.warnings                        /mnt/c/Workspace/quartus/video_processing/tests/cocotb/tb_color_matrix.py:113: DeprecationWarning: The 'units' argument has been renamed to 'unit'.
+INFO     cocotb:simulator.py:266                                                           clock_csr = Clock(dut.clk_csr, 20, units="ns")
+INFO     cocotb:simulator.py:266   3172.00ns INFO     cocotb.filter_color_matrix         [Identity OK] in=(200,100,50) out=(200,100,50)
+INFO     cocotb:simulator.py:266   3172.00ns INFO     cocotb.filter_color_matrix         [Identity OK] in=(255,255,255) out=(255,255,255)
+INFO     cocotb:simulator.py:266   3172.00ns INFO     cocotb.filter_color_matrix         [Identity OK] in=(0,0,0) out=(0,0,0)
+INFO     cocotb:simulator.py:266   3172.00ns INFO     cocotb.filter_color_matrix         [Identity OK] in=(128,64,32) out=(128,64,32)
+INFO     cocotb:simulator.py:266   3172.00ns INFO     cocotb.regression                  tb_color_matrix.test_identity passed
+INFO     cocotb:simulator.py:266   3172.00ns INFO     cocotb.regression                  running tb_color_matrix.test_calibration_example (3/4)
+INFO     cocotb:simulator.py:266                                                             CALIBRATION.md coefficients: White (255,255,255) -> ~White (clamped)
+INFO     cocotb:simulator.py:266   3172.00ns WARNING  py.warnings                        /mnt/c/Workspace/quartus/video_processing/tests/cocotb/tb_color_matrix.py:150: DeprecationWarning: The 'units' argument has been renamed to 'unit'.
+INFO     cocotb:simulator.py:266                                                           clock     = Clock(dut.clk,     26, units="ns")
+INFO     cocotb:simulator.py:266   3172.00ns WARNING  py.warnings                        /mnt/c/Workspace/quartus/video_processing/tests/cocotb/tb_color_matrix.py:151: DeprecationWarning: The 'units' argument has been renamed to 'unit'.
+INFO     cocotb:simulator.py:266                                                           clock_csr = Clock(dut.clk_csr, 20, units="ns")
+INFO     cocotb:simulator.py:266   4992.00ns WARNING  ..example.test_calibration_example G mismatch pixel[0]: ref=255 got=37
+INFO     cocotb:simulator.py:266                                                         assert 218 <= 200
+INFO     cocotb:simulator.py:266                                                          +  where 218 = abs((255 - 37))
+INFO     cocotb:simulator.py:266                                                          +    where 255 = int(255)
+INFO     cocotb:simulator.py:266                                                         Traceback (most recent call last):
+INFO     cocotb:simulator.py:266                                                           File "/mnt/c/Workspace/quartus/video_processing/tests/cocotb/tb_color_matrix.py", line 205, in test_calibration_example
+INFO     cocotb:simulator.py:266                                                             assert abs(int(ref[1]) - go) <= 200, f"G mismatch pixel[{i}]: ref={ref[1]} got={go}"
+INFO     cocotb:simulator.py:266                                                         AssertionError: G mismatch pixel[0]: ref=255 got=37
+INFO     cocotb:simulator.py:266                                                         assert 218 <= 200
+INFO     cocotb:simulator.py:266                                                          +  where 218 = abs((255 - 37))
+INFO     cocotb:simulator.py:266                                                          +    where 255 = int(255)
+INFO     cocotb:simulator.py:266   4992.00ns WARNING  cocotb.regression                  tb_color_matrix.test_calibration_example failed
+INFO     cocotb:simulator.py:266   4992.00ns INFO     cocotb.regression                  running tb_color_matrix.test_degamma_reference (4/4)
+INFO     cocotb:simulator.py:266                                                             Verify the De-Gamma LUT table values against Python gamma 2.2
+INFO     cocotb:simulator.py:266   4992.00ns INFO     cocotb.filter_color_matrix         [DeGamma LUT] [0] = 0  (ref ~0)
+INFO     cocotb:simulator.py:266   4992.00ns INFO     cocotb.filter_color_matrix         [DeGamma LUT] [64] = 12  (ref ~14)
+INFO     cocotb:simulator.py:266   4992.00ns INFO     cocotb.filter_color_matrix         [DeGamma LUT] [127] = 55  (ref ~54)
+INFO     cocotb:simulator.py:266   4992.00ns INFO     cocotb.filter_color_matrix         [DeGamma LUT] [128] = 56  (ref ~55)
+INFO     cocotb:simulator.py:266   4992.00ns INFO     cocotb.filter_color_matrix         [DeGamma LUT] [192] = 137  (ref ~139)
+INFO     cocotb:simulator.py:266   4992.00ns INFO     cocotb.filter_color_matrix         [DeGamma LUT] [255] = 255  (ref ~255)
+INFO     cocotb:simulator.py:266   4992.00ns INFO     cocotb.regression                  tb_color_matrix.test_degamma_reference passed
+INFO     cocotb:simulator.py:266   4992.00ns INFO     cocotb.regression                  **************************************************************************************************
+INFO     cocotb:simulator.py:266                                                         ** TEST                                      STATUS  SIM TIME (ns)  REAL TIME (s)  RATIO (ns/s) **
+INFO     cocotb:simulator.py:266                                                         **************************************************************************************************
+INFO     cocotb:simulator.py:266                                                         ** tb_color_matrix.test_bypass                PASS        1326.00           0.02      84649.59  **
+INFO     cocotb:simulator.py:266                                                         ** tb_color_matrix.test_identity              PASS        1846.00           0.01     182778.62  **
+INFO     cocotb:simulator.py:266                                                         ** tb_color_matrix.test_calibration_example   FAIL        1820.00           0.01     130845.09  **
+INFO     cocotb:simulator.py:266                                                         ** tb_color_matrix.test_degamma_reference     PASS           0.00           0.00          0.00  **
+INFO     cocotb:simulator.py:266                                                         **************************************************************************************************
+INFO     cocotb:simulator.py:266                                                         ** TESTS=4 PASS=3 FAIL=1 SKIP=0                           4992.00           0.07      75521.57  **
+INFO     cocotb:simulator.py:266                                                         **************************************************************************************************
+ERROR    cocotb:simulator.py:217 Failed: tb_color_matrix::test_calibration_example
+=============================== warnings summary ===============================
+test_color_matrix.py::test_color_matrix
+  /home/morer/.local/lib/python3.10/site-packages/cocotb_test/simulator.py:402: DeprecationWarning: Using kwargs is deprecated. Please explicitly declare or arguments instead.
+    super().__init__(*argv, **kwargs)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED test_color_matrix.py::test_color_matrix - SystemExit: FAILED 1 tests.
+========================= 1 failed, 1 warning in 0.93s =========================

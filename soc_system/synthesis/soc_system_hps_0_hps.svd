@@ -219331,7 +219331,7 @@ The name of this register in ARM documentation is BWFIFO4 for writes and BRFIFO4
          <addressOffset>0x4</addressOffset>
          <size>32</size>
          <access>read-only</access>
-         <resetValue>0x69a207cb</resetValue>
+         <resetValue>0x69a2738d</resetValue>
          <resetMask>0xffffffff</resetMask> 
          <fields>
            <field><name>timestamp</name>

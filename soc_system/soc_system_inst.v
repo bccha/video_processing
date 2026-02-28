@@ -1,7 +1,27 @@
 	soc_system u0 (
 		.button_pio_external_connection_export (<connected-to-button_pio_external_connection_export>), // button_pio_external_connection.export
 		.clk_clk                               (<connected-to-clk_clk>),                               //                            clk.clk
+		.color_matrix_waitrequest              (<connected-to-color_matrix_waitrequest>),              //                   color_matrix.waitrequest
+		.color_matrix_readdata                 (<connected-to-color_matrix_readdata>),                 //                               .readdata
+		.color_matrix_readdatavalid            (<connected-to-color_matrix_readdatavalid>),            //                               .readdatavalid
+		.color_matrix_burstcount               (<connected-to-color_matrix_burstcount>),               //                               .burstcount
+		.color_matrix_writedata                (<connected-to-color_matrix_writedata>),                //                               .writedata
+		.color_matrix_address                  (<connected-to-color_matrix_address>),                  //                               .address
+		.color_matrix_write                    (<connected-to-color_matrix_write>),                    //                               .write
+		.color_matrix_read                     (<connected-to-color_matrix_read>),                     //                               .read
+		.color_matrix_byteenable               (<connected-to-color_matrix_byteenable>),               //                               .byteenable
+		.color_matrix_debugaccess              (<connected-to-color_matrix_debugaccess>),              //                               .debugaccess
 		.dipsw_pio_external_connection_export  (<connected-to-dipsw_pio_external_connection_export>),  //  dipsw_pio_external_connection.export
+		.hdmi_sync_waitrequest                 (<connected-to-hdmi_sync_waitrequest>),                 //                      hdmi_sync.waitrequest
+		.hdmi_sync_readdata                    (<connected-to-hdmi_sync_readdata>),                    //                               .readdata
+		.hdmi_sync_readdatavalid               (<connected-to-hdmi_sync_readdatavalid>),               //                               .readdatavalid
+		.hdmi_sync_burstcount                  (<connected-to-hdmi_sync_burstcount>),                  //                               .burstcount
+		.hdmi_sync_writedata                   (<connected-to-hdmi_sync_writedata>),                   //                               .writedata
+		.hdmi_sync_address                     (<connected-to-hdmi_sync_address>),                     //                               .address
+		.hdmi_sync_write                       (<connected-to-hdmi_sync_write>),                       //                               .write
+		.hdmi_sync_read                        (<connected-to-hdmi_sync_read>),                        //                               .read
+		.hdmi_sync_byteenable                  (<connected-to-hdmi_sync_byteenable>),                  //                               .byteenable
+		.hdmi_sync_debugaccess                 (<connected-to-hdmi_sync_debugaccess>),                 //                               .debugaccess
 		.hps_0_f2h_cold_reset_req_reset_n      (<connected-to-hps_0_f2h_cold_reset_req_reset_n>),      //       hps_0_f2h_cold_reset_req.reset_n
 		.hps_0_f2h_debug_reset_req_reset_n     (<connected-to-hps_0_f2h_debug_reset_req_reset_n>),     //      hps_0_f2h_debug_reset_req.reset_n
 		.hps_0_f2h_stm_hw_events_stm_hwevents  (<connected-to-hps_0_f2h_stm_hw_events_stm_hwevents>),  //        hps_0_f2h_stm_hw_events.stm_hwevents
@@ -55,6 +75,10 @@
 		.hps_0_hps_io_hps_io_gpio_inst_GPIO53  (<connected-to-hps_0_hps_io_hps_io_gpio_inst_GPIO53>),  //                               .hps_io_gpio_inst_GPIO53
 		.hps_0_hps_io_hps_io_gpio_inst_GPIO54  (<connected-to-hps_0_hps_io_hps_io_gpio_inst_GPIO54>),  //                               .hps_io_gpio_inst_GPIO54
 		.hps_0_hps_io_hps_io_gpio_inst_GPIO61  (<connected-to-hps_0_hps_io_hps_io_gpio_inst_GPIO61>),  //                               .hps_io_gpio_inst_GPIO61
+		.i2c_hdmi_sda_in                       (<connected-to-i2c_hdmi_sda_in>),                       //                       i2c_hdmi.sda_in
+		.i2c_hdmi_scl_in                       (<connected-to-i2c_hdmi_scl_in>),                       //                               .scl_in
+		.i2c_hdmi_sda_oe                       (<connected-to-i2c_hdmi_sda_oe>),                       //                               .sda_oe
+		.i2c_hdmi_scl_oe                       (<connected-to-i2c_hdmi_scl_oe>),                       //                               .scl_oe
 		.led_pio_external_connection_export    (<connected-to-led_pio_external_connection_export>),    //    led_pio_external_connection.export
 		.memory_mem_a                          (<connected-to-memory_mem_a>),                          //                         memory.mem_a
 		.memory_mem_ba                         (<connected-to-memory_mem_ba>),                         //                               .mem_ba
@@ -72,6 +96,17 @@
 		.memory_mem_odt                        (<connected-to-memory_mem_odt>),                        //                               .mem_odt
 		.memory_mem_dm                         (<connected-to-memory_mem_dm>),                         //                               .mem_dm
 		.memory_oct_rzqin                      (<connected-to-memory_oct_rzqin>),                      //                               .oct_rzqin
-		.reset_reset_n                         (<connected-to-reset_reset_n>)                          //                          reset.reset_n
+		.pll_clk_video_clk                     (<connected-to-pll_clk_video_clk>),                     //                  pll_clk_video.clk
+		.reset_reset_n                         (<connected-to-reset_reset_n>),                         //                          reset.reset_n
+		.video_dma_s_waitrequest               (<connected-to-video_dma_s_waitrequest>),               //                    video_dma_s.waitrequest
+		.video_dma_s_readdata                  (<connected-to-video_dma_s_readdata>),                  //                               .readdata
+		.video_dma_s_readdatavalid             (<connected-to-video_dma_s_readdatavalid>),             //                               .readdatavalid
+		.video_dma_s_burstcount                (<connected-to-video_dma_s_burstcount>),                //                               .burstcount
+		.video_dma_s_writedata                 (<connected-to-video_dma_s_writedata>),                 //                               .writedata
+		.video_dma_s_address                   (<connected-to-video_dma_s_address>),                   //                               .address
+		.video_dma_s_write                     (<connected-to-video_dma_s_write>),                     //                               .write
+		.video_dma_s_read                      (<connected-to-video_dma_s_read>),                      //                               .read
+		.video_dma_s_byteenable                (<connected-to-video_dma_s_byteenable>),                //                               .byteenable
+		.video_dma_s_debugaccess               (<connected-to-video_dma_s_debugaccess>)                //                               .debugaccess
 	);
 

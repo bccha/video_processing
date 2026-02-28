@@ -2,7 +2,27 @@
 module soc_system (
 	button_pio_external_connection_export,
 	clk_clk,
+	color_matrix_waitrequest,
+	color_matrix_readdata,
+	color_matrix_readdatavalid,
+	color_matrix_burstcount,
+	color_matrix_writedata,
+	color_matrix_address,
+	color_matrix_write,
+	color_matrix_read,
+	color_matrix_byteenable,
+	color_matrix_debugaccess,
 	dipsw_pio_external_connection_export,
+	hdmi_sync_waitrequest,
+	hdmi_sync_readdata,
+	hdmi_sync_readdatavalid,
+	hdmi_sync_burstcount,
+	hdmi_sync_writedata,
+	hdmi_sync_address,
+	hdmi_sync_write,
+	hdmi_sync_read,
+	hdmi_sync_byteenable,
+	hdmi_sync_debugaccess,
 	hps_0_f2h_cold_reset_req_reset_n,
 	hps_0_f2h_debug_reset_req_reset_n,
 	hps_0_f2h_stm_hw_events_stm_hwevents,
@@ -56,6 +76,10 @@ module soc_system (
 	hps_0_hps_io_hps_io_gpio_inst_GPIO53,
 	hps_0_hps_io_hps_io_gpio_inst_GPIO54,
 	hps_0_hps_io_hps_io_gpio_inst_GPIO61,
+	i2c_hdmi_sda_in,
+	i2c_hdmi_scl_in,
+	i2c_hdmi_sda_oe,
+	i2c_hdmi_scl_oe,
 	led_pio_external_connection_export,
 	memory_mem_a,
 	memory_mem_ba,
@@ -73,11 +97,42 @@ module soc_system (
 	memory_mem_odt,
 	memory_mem_dm,
 	memory_oct_rzqin,
-	reset_reset_n);	
+	pll_clk_video_clk,
+	reset_reset_n,
+	video_dma_s_waitrequest,
+	video_dma_s_readdata,
+	video_dma_s_readdatavalid,
+	video_dma_s_burstcount,
+	video_dma_s_writedata,
+	video_dma_s_address,
+	video_dma_s_write,
+	video_dma_s_read,
+	video_dma_s_byteenable,
+	video_dma_s_debugaccess);	
 
 	input	[1:0]	button_pio_external_connection_export;
 	input		clk_clk;
+	input		color_matrix_waitrequest;
+	input	[31:0]	color_matrix_readdata;
+	input		color_matrix_readdatavalid;
+	output	[0:0]	color_matrix_burstcount;
+	output	[31:0]	color_matrix_writedata;
+	output	[3:0]	color_matrix_address;
+	output		color_matrix_write;
+	output		color_matrix_read;
+	output	[3:0]	color_matrix_byteenable;
+	output		color_matrix_debugaccess;
 	input	[3:0]	dipsw_pio_external_connection_export;
+	input		hdmi_sync_waitrequest;
+	input	[31:0]	hdmi_sync_readdata;
+	input		hdmi_sync_readdatavalid;
+	output	[0:0]	hdmi_sync_burstcount;
+	output	[31:0]	hdmi_sync_writedata;
+	output	[2:0]	hdmi_sync_address;
+	output		hdmi_sync_write;
+	output		hdmi_sync_read;
+	output	[3:0]	hdmi_sync_byteenable;
+	output		hdmi_sync_debugaccess;
 	input		hps_0_f2h_cold_reset_req_reset_n;
 	input		hps_0_f2h_debug_reset_req_reset_n;
 	input	[27:0]	hps_0_f2h_stm_hw_events_stm_hwevents;
@@ -131,6 +186,10 @@ module soc_system (
 	inout		hps_0_hps_io_hps_io_gpio_inst_GPIO53;
 	inout		hps_0_hps_io_hps_io_gpio_inst_GPIO54;
 	inout		hps_0_hps_io_hps_io_gpio_inst_GPIO61;
+	input		i2c_hdmi_sda_in;
+	input		i2c_hdmi_scl_in;
+	output		i2c_hdmi_sda_oe;
+	output		i2c_hdmi_scl_oe;
 	output	[6:0]	led_pio_external_connection_export;
 	output	[14:0]	memory_mem_a;
 	output	[2:0]	memory_mem_ba;
@@ -148,5 +207,16 @@ module soc_system (
 	output		memory_mem_odt;
 	output	[3:0]	memory_mem_dm;
 	input		memory_oct_rzqin;
+	output		pll_clk_video_clk;
 	input		reset_reset_n;
+	output		video_dma_s_waitrequest;
+	output	[31:0]	video_dma_s_readdata;
+	output		video_dma_s_readdatavalid;
+	input	[8:0]	video_dma_s_burstcount;
+	input	[31:0]	video_dma_s_writedata;
+	input	[31:0]	video_dma_s_address;
+	input		video_dma_s_write;
+	input		video_dma_s_read;
+	input	[3:0]	video_dma_s_byteenable;
+	input		video_dma_s_debugaccess;
 endmodule

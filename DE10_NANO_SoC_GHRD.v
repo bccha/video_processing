@@ -103,6 +103,40 @@ module DE10_NANO_SoC_GHRD(
   assign fpga_clk_50=FPGA_CLK1_50;
   assign stm_hw_events    = {{15{1'b0}}, SW, fpga_led_internal, fpga_debounced_buttons};
 
+  // Video DMA Interface Wires
+  wire        dma_waitrequest;
+  wire [31:0] dma_readdata;
+  wire        dma_readdatavalid;
+  wire [8:0]  dma_burstcount; // Qsys in current design provides 9-bit burstcount (as shown in soc_system_bb.v)
+  wire [31:0] dma_writedata;
+  wire [31:0] dma_address;
+  wire        dma_write;
+  wire        dma_read;
+  wire [3:0]  dma_byteenable;
+
+  // HDMI Sync Gen Control Interface
+  wire [2:0]  hsg_s_address;
+  wire        hsg_s_read;
+  wire        hsg_s_write;
+  wire [31:0] hsg_s_writedata;
+  wire [31:0] hsg_s_readdata;
+  wire        hsg_s_readdatavalid;
+
+  // Color Matrix CSR Interface
+  wire [3:0]  cm_address;
+  wire        cm_read;
+  wire        cm_write;
+  wire [31:0] cm_writedata;
+  wire [31:0] cm_readdata;
+  reg         cm_readdatavalid_r;
+  always @(posedge fpga_clk_50) cm_readdatavalid_r <= cm_read;
+
+  // HDMI I2C Wires
+  wire        hdmi_i2c_sda_in;
+  wire        hdmi_i2c_scl_in;
+  wire        hdmi_i2c_sda_oe;
+  wire        hdmi_i2c_scl_oe;
+
 
 
 //=======================================================
@@ -186,16 +220,100 @@ soc_system u0 (
 	  .hps_0_hps_io_hps_io_gpio_inst_GPIO54  ( HPS_KEY   ),  //                               .hps_io_gpio_inst_GPIO54
 	  .hps_0_hps_io_hps_io_gpio_inst_GPIO61  ( HPS_GSENSOR_INT ),  //                               .hps_io_gpio_inst_GPIO61
 		//FPGA Partion
-	  .led_pio_external_connection_export    ( fpga_led_internal 	),    //    led_pio_external_connection.export
+	  .led_pio_external_connection_export    (  	),    //    led_pio_external_connection.export
 	  .dipsw_pio_external_connection_export  ( SW	),  //  dipsw_pio_external_connection.export
 	  .button_pio_external_connection_export ( fpga_debounced_buttons	), // button_pio_external_connection.export
 	  .hps_0_h2f_reset_reset_n               ( hps_fpga_reset_n ),                //                hps_0_h2f_reset.reset_n
 	  .hps_0_f2h_cold_reset_req_reset_n      (~hps_cold_reset ),      //       hps_0_f2h_cold_reset_req.reset_n
      .hps_0_f2h_debug_reset_req_reset_n     (~hps_debug_reset ),     //      hps_0_f2h_debug_reset_req.reset_n
      .hps_0_f2h_stm_hw_events_stm_hwevents  (stm_hw_events ),  //        hps_0_f2h_stm_hw_events.stm_hwevents
-     .hps_0_f2h_warm_reset_req_reset_n      (~hps_warm_reset ),      //       hps_0_f2h_warm_reset_req.reset_n
-
+	  .hps_0_f2h_warm_reset_req_reset_n      (~hps_warm_reset ),      //       hps_0_f2h_warm_reset_req.reset_n
+	  //HDMI I2C
+	  .i2c_hdmi_sda_in                       (hdmi_i2c_sda_in),
+	  .i2c_hdmi_scl_in                       (hdmi_i2c_scl_in),
+	  .i2c_hdmi_sda_oe                       (hdmi_i2c_sda_oe),
+	  .i2c_hdmi_scl_oe                       (hdmi_i2c_scl_oe),
+	  //HDMI Video PLL
+	  .pll_clk_video_clk                     (HDMI_TX_CLK),
+	  //Video DMA
+	  .video_dma_s_waitrequest               (dma_waitrequest),
+	  .video_dma_s_readdata                  (dma_readdata),
+	  .video_dma_s_readdatavalid             (dma_readdatavalid),
+	  .video_dma_s_burstcount                (dma_burstcount),
+	  .video_dma_s_writedata                 (dma_writedata),
+	  .video_dma_s_address                   (dma_address),
+	  .video_dma_s_write                     (dma_write),
+	  .video_dma_s_read                      (dma_read),
+	  .video_dma_s_byteenable                (dma_byteenable),
+	  .video_dma_s_debugaccess               (),
+	  //HDMI Sync Gen (Avalon MM Slave)
+	  .hdmi_sync_waitrequest                 (1'b0),
+	  .hdmi_sync_readdata                    (hsg_s_readdata),
+	  .hdmi_sync_readdatavalid               (hsg_s_readdatavalid),
+	  .hdmi_sync_burstcount                  (),
+	  .hdmi_sync_writedata                   (hsg_s_writedata),
+	  .hdmi_sync_address                     (hsg_s_address),
+	  .hdmi_sync_write                       (hsg_s_write),
+	  .hdmi_sync_read                        (hsg_s_read),
+	  .hdmi_sync_byteenable                  (),
+	  .hdmi_sync_debugaccess                 (),
+	  //Color Matrix
+	  .color_matrix_waitrequest              (1'b0),
+	  .color_matrix_readdata                 (cm_readdata),
+	  .color_matrix_readdatavalid            (cm_readdatavalid_r),
+	  .color_matrix_burstcount               (),
+	  .color_matrix_writedata                (cm_writedata),
+	  .color_matrix_address                  (cm_address),
+	  .color_matrix_write                    (cm_write),
+	  .color_matrix_read                     (cm_read),
+	  .color_matrix_byteenable               (),
+	  .color_matrix_debugaccess              ()
  );
+
+// HDMI Video Pipeline (DMA + FIFO + Sync Gen)
+video_pipeline u_video_pipeline (
+    .clk_50            (fpga_clk_50),           // 50 MHz for DMA
+    .clk_hdmi          (HDMI_TX_CLK),           // 37.8 MHz for HDMI
+    .reset_n           (hps_fpga_reset_n),
+    
+    // Avalon-MM Master (to DDR3 via Qsys)
+    .m_waitrequest     (dma_waitrequest),
+    .m_readdata        (dma_readdata),
+    .m_readdatavalid   (dma_readdatavalid),
+    .m_address         (dma_address),
+    .m_read            (dma_read),
+    .m_burstcount      (dma_burstcount[7:0]), // Map 9-bit Qsys width to 8-bit pipeline width
+    
+    // Avalon-MM Slave (Control from Nios II)
+    .s_address         (hsg_s_address),
+    .s_read            (hsg_s_read),
+    .s_write           (hsg_s_write),
+    .s_writedata       (hsg_s_writedata),
+    .s_readdata        (hsg_s_readdata),
+    .s_readdatavalid   (hsg_s_readdatavalid),
+
+    // Color Matrix Avalon-MM Slave (from Nios II via Qsys)
+    .cm_s_address      (cm_address),
+    .cm_s_read         (cm_read),
+    .cm_s_write        (cm_write),
+    .cm_s_writedata    (cm_writedata),
+    .cm_s_readdata     (cm_readdata),
+    
+    // HDMI Output
+    .hdmi_d            (HDMI_TX_D),
+    .hdmi_de           (HDMI_TX_DE),
+    .hdmi_hs           (HDMI_TX_HS),
+    .hdmi_vs           (HDMI_TX_VS),
+    
+    // Debug
+    .debug_leds        (fpga_led_internal)      // Map internal debug to LEDs
+);
+
+// HDMI I2C Tri-state Buffer
+assign HDMI_I2C_SCL = hdmi_i2c_scl_oe ? 1'b0 : 1'bz;
+assign hdmi_i2c_scl_in = HDMI_I2C_SCL;
+assign HDMI_I2C_SDA = hdmi_i2c_sda_oe ? 1'b0 : 1'bz;
+assign hdmi_i2c_sda_in = HDMI_I2C_SDA;
 
 // Debounce logic to clean out glitches within 1ms
 debounce debounce_inst (

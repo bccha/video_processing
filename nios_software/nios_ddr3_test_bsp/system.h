@@ -4,7 +4,7 @@
  * Machine generated for CPU 'nios2_gen2_0' in SOPC Builder design 'soc_system'
  * SOPC Builder design path: ../../soc_system.sopcinfo
  *
- * Generated: Fri Feb 27 16:21:59 EST 2026
+ * Generated: Fri Feb 27 22:53:51 EST 2026
  */
 
 /*
@@ -134,10 +134,16 @@
  */
 
 #define __ALTERA_ADDRESS_SPAN_EXTENDER
+#define __ALTERA_AVALON_I2C
 #define __ALTERA_AVALON_JTAG_UART
+#define __ALTERA_AVALON_MM_BRIDGE
 #define __ALTERA_AVALON_ONCHIP_MEMORY2
+#define __ALTERA_AVALON_PIO
 #define __ALTERA_AVALON_TIMER
 #define __ALTERA_NIOS2_GEN2
+#define __ALTERA_PLL_RECONFIG
+#define __BURST_MASTER
+#define __BURST_MASTER_4
 
 
 /*
@@ -225,6 +231,48 @@
 
 
 /*
+ * burst_master_0 configuration
+ *
+ */
+
+#define ALT_MODULE_CLASS_burst_master_0 burst_master
+#define BURST_MASTER_0_BASE 0x30020
+#define BURST_MASTER_0_IRQ -1
+#define BURST_MASTER_0_IRQ_INTERRUPT_CONTROLLER_ID -1
+#define BURST_MASTER_0_NAME "/dev/burst_master_0"
+#define BURST_MASTER_0_SPAN 32
+#define BURST_MASTER_0_TYPE "burst_master"
+
+
+/*
+ * burst_master_4_0 configuration
+ *
+ */
+
+#define ALT_MODULE_CLASS_burst_master_4_0 burst_master_4
+#define BURST_MASTER_4_0_BASE 0x30000
+#define BURST_MASTER_4_0_IRQ -1
+#define BURST_MASTER_4_0_IRQ_INTERRUPT_CONTROLLER_ID -1
+#define BURST_MASTER_4_0_NAME "/dev/burst_master_4_0"
+#define BURST_MASTER_4_0_SPAN 32
+#define BURST_MASTER_4_0_TYPE "burst_master_4"
+
+
+/*
+ * color_matrix configuration
+ *
+ */
+
+#define ALT_MODULE_CLASS_color_matrix altera_avalon_mm_bridge
+#define COLOR_MATRIX_BASE 0x20240
+#define COLOR_MATRIX_IRQ -1
+#define COLOR_MATRIX_IRQ_INTERRUPT_CONTROLLER_ID -1
+#define COLOR_MATRIX_NAME "/dev/color_matrix"
+#define COLOR_MATRIX_SPAN 64
+#define COLOR_MATRIX_TYPE "altera_avalon_mm_bridge"
+
+
+/*
  * hal configuration
  *
  */
@@ -233,6 +281,37 @@
 #define ALT_MAX_FD 32
 #define ALT_SYS_CLK TIMER_0
 #define ALT_TIMESTAMP_CLK none
+
+
+/*
+ * hdmi_sync configuration
+ *
+ */
+
+#define ALT_MODULE_CLASS_hdmi_sync altera_avalon_mm_bridge
+#define HDMI_SYNC_BASE 0x20200
+#define HDMI_SYNC_IRQ -1
+#define HDMI_SYNC_IRQ_INTERRUPT_CONTROLLER_ID -1
+#define HDMI_SYNC_NAME "/dev/hdmi_sync"
+#define HDMI_SYNC_SPAN 32
+#define HDMI_SYNC_TYPE "altera_avalon_mm_bridge"
+
+
+/*
+ * i2c_hdmi configuration
+ *
+ */
+
+#define ALT_MODULE_CLASS_i2c_hdmi altera_avalon_i2c
+#define I2C_HDMI_BASE 0x20040
+#define I2C_HDMI_FIFO_DEPTH 4
+#define I2C_HDMI_FREQ 50000000
+#define I2C_HDMI_IRQ 2
+#define I2C_HDMI_IRQ_INTERRUPT_CONTROLLER_ID 0
+#define I2C_HDMI_NAME "/dev/i2c_hdmi"
+#define I2C_HDMI_SPAN 64
+#define I2C_HDMI_TYPE "altera_avalon_i2c"
+#define I2C_HDMI_USE_AV_ST 0
 
 
 /*
@@ -280,6 +359,47 @@
 #define ONCHIP_MEMORY2_0_SPAN 100000
 #define ONCHIP_MEMORY2_0_TYPE "altera_avalon_onchip_memory2"
 #define ONCHIP_MEMORY2_0_WRITABLE 1
+
+
+/*
+ * pll_locked configuration
+ *
+ */
+
+#define ALT_MODULE_CLASS_pll_locked altera_avalon_pio
+#define PLL_LOCKED_BASE 0x20010
+#define PLL_LOCKED_BIT_CLEARING_EDGE_REGISTER 0
+#define PLL_LOCKED_BIT_MODIFYING_OUTPUT_REGISTER 0
+#define PLL_LOCKED_CAPTURE 0
+#define PLL_LOCKED_DATA_WIDTH 1
+#define PLL_LOCKED_DO_TEST_BENCH_WIRING 0
+#define PLL_LOCKED_DRIVEN_SIM_VALUE 0
+#define PLL_LOCKED_EDGE_TYPE "NONE"
+#define PLL_LOCKED_FREQ 50000000
+#define PLL_LOCKED_HAS_IN 1
+#define PLL_LOCKED_HAS_OUT 0
+#define PLL_LOCKED_HAS_TRI 0
+#define PLL_LOCKED_IRQ -1
+#define PLL_LOCKED_IRQ_INTERRUPT_CONTROLLER_ID -1
+#define PLL_LOCKED_IRQ_TYPE "NONE"
+#define PLL_LOCKED_NAME "/dev/pll_locked"
+#define PLL_LOCKED_RESET_VALUE 0
+#define PLL_LOCKED_SPAN 16
+#define PLL_LOCKED_TYPE "altera_avalon_pio"
+
+
+/*
+ * pll_reconfig_0 configuration
+ *
+ */
+
+#define ALT_MODULE_CLASS_pll_reconfig_0 altera_pll_reconfig
+#define PLL_RECONFIG_0_BASE 0x20100
+#define PLL_RECONFIG_0_IRQ -1
+#define PLL_RECONFIG_0_IRQ_INTERRUPT_CONTROLLER_ID -1
+#define PLL_RECONFIG_0_NAME "/dev/pll_reconfig_0"
+#define PLL_RECONFIG_0_SPAN 256
+#define PLL_RECONFIG_0_TYPE "altera_pll_reconfig"
 
 
 /*

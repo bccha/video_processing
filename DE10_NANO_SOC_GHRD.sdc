@@ -52,6 +52,22 @@ derive_clock_uncertainty
 # Set Clock Groups
 #**************************************************************
 
+# By defining asynchronous clock groups, we tell the Quartus Fitter/TimeQuest
+# NOT to analyze paths CROSSING between these separate clock domains.
+# The Video Pipeline, Nios, HPS/DDR, and 50MHz board inputs are separated by
+# FIFOs/CDCs in Qsys, so they are truly Asynchronous.
+#
+# Doing this prevents the Router from wasting hours trying to achieve 
+# impossible Timing Closure on CDC boundaries.
+
+set_clock_groups -asynchronous \
+    -group [get_clocks {FPGA_CLK1_50 FPGA_CLK2_50 FPGA_CLK3_50}] \
+    -group [get_clocks {u0|pll_0|altera_pll_i|*|divclk}] \
+    -group [get_clocks {*|hps_0|hps_io|border|h2f_user0_clock}]
+
+# Note: Add additional groups with wildcards for any specific AXI/Avalon 
+# Video PLL clocks or Nios core clocks if they differ from the pll_0 divclk.
+
 
 
 #**************************************************************
