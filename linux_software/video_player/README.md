@@ -94,3 +94,30 @@ ffmpeg -i heavy_video.mp4 -vf scale=960:540 -pix_fmt bgra -f rawvideo - | ssh ro
 *   Replace `<BOARD_IP_ADDRESS>` with the IP of your DE10-Nano.
 *   Ensure the path `~/test/linux_software/video_player` exactly matches where your `video_player` binary is located on the board.
 *   A Gigabit Ethernet connection is heavily recommended, as raw 960x540@60fps pushes roughly 995 Mbps of network traffic.
+
+---
+
+## Appendix: Setting a Permanent Static IP on the DE10-Nano
+
+To ensure you can always SSH into your board without checking the IP on a monitor every time, you should configure a static IP address.
+
+1.  Open the network interfaces file on the board:
+    ```bash
+    nano /etc/network/interfaces
+    ```
+2.  Add or modify the `eth0` interface settings at the bottom of the file (replace the IP addresses to match your local router's subnet):
+    ```text
+    auto eth0
+    iface eth0 inet static
+        address 192.168.0.100  # Desired Static IP for the Board
+        netmask 255.255.255.0
+        gateway 192.168.0.1    # Your Router IP
+    ```
+    *(Note: If `iface eth0 inet dhcp` exists, comment it out with `#` or delete it).*
+3.  Save the file (`Ctrl+O`, `Enter`) and exit (`Ctrl+X`).
+4.  Restart the networking service or reboot the board to apply changes:
+    ```bash
+    /etc/init.d/networking restart
+    # or
+    reboot
+    ```
