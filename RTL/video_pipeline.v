@@ -112,7 +112,23 @@ module video_pipeline (
         .busy              (dma_busy)
     );
 
-    // 3. DC FIFO (Megafunction)
+    // 3. DC FIFO (Megafunction / Simulation Model)
+`ifdef COCOTB_SIM
+    simple_dcfifo #(
+        .DATA_WIDTH(32),
+        .ADDR_WIDTH(10) // Match typical MegaWizard depth (e.g., 1024)
+    ) u_dc_fifo (
+        .data    (fifo_wr_data),
+        .rdclk   (clk_hdmi),
+        .rdreq   (fifo_rd_en),
+        .wrclk   (clk_50),
+        .wrreq   (fifo_wr_en),
+        .q       (fifo_rd_data),
+        .rdempty (fifo_empty),
+        .wrfull  (fifo_full),
+        .wrusedw (fifo_used)
+    );
+`else
     DC_FIFO u_dc_fifo (
         .aclr    (~reset_n | vsync_edge_sync),
         .data    (fifo_wr_data),
@@ -126,6 +142,7 @@ module video_pipeline (
         .wrfull  (fifo_full),
         .wrusedw (fifo_used)
     );
+`endif
 
     // Internal wires for raw HDMI signals from Sync Gen
     wire [23:0] raw_hdmi_d;

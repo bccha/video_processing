@@ -135,7 +135,7 @@ async def test_full_integration(dut):
     for _ in range(1000):
         await RisingEdge(dut.clk_50)
         try:
-            if int(dut.u_simple_fifo.wrusedw.value) > 32:
+            if int(dut.u_dc_fifo.wrusedw.value) > 32:
                 break
         except: pass
         
@@ -205,7 +205,7 @@ async def test_full_integration(dut):
             px_in_f = pixel_count % frame_size
             if px_in_f >= 950 and px_in_f <= 970:
                  with open(debug_log_file, "a") as f:
-                     f.write(f"[DEBUG] Fx {pixel_count // frame_size} Px {px_in_f}: {data:06X} (FIFO={int(dut.u_simple_fifo.wrusedw.value)})\n")
+                     f.write(f"[DEBUG] Fx {pixel_count // frame_size} Px {px_in_f}: {data:06X} (FIFO={int(dut.u_dc_fifo.wrusedw.value)})\n")
                      
             pixel_count += 1
             if pixel_count >= target_pixels:

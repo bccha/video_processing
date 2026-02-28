@@ -76,7 +76,7 @@ int kbhit() {
 // FPGA CSR Addresses (HPS Lightweight Bridge)
 #define CSR_BASE_PHY 0xFF200000
 #define CSR_SPAN 0x00100000 // 1MB
-#define HDMI_SYNC_GEN_OFFSET 0x2080
+#define HDMI_SYNC_GEN_OFFSET 0x20200
 
 // Register Offsets (Match hdmi_control.h)
 #define REG_PATTERN_MODE 0
@@ -90,8 +90,8 @@ int kbhit() {
 #define FILTER_CFG_DITHER_EN (1 << 3)
 
 // Color Matrix slave offset in the CSR region
-// system.h: COLOR_MATRIX_BASE=0x2000
-#define COLOR_MATRIX_OFFSET 0x2000
+// MATCHES system.h: COLOR_MATRIX_BASE=0x20240
+#define COLOR_MATRIX_OFFSET 0x20240
 // Color Matrix register offsets
 #define CM_REG_CTRL (0 * 4)
 #define CM_REG_C00 (1 * 4)

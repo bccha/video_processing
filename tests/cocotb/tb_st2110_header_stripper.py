@@ -7,11 +7,15 @@ class HeaderStripperDriver:
         self.dut = dut
         self.clock = clock
         self.dut.asi_valid.value = 0
+        self.dut.asi_startofpacket.value = 0
+        self.dut.asi_endofpacket.value = 0
         self.dut.aso_ready.value = 1
 
     async def send_packet(self, data_bytes):
         for i, b in enumerate(data_bytes):
             self.dut.asi_valid.value = 1
+            self.dut.asi_startofpacket.value = 1 if i == 0 else 0
+            self.dut.asi_endofpacket.value = 1 if i == len(data_bytes) - 1 else 0
             self.dut.asi_data.value = b
             await RisingEdge(self.clock)
             # wait until ready is high
@@ -19,6 +23,8 @@ class HeaderStripperDriver:
                 await RisingEdge(self.clock)
         
         self.dut.asi_valid.value = 0
+        self.dut.asi_startofpacket.value = 0
+        self.dut.asi_endofpacket.value = 0
 
 @cocotb.test()
 async def test_header_stripper(dut):
