@@ -23,6 +23,30 @@ The system has been expanded to support professional **SMPTE ST 2110-20 Video ov
 
 ---
 
+## 📚 Documentation Index
+
+To keep this repository organized, detailed technical specifications and guides have been divided into the following documents located in the `doc/` directory:
+
+### Architecture & Hardware Design
+* [**Pipeline Design & CDC (`DESIGN.md`)**](./doc/DESIGN.md)
+* [**DMA & F2H Bridge (`BURST_DMA.md`)**](./doc/BURST_DMA.md)
+* [**Nios II Firmware (`NIOS.md`)**](./doc/NIOS.md)
+
+### Color Science & Video Processing
+* [**Display Calibration & Matrices (`CALIBRATION.md`)**](./doc/CALIBRATION.md)
+* [**Advanced LED Dithering (`DITHER.md`)**](./doc/DITHER.md)
+
+### SMPTE ST 2110 & Video Streaming Tools
+* [**SMPTE ST 2110 Architecture (`ST2110.md`)**](./doc/ST2110.md)
+* [**ST 2110 Linux Optimization (`ST2110_LINUX.md`)**](./doc/ST2110_LINUX.md)
+* [**Linux Video Player & FFmpeg (`VIDEO_PLAYER.md`)**](./doc/VIDEO_PLAYER.md)
+
+### Benchmarks & Case Studies
+* [**Performance Results (`RESULT.md`)**](./doc/RESULT.md)
+* [**Technical Studies (`STUDY.md`)**](./doc/STUDY.md)
+
+---
+
 ## 🏗 System Architecture
 
 ```
