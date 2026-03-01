@@ -9,6 +9,18 @@ def test_video_pipeline():
     
     run(
         verilog_sources=[
+            os.path.join(rtl_dir, "delay_line.v"),
+            os.path.join(rtl_dir, "line_buffer.v"),
+            os.path.join(rtl_dir, "filter_blur.v"),
+            os.path.join(rtl_dir, "filter_edge.v"),
+            os.path.join(rtl_dir, "filter_emboss.v"),
+            os.path.join(rtl_dir, "filter_sharpen.v"),
+            os.path.join(rtl_dir, "filter_degamma.v"),
+            os.path.join(rtl_dir, "filter_color_matrix.v"),
+            os.path.join(rtl_dir, "filter_gamma.v"),
+            os.path.join(rtl_dir, "filter_dither.v"),
+            os.path.join(rtl_dir, "filter_error_diffusion.v"),
+            os.path.join(rtl_dir, "image_filter.v"),
             os.path.join(rtl_dir, "simple_dcfifo.v"),
             os.path.join(rtl_dir, "video_dma_master.v"),
             os.path.join(rtl_dir, "hdmi_sync_gen.v"),

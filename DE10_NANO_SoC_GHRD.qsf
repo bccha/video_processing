@@ -8,7 +8,6 @@ set_global_assignment -name TOP_LEVEL_ENTITY "DE10_NANO_SoC_GHRD"
 set_global_assignment -name LAST_QUARTUS_VERSION "20.1.1 Lite Edition"
 set_global_assignment -name PROJECT_CREATION_TIME_DATE "17:14:54 MARCH 04,2015"
 set_global_assignment -name PROJECT_OUTPUT_DIRECTORY output_files
-set_global_assignment -name IP_SEARCH_PATHS "Component;ip;RTL;\$"
 #============================================================
 # CLOCK
 #============================================================
@@ -473,33 +472,32 @@ set_global_assignment -name USE_DLL_FREQUENCY_FOR_DQS_DELAY_CHAIN ON
 set_global_assignment -name UNIPHY_SEQUENCER_DQS_CONFIG_ENABLE ON
 set_global_assignment -name OPTIMIZE_MULTI_CORNER_TIMING ON
 set_global_assignment -name ECO_REGENERATE_REPORT ON
-set_global_assignment -name HEX_FILE RTL/gamma_lut.hex
-set_global_assignment -name HEX_FILE RTL/degamma_lut.hex
-set_global_assignment -name VERILOG_FILE RTL/filter_gamma.v
-set_global_assignment -name VERILOG_FILE RTL/filter_degamma.v
-set_global_assignment -name VERILOG_FILE RTL/filter_color_matrix.v
-set_global_assignment -name VERILOG_FILE RTL/filter_dither.v
-set_global_assignment -name VERILOG_FILE RTL/filter_error_diffusion.v
-set_global_assignment -name VERILOG_FILE RTL/filter_sharpen.v
-set_global_assignment -name VERILOG_FILE RTL/filter_emboss.v
-set_global_assignment -name VERILOG_FILE RTL/filter_edge.v
-set_global_assignment -name VERILOG_FILE RTL/filter_blur.v
-set_global_assignment -name VERILOG_FILE RTL/line_buffer.v
-set_global_assignment -name VERILOG_FILE RTL/image_filter.v
-set_global_assignment -name VERILOG_FILE RTL/delay_line.v
+set_global_assignment -name QIP_FILE RTL/DC_FIFO.qip
+set_global_assignment -name VERILOG_FILE RTL/burst_master_4.v
+set_global_assignment -name VERILOG_FILE RTL/burst_master.v
 set_global_assignment -name VERILOG_FILE RTL/video_pipeline.v
 set_global_assignment -name VERILOG_FILE RTL/video_dma_master.v
-set_global_assignment -name VERILOG_FILE RTL/simple_dcfifo.v
-set_global_assignment -name SDC_FILE DE10_NANO_SOC_GHRD.sdc
-set_global_assignment -name VERILOG_FILE RTL/DE10_NANO_SoC_GHRD.v
-set_global_assignment -name VERILOG_FILE RTL/burst_master.v
-set_global_assignment -name VERILOG_FILE RTL/burst_master_4.v
+set_global_assignment -name VERILOG_FILE RTL/st2110_header_stripper.v
+set_global_assignment -name VERILOG_FILE RTL/st2110_alignment_wrapper.v
 set_global_assignment -name VERILOG_FILE RTL/simple_fifo.v
+set_global_assignment -name VERILOG_FILE RTL/simple_dcfifo.v
+set_global_assignment -name VERILOG_FILE RTL/line_buffer.v
+set_global_assignment -name VERILOG_FILE RTL/image_filter.v
 set_global_assignment -name VERILOG_FILE RTL/hdmi_sync_gen.v
+set_global_assignment -name VERILOG_FILE RTL/filter_sharpen.v
+set_global_assignment -name VERILOG_FILE RTL/filter_gamma.v
+set_global_assignment -name VERILOG_FILE RTL/filter_error_diffusion.v
+set_global_assignment -name VERILOG_FILE RTL/filter_emboss.v
+set_global_assignment -name VERILOG_FILE RTL/filter_edge.v
+set_global_assignment -name VERILOG_FILE RTL/filter_dither.v
+set_global_assignment -name VERILOG_FILE RTL/filter_degamma.v
+set_global_assignment -name VERILOG_FILE RTL/filter_color_matrix.v
+set_global_assignment -name VERILOG_FILE RTL/filter_blur.v
+set_global_assignment -name VERILOG_FILE RTL/delay_line.v
+set_global_assignment -name SDC_FILE DE10_NANO_SOC_GHRD.sdc
 set_global_assignment -name VERILOG_FILE ip/intr_capturer/intr_capturer.v
 set_global_assignment -name VERILOG_FILE ip/edge_detect/altera_edge_detector.v
 set_global_assignment -name VERILOG_FILE ip/debounce/debounce.v
 set_global_assignment -name QIP_FILE ip/altsource_probe/hps_reset.qip
 set_global_assignment -name QIP_FILE soc_system/synthesis/soc_system.qip
-set_global_assignment -name QIP_FILE RTL/DC_FIFO.qip
 set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top

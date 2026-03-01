@@ -5,10 +5,19 @@
 #include <sys/mman.h>
 #include <unistd.h>
 
+#define HW_REGS_BASE 0xFF200000
+#define HW_REGS_SPAN 0x00200000
+#define HW_REGS_MASK (HW_REGS_SPAN - 1)
+#define HDMI_SYNC_GEN_OFFSET 0x2080
 
-#define CSR_BASE_PHY 0xFF200000
-#define CSR_SPAN 0x00100000
-#define HDMI_SYNC_GEN_OFFSET 0x00010100
+#ifndef IOWR_32DIRECT
+#define IOWR_32DIRECT(base, offset, data)                                      \
+  (*(volatile uint32_t *)((uint8_t *)(base) + (offset)) = (data))
+#endif
+#ifndef IORD_32DIRECT
+#define IORD_32DIRECT(base, offset)                                            \
+  (*(volatile uint32_t *)((uint8_t *)(base) + (offset)))
+#endif
 
 #define REG_PATTERN_MODE 0
 #define REG_GLOBAL_CTRL (1 * 4)
@@ -29,8 +38,8 @@ int main(int argc, char **argv) {
     return 1;
   }
 
-  void *virtual_base = mmap(NULL, CSR_SPAN, PROT_READ | PROT_WRITE, MAP_SHARED,
-                            fd, CSR_BASE_PHY);
+  void *virtual_base = mmap(NULL, HW_REGS_SPAN, PROT_READ | PROT_WRITE,
+                            MAP_SHARED, fd, HW_REGS_BASE);
   if (virtual_base == MAP_FAILED) {
     perror("mmap");
     close(fd);
@@ -43,16 +52,17 @@ int main(int argc, char **argv) {
   printf("HPS: Setting Frame Pointer to 0x%08X\n", new_fb_addr);
 
   // 1. Ensure DMA Mode is enabled (Mode 8)
-  hdmi_csr[REG_PATTERN_MODE / 4] = 8;
+  IOWR_32DIRECT(hdmi_csr, REG_PATTERN_MODE, 8);
   // 2. Ensure Continuous DMA is enabled (Bit 1)
-  hdmi_csr[REG_GLOBAL_CTRL / 4] |= 0x02;
+  uint32_t current_ctrl = IORD_32DIRECT(hdmi_csr, REG_GLOBAL_CTRL);
+  IOWR_32DIRECT(hdmi_csr, REG_GLOBAL_CTRL, current_ctrl | 0x02);
   // 3. Update Frame Pointer
-  hdmi_csr[REG_FRAME_PTR / 4] = new_fb_addr;
+  IOWR_32DIRECT(hdmi_csr, REG_FRAME_PTR, new_fb_addr);
 
   printf("Done. Current Control Register: 0x%08X\n",
-         hdmi_csr[REG_GLOBAL_CTRL / 4]);
+         IORD_32DIRECT(hdmi_csr, REG_GLOBAL_CTRL));
 
-  munmap(virtual_base, CSR_SPAN);
+  munmap(virtual_base, HW_REGS_SPAN);
   close(fd);
 
   return 0;

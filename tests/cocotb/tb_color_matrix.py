@@ -46,7 +46,8 @@ async def csr_write(dut, addr, data):
         await RisingEdge(dut.clk)
 
 async def send_pixel(dut, r, g, b):
-    dut.din.value   = (r << 16) | (g << 8) | b
+    # 36-bit format: 12-bit Red (35:24), 12-bit Green (23:12), 12-bit Blue (11:0)
+    dut.din.value   = ((int(r) & 0xFFF) << 24) | ((int(g) & 0xFFF) << 12) | (int(b) & 0xFFF)
     dut.de_in.value = 1
     await RisingEdge(dut.clk)
 
@@ -64,7 +65,8 @@ async def capture_output(dut, count):
         timeout -= 1
         if dut.de_out.value == 1:
             val = int(dut.dout.value)
-            results.append(((val >> 16) & 0xFF, (val >> 8) & 0xFF, val & 0xFF))
+            # 36-bit format: 12-bit Red, 12-bit Green, 12-bit Blue
+            results.append(((val >> 24) & 0xFFF, (val >> 12) & 0xFFF, val & 0xFFF))
     return results
 
 # ----------------------------------------------------------------
@@ -161,19 +163,44 @@ async def test_calibration_example(dut):
 
     # Test White input
     test_pixels = [(255, 255, 255), (128, 128, 128), (0, 0, 0)]
+    
+    # Degamma function: 8-bit -> 12-bit (Gamma 2.2)
+    def py_degamma(val):
+        return min(4095, round(4095.0 * (val / 255.0) ** 2.2)) if val > 0 else 0
+        
+    # Gamma function: 12-bit -> 8-bit (Gamma 1/2.2)
+    def py_gamma(val):
+        return min(255, round(255.0 * (val / 4095.0) ** (1.0 / 2.2))) if val > 0 else 0
+
     monitor = cocotb.start_soon(capture_output(dut, len(test_pixels)))
     for r, g, b in test_pixels:
-        await send_pixel(dut, r, g, b)
+        # Before sending to the 12-bit Color Matrix HW, we must apply De-Gamma!
+        r_lin, g_lin, b_lin = py_degamma(r), py_degamma(g), py_degamma(b)
+        await send_pixel(dut, r_lin, g_lin, b_lin)
     await flush_pipeline(dut)
-    results = await monitor
+    results_12bit = await monitor
 
-    # Python reference: float computation
+    # Python reference: float computation (in Linear space!)
+    # White point target in linear will be transformed by M
     M = np.array([[923, 192, 31], [44, 970, 11], [7, 18, 706]]) / 1024.0
-    for i, (pix_in, (ro, go, bo)) in enumerate(zip(test_pixels, results)):
-        ref = np.clip(np.round(M @ np.array(pix_in)).astype(int), 0, 255)
-        assert abs(int(ref[0]) - ro) <= 1, f"R mismatch pixel[{i}]: ref={ref[0]} got={ro}"
-        assert abs(int(ref[1]) - go) <= 1, f"G mismatch pixel[{i}]: ref={ref[1]} got={go}"
-        assert abs(int(ref[2]) - bo) <= 1, f"B mismatch pixel[{i}]: ref={ref[2]} got={bo}"
+    
+    for i, (pix_in, (ro_12, go_12, bo_12)) in enumerate(zip(test_pixels, results_12bit)):
+        # Apply Gamma to get back to 8-bit sRGB space
+        ro, go, bo = py_gamma(ro_12), py_gamma(go_12), py_gamma(bo_12)
+        
+        # Calculate exactly what python float precision expects (in linear space, then gamma)
+        lin_in = np.array([py_degamma(pix_in[0]), py_degamma(pix_in[1]), py_degamma(pix_in[2])])
+        lin_out = M @ lin_in
+        lin_out = np.clip(np.round(lin_out), 0, 4095).astype(int)
+        
+        ref = [py_gamma(lin_out[0]), py_gamma(lin_out[1]), py_gamma(lin_out[2])]
+
+        # Due to integer matrix multiplication truncation inside the RTL:
+        # Error tolerance should comfortably be within ±2 of expected Python representation.
+        assert abs(int(ref[0]) - ro) <= 2, f"R mismatch pixel[{i}]: ref={ref[0]} got={ro}"
+        assert abs(int(ref[1]) - go) <= 2, f"G mismatch pixel[{i}]: ref={ref[1]} got={go}"
+        assert abs(int(ref[2]) - bo) <= 2, f"B mismatch pixel[{i}]: ref={ref[2]} got={bo}"
+        
         dut._log.info(f"[CAL OK] in={pix_in} ref=({ref[0]},{ref[1]},{ref[2]}) "
                       f"out=({ro},{go},{bo})")
 

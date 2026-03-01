@@ -8,6 +8,9 @@ A hardware-accelerated video processing system on the DE10-Nano (Cyclone V SoC),
 
 This project streams video from HPS DDR3 memory through an FPGA pixel pipeline to an HDMI display at **960×540p @ 60fps with zero tearing**. The FPGA handles all real-time quality processing: spatial filtering, color space conversion, gamut calibration, and advanced dithering — entirely in RTL.
 
+**🚀 [NEW] SMPTE ST 2110 Hybrid Receiver Integration**
+The system has been expanded to support professional **SMPTE ST 2110-20 Video over IP** reception. It features a unique hybrid architecture where the ARM HPS handles network decap (via `AF_PACKET` raw sockets and `mmap` zero-copy directly to DDR), while the FPGA fabric handles high-speed header stripping and video streaming.
+
 **Key Results at a Glance**
 
 | Data Path | Method | Throughput | Speedup |
@@ -20,15 +23,42 @@ This project streams video from HPS DDR3 memory through an FPGA pixel pipeline t
 
 ---
 
+## 📚 Documentation Index
+
+To keep this repository organized, detailed technical specifications and guides have been divided into the following documents located in the `doc/` directory:
+
+### Architecture & Hardware Design
+* [**Pipeline Design & CDC (`DESIGN.md`)**](./doc/DESIGN.md)
+* [**DMA & F2H Bridge (`BURST_DMA.md`)**](./doc/BURST_DMA.md)
+* [**Nios II Firmware (`NIOS.md`)**](./doc/NIOS.md)
+
+### Color Science & Video Processing
+* [**Display Calibration & Matrices (`CALIBRATION.md`)**](./doc/CALIBRATION.md)
+* [**Advanced LED Dithering (`DITHER.md`)**](./doc/DITHER.md)
+
+### SMPTE ST 2110 & Video Streaming Tools
+* [**SMPTE ST 2110 Architecture (`ST2110.md`)**](./doc/ST2110.md)
+* [**ST 2110 Linux Optimization (`ST2110_LINUX.md`)**](./doc/ST2110_LINUX.md)
+* [**Linux Video Player & FFmpeg (`VIDEO_PLAYER.md`)**](./doc/VIDEO_PLAYER.md)
+
+### Benchmarks & Case Studies
+* [**Performance Results (`RESULT.md`)**](./doc/RESULT.md)
+* [**Technical Studies (`STUDY.md`)**](./doc/STUDY.md)
+
+---
+
 ## 🏗 System Architecture
 
 ```
+PC Transmitter (st2110_tx.py)
+      │
+      ▼  (RNDIS USB / GbE network)
 ARM (Linux/HPS)                     FPGA Pixel Pipeline (37.8 MHz)
 ────────────────                    ──────────────────────────────────────────────────
-FFmpeg decode         mmap          F2H AXI     Burst    Video    Sync
-raw frames      ──────────────►    Bridge  ──► Master ──► FIFO ──► Gen
-into DDR3 @                                                          │
-0x20000000                                                           ▼
+Raw ST 2110           mmap          F2H AXI     Burst    Video    Sync
+AF_PACKET Socket ─────────────►    Bridge  ──► Master ──► FIFO ──► Gen
+into SDRAM1                                 ▲                                                          │
+(Ring Buffer)                               │ (SDRAM0)                                             ▼
                                                               Image Filter
                                                           (Blur/Edge/Emboss/Sharpen)
                                                                      │
@@ -275,9 +305,12 @@ When the input color space is wider than the target, the matrix will produce neg
 
 ## 3. DMA Design: F2H AXI Bridge + Burst Master
 
-### 3.1 Architecture
+### 3.1 Architecture (Dual SDRAM Split)
 
-The FPGA accesses DDR3 exclusively via the **FPGA-to-HPS AXI Slave Bridge**, bypassing the dedicated FPGA-to-SDRAM ports which require preloader-level configuration. This gives a reliable, high-bandwidth path through the HPS L3 Interconnect.
+To maximize memory bandwidth and prevent collisions between the high-speed gigabit network receiver and the real-time 60fps video display DMA, the system isolates the HPS DDR3 memory into two discrete regions accessed via the **FPGA-to-HPS AXI Slave Bridge**:
+
+- **SDRAM0 (Framebuffer & Control)**: Dedicated exclusively to the Nios II processor and the Video Output DMA master. This domain handles the final HDMI rendering.
+- **SDRAM1 (Network Ringbuffer)**: Dedicated exclusively to the ST2110 `AF_PACKET` socket `mmap` ringbuffer. The ARM HPS software ingests high-speed UDP packets directly into this region.
 
 ```
 FPGA Fabric
@@ -288,7 +321,7 @@ FPGA Fabric
 └──────────────────────────────────┘
 ```
 
-The Address Span Extender maps the full 32-bit DDR3 space into the Avalon-MM address range. Both Nios II and the DMA master are initialized with a base offset of `0x20000000` (512 MB), keeping them out of the ARM/Linux kernel space.
+The Address Span Extender maps the 32-bit DDR3 physical space into the Avalon-MM address range. For example, the video DMA master is configured to read the framebuffer from `0x20000000` (SDRAM0), securely isolated from Linux kernel space and the network ingress buffer at `0x30000000` (SDRAM1).
 
 ### 3.2 Why the Burst Master is Fast
 

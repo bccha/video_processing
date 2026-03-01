@@ -23,7 +23,16 @@
 // FPGA CSR Addresses (HPS Lightweight Bridge)
 #define CSR_BASE_PHY 0xFF200000
 #define CSR_SPAN 0x00100000 // 1MB
-#define HDMI_SYNC_GEN_OFFSET 0x00010100
+#define HDMI_SYNC_GEN_OFFSET 0x2080
+
+#ifndef IOWR_32DIRECT
+#define IOWR_32DIRECT(base, offset, data)                                      \
+  (*(volatile uint32_t *)((uint8_t *)(base) + (offset)) = (data))
+#endif
+#ifndef IORD_32DIRECT
+#define IORD_32DIRECT(base, offset)                                            \
+  (*(volatile uint32_t *)((uint8_t *)(base) + (offset)))
+#endif
 
 // Register Offsets
 #define REG_PATTERN_MODE 0
@@ -63,8 +72,12 @@ int main(int argc, char **argv) {
 
   // 2. Hardware Initialization
   printf("Initializing Hardware (Mode 8, Continuous DMA)...\n");
-  hdmi_csr[REG_PATTERN_MODE / 4] = 8;    // DMA Mode
-  hdmi_csr[REG_GLOBAL_CTRL / 4] |= 0x02; // Enable Continuous
+  IOWR_32DIRECT(hdmi_csr, REG_PATTERN_MODE, 8); // DMA Mode
+
+  // To match |= 0x02, we read first, modify, then write
+  uint32_t current_ctrl = IORD_32DIRECT(hdmi_csr, REG_GLOBAL_CTRL);
+  IOWR_32DIRECT(hdmi_csr, REG_GLOBAL_CTRL,
+                current_ctrl | 0x02); // Enable Continuous
 
   // 3. Streaming Loop
   printf(">>> START STREAMING <<<\n");
@@ -90,7 +103,7 @@ int main(int argc, char **argv) {
     }
 
     // Switch Hardware to this buffer
-    hdmi_csr[REG_FRAME_PTR / 4] = phys_ptr;
+    IOWR_32DIRECT(hdmi_csr, REG_FRAME_PTR, phys_ptr);
 
     // Toggle buffer for next frame
     active_buffer = (active_buffer == 0) ? 1 : 0;

@@ -2,7 +2,27 @@
 module soc_system (
 	button_pio_external_connection_export,
 	clk_clk,
+	color_matrix_waitrequest,
+	color_matrix_readdata,
+	color_matrix_readdatavalid,
+	color_matrix_burstcount,
+	color_matrix_writedata,
+	color_matrix_address,
+	color_matrix_write,
+	color_matrix_read,
+	color_matrix_byteenable,
+	color_matrix_debugaccess,
 	dipsw_pio_external_connection_export,
+	hdmi_sync_waitrequest,
+	hdmi_sync_readdata,
+	hdmi_sync_readdatavalid,
+	hdmi_sync_burstcount,
+	hdmi_sync_writedata,
+	hdmi_sync_address,
+	hdmi_sync_write,
+	hdmi_sync_read,
+	hdmi_sync_byteenable,
+	hdmi_sync_debugaccess,
 	hps_0_f2h_cold_reset_req_reset_n,
 	hps_0_f2h_debug_reset_req_reset_n,
 	hps_0_f2h_stm_hw_events_stm_hwevents,
@@ -88,21 +108,31 @@ module soc_system (
 	video_dma_s_write,
 	video_dma_s_read,
 	video_dma_s_byteenable,
-	video_dma_s_debugaccess,
-	hdmi_sync_waitrequest,
-	hdmi_sync_readdata,
-	hdmi_sync_readdatavalid,
-	hdmi_sync_burstcount,
-	hdmi_sync_writedata,
-	hdmi_sync_address,
-	hdmi_sync_write,
-	hdmi_sync_read,
-	hdmi_sync_byteenable,
-	hdmi_sync_debugaccess);	
+	video_dma_s_debugaccess);	
 
 	input	[1:0]	button_pio_external_connection_export;
 	input		clk_clk;
+	input		color_matrix_waitrequest;
+	input	[31:0]	color_matrix_readdata;
+	input		color_matrix_readdatavalid;
+	output	[0:0]	color_matrix_burstcount;
+	output	[31:0]	color_matrix_writedata;
+	output	[3:0]	color_matrix_address;
+	output		color_matrix_write;
+	output		color_matrix_read;
+	output	[3:0]	color_matrix_byteenable;
+	output		color_matrix_debugaccess;
 	input	[3:0]	dipsw_pio_external_connection_export;
+	input		hdmi_sync_waitrequest;
+	input	[31:0]	hdmi_sync_readdata;
+	input		hdmi_sync_readdatavalid;
+	output	[0:0]	hdmi_sync_burstcount;
+	output	[31:0]	hdmi_sync_writedata;
+	output	[2:0]	hdmi_sync_address;
+	output		hdmi_sync_write;
+	output		hdmi_sync_read;
+	output	[3:0]	hdmi_sync_byteenable;
+	output		hdmi_sync_debugaccess;
 	input		hps_0_f2h_cold_reset_req_reset_n;
 	input		hps_0_f2h_debug_reset_req_reset_n;
 	input	[27:0]	hps_0_f2h_stm_hw_events_stm_hwevents;
@@ -189,14 +219,4 @@ module soc_system (
 	input		video_dma_s_read;
 	input	[3:0]	video_dma_s_byteenable;
 	input		video_dma_s_debugaccess;
-	input		hdmi_sync_waitrequest;
-	input	[31:0]	hdmi_sync_readdata;
-	input		hdmi_sync_readdatavalid;
-	output	[0:0]	hdmi_sync_burstcount;
-	output	[31:0]	hdmi_sync_writedata;
-	output	[2:0]	hdmi_sync_address;
-	output		hdmi_sync_write;
-	output		hdmi_sync_read;
-	output	[3:0]	hdmi_sync_byteenable;
-	output		hdmi_sync_debugaccess;
 endmodule
