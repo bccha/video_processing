@@ -33,8 +33,8 @@ ARM (Linux/HPS)                     FPGA Pixel Pipeline (37.8 MHz)
 ────────────────                    ──────────────────────────────────────────────────
 Raw ST 2110           mmap          F2H AXI     Burst    Video    Sync
 AF_PACKET Socket ─────────────►    Bridge  ──► Master ──► FIFO ──► Gen
-into DDR3 @                                                          │
-0x30000000 (Ring Buffer)                                             ▼
+into SDRAM1                                 ▲                                                          │
+(Ring Buffer)                               │ (SDRAM0)                                             ▼
                                                               Image Filter
                                                           (Blur/Edge/Emboss/Sharpen)
                                                                      │
@@ -281,9 +281,12 @@ When the input color space is wider than the target, the matrix will produce neg
 
 ## 3. DMA Design: F2H AXI Bridge + Burst Master
 
-### 3.1 Architecture
+### 3.1 Architecture (Dual SDRAM Split)
 
-The FPGA accesses DDR3 exclusively via the **FPGA-to-HPS AXI Slave Bridge**, bypassing the dedicated FPGA-to-SDRAM ports which require preloader-level configuration. This gives a reliable, high-bandwidth path through the HPS L3 Interconnect.
+To maximize memory bandwidth and prevent collisions between the high-speed gigabit network receiver and the real-time 60fps video display DMA, the system isolates the HPS DDR3 memory into two discrete regions accessed via the **FPGA-to-HPS AXI Slave Bridge**:
+
+- **SDRAM0 (Framebuffer & Control)**: Dedicated exclusively to the Nios II processor and the Video Output DMA master. This domain handles the final HDMI rendering.
+- **SDRAM1 (Network Ringbuffer)**: Dedicated exclusively to the ST2110 `AF_PACKET` socket `mmap` ringbuffer. The ARM HPS software ingests high-speed UDP packets directly into this region.
 
 ```
 FPGA Fabric
@@ -294,7 +297,7 @@ FPGA Fabric
 └──────────────────────────────────┘
 ```
 
-The Address Span Extender maps the full 32-bit DDR3 space into the Avalon-MM address range. Both Nios II and the DMA master are initialized with a base offset of `0x20000000` (512 MB), keeping them out of the ARM/Linux kernel space.
+The Address Span Extender maps the 32-bit DDR3 physical space into the Avalon-MM address range. For example, the video DMA master is configured to read the framebuffer from `0x20000000` (SDRAM0), securely isolated from Linux kernel space and the network ingress buffer at `0x30000000` (SDRAM1).
 
 ### 3.2 Why the Burst Master is Fast
 
