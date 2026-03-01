@@ -54,7 +54,40 @@ Nios II 기반에서는 BSP(Board Support Package)가 자동으로 물리 주소
   * 리눅스에서 `IOWR_32DIRECT` 등의 함수를 매크로(Macro)로 직접 정의해야 했습니다 (`#define IOWR_32DIRECT(BASE, OFFSET, DATA)`).
   * **Timing Parameter:** 제어 비트 설정 시 리눅스는 BSP 매크로가 없으므로 `st2110_common.h`의 `MSGDMA_CSR_GENERATE_SOP` / `EOP` 등의 플래그를 Nios의 `/inc/altera_msgdma_descriptor_regs.h` 드라이버를 열어보고 **정확한 비트 번호 (Bit 8, Bit 9 등)** 를 하드코딩 해주어야 Alignment Wrapper가 깨지지 않습니다.
 
-### 3. FPS를 60까지 끌어올리기 위한 최적화 (향후 과제)
+### 3. MSGDMA Register Map (CSR & Descriptor)
+Linux 환경에서 C 코드로 하드웨어를 직접 제어할 때 실수를 방지하기 위한 핵심 레지스터 명세입니다. (`altera_msgdma_csr_regs.h` 및 `altera_msgdma_descriptor_regs.h` 기준)
+
+#### 📝 MSGDMA CSR (Control & Status Register) 가이드
+CSR은 DMA의 현재 상태를 읽거나, 전체 리셋, 인터럽트 활성화 등을 수행하는 제어부입니다. 메모리 맵(mmap) 기준 `CSR_BASE + Offset` 에 위치합니다.
+| Offset | 이름 | 접근 | 설명 |
+| :--- | :--- | :--- | :--- |
+| `0x0`  | **Status** | R/Clr | DMA의 현재 상태. `Busy (Bit 0)`, `Desc Buffer Empty (Bit 1)`, `Full (Bit 2)` 확인 등. `1`을 쓰면 (W1C) 인터럽트가 초기화됨. |
+| `0x4`  | **Control** | R/W | `Stop (Bit 0)`, `Software Reset (Bit 1)`, `Global Interrupt Mask (Bit 4)` 제어. |
+| `0x8`  | **Descriptor Fill Level** | R | 현재 버퍼에 쌓여있는 Descriptor 개수 (Write `[31:16]`, Read `[15:0]`). |
+| `0xC`  | **Response Fill Level** | R | Response FIFO에 쌓인 응답 개수 `[15:0]`. |
+
+**[주의사항]** 작동 중인 DMA를 강제로 초기화하려면 Control 레지스터(`0x4`)의 비트 1 (`Software Reset`)에 `1`을 씁니다. 상태 레지스터(`0x0`)의 비트 0 (`Busy`)이 `0`인지 확인 한 뒤 새 Descriptor를 넣어야 안전합니다.
+
+#### 📝 MSGDMA Descriptor (Extended Format) 가이드
+디스크립터는 DMA가 "어디서(Read) 어디로(Write) 얼만큼(Length)" 복사할지 지시하는 32바이트(Extended 기준) 크기의 작업 지시서입니다. 
+ST2110 비디오 파이프라인처럼 Avalon-ST Video 패킷을 다룰 때는 **Extended Format**을 사용하여 SOP/EOP 플래그를 정확히 제어해야 합니다.
+| Offset | 이름 | 설명 |
+| :--- | :--- | :--- |
+| `0x00` | **Read Address** `[31:0]` | 데이터 원본 물리 주소 (예: DDR3 네트워크 링버퍼 주소). |
+| `0x04` | **Write Address** `[31:0]` | 데이터 목적지 물리 주소 (예: 화면 출력 FIFO). |
+| `0x08` | **Length** `[31:0]` | 전송할 바이트 단위 길이. |
+| `0x1C` | **Control (Enhanced)** `[31:0]` | 패킷 제어 및 전송 커맨드. (가장 중요) |
+
+**[Control (0x1C) 상세 비트 마스크]**
+* **`GO` (Bit 31, `1 << 31`):** 이 비트를 `1`로 셋팅하여 디스크립터를 작성하면 DMA가 해당 작업을 Dispatcher에 큐잉하고 전송을 시작합니다.
+* **`GENERATE_SOP` (Bit 8, `1 << 8`):** 전송의 시작이 영상 프레임 패킷의 시작점(Start of Packet)임을 나타냅니다. 영상의 **첫 픽셀 묶음** 전송 시 반드시 비트를 켜야 합니다.
+* **`GENERATE_EOP` (Bit 9, `1 << 9`):** 패킷의 끝점(End of Packet)임을 나타냅니다. 한 영상 프레임/라인의 **마지막 픽셀 묶음** 전송 시 넣어주어야 다음 프레임과 화면이 꼬이지 않습니다.
+* **`TRANSFER_COMPLETE_IRQ` (Bit 14, `1 << 14`):** 해당 디스크립터 전송 완료 시 인터럽트를 발생시킵니다.
+* **`EARLY_DONE_ENABLE` (Bit 24, `1 << 24`):** Avalon-ST 수신 측에서 EOP를 조기 감지하여 DMA를 멈추게 할 때 사용합니다.
+
+리눅스 C 프로그래밍 시, 위 매크로 상수들(특히 `Bit 8, 9`의 SOP/EOP)을 우연히 다른 엉뚱한 비트(예: 14, 15번)로 설정해버리면 MSGDMA Alignment Wrapper가 패킷의 시작과 끝을 인지하지 못해 화면 픽셀이 통째로 엇갈리는 **픽셀 시프트 (Pixel Shift)** 증상이 나타납니다.
+
+### 4. FPS를 60까지 끌어올리기 위한 최적화 (향후 과제)
 현재 24 FPS 송출 시 80~90% 수준의 방어율을 보입니다. 대역폭 지연을 줄이고 60 FPS를 안정적으로 달성하기 위한 방법입니다.
 
 * **1. Zero-Copy 네트워킹 도입 (`AF_XDP` 또는 `DPDK`)**
